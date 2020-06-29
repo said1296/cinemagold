@@ -1,0 +1,59 @@
+<resources>
+    <!--Elevation adds padding of same amount all around, affected rows will be marked-->
+    <dimen name="item_content_horizontal_elevation">10dp</dimen>
+
+    <dimen name="item_content_horizontal_width">350dp</dimen>
+    <!-- 9:16 aspect ratio -->
+    <dimen name="item_content_horizontal_height">197dp</dimen>
+    <dimen name="item_content_horizontal_info_margin_horizontal">20dp</dimen>
+    <dimen name="item_content_horizontal_info_margin_bottom">10dp</dimen>
+
+    <dimen name="item_content_vertical_width">250dp</dimen>
+
+    <dimen name="item_content_grid_width">125dp</dimen>
+
+    <dimen name="standard_margin_horizontal">20dp</dimen>
+    <!--Affected by elevation-->
+    <dimen name="item_content_grouped_by_genre_margin_bottom">25dp</dimen>
+    <!--Affected by elevation-->
+    <dimen name="item_content_grouped_by_genre_title_margin_bottom">0dp</dimen>
+
+    <!--Affected by elevation-->
+    <dimen name="item_content_margin_right">-10dp</dimen>
+    <dimen name="item_content_border_radius">19dp</dimen>
+
+    <dimen name="preview_info_padding_top">20dp</dimen>
+    <dimen name="preview_info_padding_horizontal">20dp</dimen>
+    <dimen name="preview_info_genres_margin_top">5dp</dimen>
+    <dimen name="preview_info_description_short_margin_top">10dp</dimen>
+    <dimen name="preview_info_description_short_margin_bottom">20dp</dimen>
+    <dimen name="preview_info_length_margin_top">10dp</dimen>
+    <dimen name="preview_spinner_season_margin_top">10dp</dimen>
+
+    <dimen name="item_episode_horizontal_width">350dp</dimen>
+    <dimen name="item_episode_margin_right">10dp</dimen>
+    <dimen name="item_episode_border_radius">19dp</dimen>
+    <item name="item_episode_guideline_info" type="dimen" format="float">0.8</item>
+    <dimen name="item_episode_info_padding">19dp</dimen>
+
+    <dimen name="item_genre_margin_right">10dp</dimen>
+
+    <dimen name="header_margin_vertical">15dp</dimen>
+
+    <item name="navbar_guideline_top_percent" type="dimen" format="float">0.94</item>
+
+    <dimen name="sidebar_option_spacing">15dp</dimen>
+    <dimen name="sidebar_padding_horizontal">25dp</dimen>
+    <item name="sidebar_guideline_end" type="dimen" format="float">0.85</item>
+    <item name="sidebar_options_main_end" type="dimen" format="float">0.9</item>
+
+    <dimen name="heading1">45sp</dimen>
+    <dimen name="heading2">35sp</dimen>
+    <dimen name="heading3">26sp</dimen>
+    <dimen name="heading4">24sp</dimen>
+    <dimen name="heading5">18sp</dimen>
+    <dimen name="text1">16sp</dimen>
+    <dimen name="text2">15sp</dimen>
+    <dimen name="text3">14sp</dimen>
+    <dimen name="text4">11sp</dimen>
+</resources>

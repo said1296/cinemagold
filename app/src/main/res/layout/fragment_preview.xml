@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/preview"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.preview.PreviewFragment"
+    android:background="?dark">
+
+    <ImageView
+        android:id="@+id/preview_slider"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:contentDescription="Slider"
+        android:src="?dark"
+        app:layout_constraintBottom_toBottomOf="@id/preview_guideline_slider"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <LinearLayout
+        android:id="@+id/preview_info"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_preview_info"
+        android:orientation="vertical"
+        android:paddingHorizontal="@dimen/preview_info_padding_horizontal"
+        android:paddingTop="@dimen/preview_info_padding_top"
+        app:layout_constraintTop_toTopOf="@id/preview_guideline_info_common">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="bottom"
+            android:orientation="horizontal"
+            android:weightSum="100">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="65"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/preview_info_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:maxWidth="270dp"
+                    android:maxLines="3"
+                    android:text="TÍTULO LARGO MUY LARGO"
+                    android:textSize="@dimen/heading4"
+                    app:fontFamily="@font/font_semibold" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="@dimen/preview_info_genres_margin_top"
+                    android:gravity="bottom"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/preview_info_genre_main"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingEnd="25dp"
+                        android:paddingRight="25dp"
+                        android:text="Acción"
+                        android:textSize="@dimen/text1"
+                        app:fontFamily="@font/font_regular" />
+
+                    <TextView
+                        android:id="@+id/preview_info_genre_secondary"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Crimen"
+                        android:textSize="@dimen/text1"
+                        app:fontFamily="@font/font_light" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="35"
+                android:gravity="end"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/preview_info_pg"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Edad +16"
+                    android:textSize="@dimen/text1"
+                    app:fontFamily="@font/font_regular" />
+
+                <RatingBar
+                    android:id="@+id/preview_info_score"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:isIndicator="true"
+                    android:numStars="5"
+                    android:rating="0" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/preview_info_description_short"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/preview_info_description_short_margin_top"
+            android:layout_marginBottom="@dimen/preview_info_description_short_margin_bottom"
+            android:text="VINE a Comala porque me dijeron que acá vivía mi padre, un tal Pedro Páramo. Mi madre me
+            lo dijo. Y yo le prometí que vendría a verlo en cuanto ella muriera. Le apreté sus manos en
+            señal de que lo haría, pues ella estaba por morirse y yo en un plan de prometerlo todo."
+            android:textSize="@dimen/text1"
+            app:fontFamily="@font/font_regular" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/preview_info_specific"
+        android:layout_width="match_parent"
+        app:layout_constraintTop_toBottomOf="@id/preview_info"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:background="?dark"
+        android:layout_height="0dp"
+        android:orientation="vertical">
+
+    </LinearLayout>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/preview_guideline_slider"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.3" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/preview_guideline_info_common"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.20" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/preview_guideline_info_common_end"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.6" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

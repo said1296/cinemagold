@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@android:id/text1"
+    android:singleLine="true"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:ellipsize="marquee"
+    android:layout_gravity="end"
+    android:text="Novela"
+    app:fontFamily="@font/font_medium"
+    android:textSize="@dimen/text2"
+    android:textColor="@color/orange"
+    android:textAlignment="inherit"
+    android:drawableLeft="@drawable/ic_arrow_drop_down_24dp"/>

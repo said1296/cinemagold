@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical">
+
+
+    <include
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_marginHorizontal="@dimen/preview_info_padding_horizontal"
+        layout="@layout/widget_button_play"
+        />
+
+    <Spinner
+        android:id="@+id/preview_spinner_season"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingLeft="@dimen/preview_info_padding_horizontal"
+        android:background="@null"
+        android:layout_marginTop="@dimen/preview_spinner_season_margin_top"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/preview_recycler_episode"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+
+</LinearLayout>

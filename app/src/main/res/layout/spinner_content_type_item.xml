@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CheckedTextView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@android:id/text1"
+    android:minWidth="150dp"
+    android:singleLine="true"
+    android:textAlignment="center"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?dark"
+    app:fontFamily="@font/font_medium"
+    android:textSize="@dimen/text2"
+    android:text="Anime"
+    android:paddingVertical="10dp"
+    android:paddingHorizontal="10dp"
+    android:gravity="center_horizontal" />

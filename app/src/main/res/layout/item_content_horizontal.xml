@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/item_content_horizontal"
+    android:layout_width="@dimen/item_content_horizontal_width"
+    android:layout_height="wrap_content"
+    android:layout_marginRight="@dimen/item_content_margin_right"
+    android:layout_marginEnd="@dimen/item_content_margin_right"
+    app:cardCornerRadius="@dimen/item_content_border_radius"
+    app:cardElevation="@dimen/item_content_horizontal_elevation"
+    app:cardUseCompatPadding="true"
+    app:cardPreventCornerOverlap="false">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_item_content"
+            >
+
+                <app.cinemagold.ui.common.view.ImageViewRecycledBitmap
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    android:scaleType="centerCrop"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    android:id="@+id/item_content_horizontal_background"
+                    app:layout_constraintDimensionRatio="16:9"
+                    android:contentDescription="Content slider" />
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    android:orientation="vertical"
+                    android:layout_marginLeft="@dimen/item_content_horizontal_info_margin_horizontal"
+                    android:layout_marginStart="@dimen/item_content_horizontal_info_margin_horizontal"
+                    android:layout_marginRight="@dimen/item_content_horizontal_info_margin_horizontal"
+                    android:layout_marginBottom="@dimen/item_content_horizontal_info_margin_bottom">
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:id="@+id/item_content_horizontal_metadata"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="PRUEBA"
+                            app:layout_constraintBottom_toTopOf="@id/item_content_horizontal_title"
+                            app:fontFamily="@font/font_medium"
+                            android:textSize="@dimen/text4"/>
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:id="@+id/item_content_horizontal_title"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            android:text="TITLE"
+                            android:maxLines="1"
+                            android:ellipsize="end"
+                            android:textSize="@dimen/text1"
+                            android:textColor="?brand" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.cardview.widget.CardView>

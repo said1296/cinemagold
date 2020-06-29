@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">CinemaGOLD</string>
+    <string name="title_activity_main">ActivityMain</string>
+    <!-- Strings used for fragments for navigation -->
+    <string name="first_fragment_label">First Fragment</string>
+    <string name="second_fragment_label">Second Fragment</string>
+    <string name="next">Next</string>
+    <string name="navigation_drawer_close">Previous</string>
+
+    <string name="navigation_drawer_open">Hello first fragment</string>
+    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+    <string name="preview_info_director">Director:</string>
+    <string name="preview_info_length">Duración:</string>
+    <string name="movies">Películas</string>
+</resources>

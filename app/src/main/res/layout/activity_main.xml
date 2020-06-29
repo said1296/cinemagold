@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.drawerlayout.widget.DrawerLayout
+        android:id="@+id/sidebar_drawer_layout"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:theme="@style/AppTheme"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/nav_host_fragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/bottom_navbar"
+            android:layout_width="match_parent"
+            android:layout_alignParentBottom="true"
+            android:clickable="false"
+            android:layout_height="wrap_content"
+            app:menu="@menu/navbar"
+            app:itemIconTint="@color/selector_navbar"
+            app:itemTextColor="?lightMedium"
+            android:background="@drawable/bg_navbar" />
+
+    </RelativeLayout>
+
+
+        <include
+            layout="@layout/common_sidebar"
+            />
+
+</androidx.drawerlayout.widget.DrawerLayout>

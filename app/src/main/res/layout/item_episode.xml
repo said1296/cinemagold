@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/item_episode"
+    android:layout_width="@dimen/item_episode_horizontal_width"
+    android:layout_height="wrap_content"
+    android:layout_marginRight="@dimen/item_episode_margin_right"
+    android:layout_marginEnd="@dimen/item_episode_margin_right"
+    app:cardCornerRadius="@dimen/item_episode_border_radius"
+    app:cardElevation="@dimen/item_content_horizontal_elevation"
+    app:cardUseCompatPadding="true"
+    app:cardPreventCornerOverlap="false">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/bg_item_content">
+
+        <ImageView
+            android:id="@+id/item_episode_background"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:contentDescription="Content slider"
+            android:scaleType="centerCrop"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintDimensionRatio="16:9"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <View
+            android:id="@+id/item_episode_background_gradient"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:scaleType="centerCrop"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintDimensionRatio="16:9"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:background="@drawable/bg_item_episode_gradient"/>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/item_episode_info"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:padding="@dimen/item_episode_info_padding">
+            <androidx.appcompat.widget.AppCompatTextView
+                android:maxLines="4"
+                android:ellipsize="end"
+                android:id="@+id/item_episode_description"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="ESTA ES UNA DESCRIPCION MUY LARGA ALV MUY MUY LARGA MUY MUY LARGA msdiaomd osamd oamd kosamd oas"
+                android:textSize="@dimen/text3"
+                app:fontFamily="@font/font_medium"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toLeftOf="@id/item_episode_guideline_info" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/item_episode_length"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="42m min"
+                android:textSize="@dimen/text3"
+                app:fontFamily="@font/font_medium"
+                android:textColor="?lightMedium"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toLeftOf="@id/item_episode_guideline_info"
+                app:layout_constraintBottom_toTopOf="@id/item_episode_title" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/item_episode_title"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="2"
+                android:text="Siempre y para siempreas fdsa  fdsa fds"
+                android:textSize="@dimen/text3"
+                app:fontFamily="@font/font_medium"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toLeftOf="@id/item_episode_guideline_info"
+                app:layout_constraintBottom_toBottomOf="parent" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/item_episode_number"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:textSize="@dimen/heading4"
+                android:textColor="?lightMedium"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintLeft_toLeftOf="@id/item_episode_guideline_info"
+                android:gravity="end"
+                android:text="1" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/item_episode_guideline_info"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="@dimen/item_episode_guideline_info" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.cardview.widget.CardView>
