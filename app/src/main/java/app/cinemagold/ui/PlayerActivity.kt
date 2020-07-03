@@ -14,18 +14,19 @@ import com.google.android.exoplayer2.ExoPlayer
 import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.SimpleExoPlayer
 import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory
+import com.google.android.exoplayer2.source.MediaSource
 import com.google.android.exoplayer2.source.ProgressiveMediaSource
-import com.google.android.exoplayer2.source.hls.HlsDataSourceFactory
 import com.google.android.exoplayer2.source.hls.HlsMediaSource
 import com.google.android.exoplayer2.ui.PlayerView
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
+import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory
 import com.google.android.exoplayer2.util.Util
 
 class PlayerActivity : AppCompatActivity() {
     private lateinit var player : ExoPlayer
     private lateinit var playerView : PlayerView
-    private lateinit var progressiveMediaSource: ProgressiveMediaSource
     private lateinit var contentType : ContentType
+    private lateinit var mediaSource : MediaSource
     lateinit var contentSource : String
     var contentId : Int = -1
 
@@ -74,20 +75,24 @@ class PlayerActivity : AppCompatActivity() {
         playerView.player = player
     }
 
+
     private fun initializePlayer(url: String){
         player.repeatMode = Player.REPEAT_MODE_ALL
 
         val userAgent =
             Util.getUserAgent(playerView.context, playerView.context.getString(R.string.app_name))
+        val dataSourceFactory = DefaultHttpDataSourceFactory(userAgent);
 
-
-        progressiveMediaSource = ProgressiveMediaSource
-            .Factory(
-                DefaultDataSourceFactory(playerView.context, userAgent),
-                DefaultExtractorsFactory()
-            )
-            .createMediaSource(Uri.parse(url))
-
-        player.prepare(progressiveMediaSource, true, false)
+        if(url.endsWith("m3u8")){
+            mediaSource = HlsMediaSource.Factory(dataSourceFactory)
+                .setAllowChunklessPreparation(true)
+                .createMediaSource(Uri.parse(url))
+            player.prepare(mediaSource, true, false)
+        }else{
+            mediaSource = ProgressiveMediaSource
+                .Factory(dataSourceFactory)
+                .createMediaSource(Uri.parse(url))
+        }
+        player.prepare(mediaSource, true, false)
     }
 }
