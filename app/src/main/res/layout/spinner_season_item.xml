@@ -8,4 +8,7 @@
     android:ellipsize="marquee"
     android:background="?dark"
     android:textSize="@dimen/heading5"
-    android:paddingVertical="5dp"/>
+    android:paddingVertical="10dp"
+    android:paddingHorizontal="10dp"
+    android:textAlignment="center"
+    android:gravity="center_horizontal" />

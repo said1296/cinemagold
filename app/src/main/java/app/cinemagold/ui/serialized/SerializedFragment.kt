@@ -10,17 +10,11 @@ import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.appcompat.widget.LinearLayoutCompat
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
-import androidx.lifecycle.Observer
 import androidx.lifecycle.observe
 import androidx.recyclerview.widget.LinearLayoutManager
 import app.cinemagold.R
 import app.cinemagold.injection.ApplicationContextInjector
-import app.cinemagold.model.content.Content
-import app.cinemagold.model.content.ContentGroupedByGenre
-import app.cinemagold.model.generic.GenericIdAndName
 import app.cinemagold.ui.MainActivity
-import app.cinemagold.ui.common.fragment.ContentGroupedByGenreFragment
 import kotlinx.android.synthetic.main.fragment_serialized.view.*
 import javax.inject.Inject
 
@@ -63,9 +57,6 @@ class SerializedFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_serialized, container, false)
-        //Initial child fragment needs to be refreshed in order to inflate its view because the onStop method of this
-        //fragment doesn't travel down and onCreateView is not called.
-        (activity as MainActivity).refreshFragmentByTag(ContentGroupedByGenreFragment::class.simpleName)
         //Reset selected position
         genreRVA.selectedPosition = 0
 

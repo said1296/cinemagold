@@ -42,7 +42,7 @@
                 android:layout_weight="65"
                 android:orientation="vertical">
 
-                <TextView
+                <app.cinemagold.ui.common.view.TextViewUnescapedHTML
                     android:id="@+id/preview_info_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -60,7 +60,7 @@
                     android:gravity="bottom"
                     android:orientation="horizontal">
 
-                    <TextView
+                    <app.cinemagold.ui.common.view.TextViewUnescapedHTML
                         android:id="@+id/preview_info_genre_main"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"

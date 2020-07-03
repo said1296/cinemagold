@@ -9,17 +9,18 @@ import android.view.ViewGroup
 import android.widget.*
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
-import androidx.lifecycle.Observer
 import androidx.lifecycle.observe
 import androidx.recyclerview.widget.LinearLayoutManager
 import app.cinemagold.R
 import app.cinemagold.injection.ApplicationContextInjector
 import app.cinemagold.model.content.Content
 import app.cinemagold.model.content.ContentType
+import app.cinemagold.ui.MainActivity
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_preview.view.*
 import kotlinx.android.synthetic.main.preview_info_specific_movie.view.*
 import kotlinx.android.synthetic.main.preview_info_specific_serialized.view.*
+import kotlinx.android.synthetic.main.widget_button_play.view.*
 import java.util.stream.Collectors
 import javax.inject.Inject
 
@@ -30,6 +31,8 @@ class PreviewFragment : Fragment() {
     lateinit var picasso : Picasso
     @Inject
     lateinit var episodeRVA : EpisodeRVA
+    var contentId : Int = -1
+    lateinit var contentType : ContentType
     lateinit var content : Content
     private val scale : Int = 30
     private var currentSeasonIndex : Int = 0
@@ -53,8 +56,8 @@ class PreviewFragment : Fragment() {
 
         //Listen for contentId set on Home fragment
         setFragmentResultListener("preview") { _, bundle ->
-            val contentId = bundle.getInt("contentId")
-            val contentType = bundle.get("contentType") as ContentType
+            contentId = bundle.getInt("contentId")
+            contentType = bundle.get("contentType") as ContentType
             viewModel.receivedContentIdAndContentType(contentId, contentType)
         }
 
@@ -63,14 +66,23 @@ class PreviewFragment : Fragment() {
             Toast.makeText(context, data, Toast.LENGTH_LONG).show()
         }
         viewModel.content.observe(this) {data ->
+            val contentSource : String
             content = data
             updateCommonView()
-            if(viewModel.currentContentType == ContentType.MOVIE)
+            if(viewModel.currentContentType == ContentType.MOVIE){
                 updateInfoSpecificMovieView()
-            else
+                contentSource = content.movie.src
+            } else {
                 updateInfoSpecificSerializedView()
+                contentSource = content.seasons[0].episodes[0].src
+            }
             infoSpecificView.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT)
             infoSpecificContainerView.addView(infoSpecificView)
+
+            //Set onClickListener for Play button that is added in any of the two specific views
+            requireView().widget_button_play.setOnClickListener {
+                (activity as MainActivity).navigateToPlayer(contentId, contentType, contentSource)
+            }
         }
     }
 
@@ -86,6 +98,7 @@ class PreviewFragment : Fragment() {
         descriptionShortView = view.preview_info_description_short
         sliderView = view.preview_slider
         scoreView = view.preview_info_score
+
         return view
     }
 
@@ -109,7 +122,7 @@ class PreviewFragment : Fragment() {
     }
 
     //Add information specific to serialized content
-    fun updateInfoSpecificSerializedView(){
+    private fun updateInfoSpecificSerializedView(){
         picasso.load(content.seasons[currentSeasonIndex].sliderSrc)
             .placeholder(R.drawable.bg_dark)
             .config(Bitmap.Config.RGB_565)

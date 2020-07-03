@@ -67,10 +67,8 @@ class SerializedViewModel(private val contentApi : ContentApi, private val genre
         }
     }
 
-    //Reinitialize current values
     fun stoppedFragment(){
-        //Set currentContentType to All
-        currentContentType = contentTypes.value!![0]
+        //Reinitialize genre value
         currentGenre = GenericIdAndName()
     }
 

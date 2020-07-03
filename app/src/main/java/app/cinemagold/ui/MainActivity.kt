@@ -1,13 +1,14 @@
 package app.cinemagold.ui
 
+import android.content.Intent
 import android.os.Bundle
+import android.provider.AlarmClock.EXTRA_MESSAGE
 import android.view.Gravity
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentTransaction
 import app.cinemagold.R
 import app.cinemagold.injection.ApplicationContextInjector
 import app.cinemagold.model.content.Content
@@ -16,9 +17,11 @@ import app.cinemagold.model.content.ContentType
 import app.cinemagold.ui.common.fragment.ContentGridFragment
 import app.cinemagold.ui.common.fragment.ContentGroupedByGenreFragment
 import app.cinemagold.ui.home.HomeFragment
-import app.cinemagold.ui.preview.PreviewFragment
 import app.cinemagold.ui.movie.MovieFragment
+import app.cinemagold.ui.preview.PreviewFragment
+import app.cinemagold.ui.search.SearchFragment
 import app.cinemagold.ui.serialized.SerializedFragment
+import com.google.android.exoplayer2.Player
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import javax.inject.Inject
 
@@ -49,15 +52,36 @@ class MainActivity : AppCompatActivity() {
         bottomNavigationView.setOnNavigationItemSelectedListener {menuItem ->
             when(menuItem.itemId){
                 R.id.navbar_serialized -> {
+                    detachFragmentByTag(HomeFragment::class.simpleName)
+                    detachFragmentByTag(MovieFragment::class.simpleName)
                     addOrReplaceFragment(SerializedFragment(), SerializedFragment::class.simpleName)
+                    //Force ContentGroupedByGenreFragment to run onCreateView with SerializedFragment now as main view
+                    refreshFragmentByTag(contentGroupedByGenreFragment::class.simpleName)
                     return@setOnNavigationItemSelectedListener true
                 }
                 R.id.navbar_home -> {
+                    detachFragmentByTag(MovieFragment::class.simpleName)
+                    detachFragmentByTag(SerializedFragment::class.simpleName)
                     addOrReplaceFragment(HomeFragment(), HomeFragment::class.simpleName)
+                    //Force ContentGroupedByGenreFragment to run onCreateView with SerializedFragment now as main view
+                    refreshFragmentByTag(contentGroupedByGenreFragment::class.simpleName)
                     return@setOnNavigationItemSelectedListener true
                 }
                 R.id.navbar_movie -> {
+                    detachFragmentByTag(HomeFragment::class.simpleName)
+                    detachFragmentByTag(SerializedFragment::class.simpleName)
                     addOrReplaceFragment(MovieFragment(), MovieFragment::class.simpleName)
+                    //Force ContentGroupedByGenreFragment to run onCreateView with MovieFragment now as main view
+                    refreshFragmentByTag(contentGroupedByGenreFragment::class.simpleName)
+                    return@setOnNavigationItemSelectedListener true
+                }
+                R.id.navbar_search -> {
+                    detachFragmentByTag(HomeFragment::class.simpleName)
+                    detachFragmentByTag(SerializedFragment::class.simpleName)
+                    detachFragmentByTag(MovieFragment::class.simpleName)
+                    addOrReplaceFragment(SearchFragment(), SearchFragment::class.simpleName)
+                    //Force ContentGroupedByGenreFragment to run onCreateView with MovieFragment now as main view
+                    refreshFragmentByTag(contentGridFragment::class.simpleName)
                     return@setOnNavigationItemSelectedListener true
                 }
                 else -> {
@@ -68,65 +92,75 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-        supportFragmentManager.popBackStack()
+        fragmentManager.popBackStack()
     }
 
-    fun addOrReplaceFragment(fragment : Fragment, tag : String?){
-        if(supportFragmentManager.findFragmentByTag(tag)==null){
+    //Fragment transactions
+
+    private fun addOrReplaceFragment(fragment : Fragment, tag : String?){
+        if(fragmentManager.findFragmentByTag(tag)==null){
             println("ADDING $tag")
-            supportFragmentManager.beginTransaction().add(R.id.nav_host_fragment, fragment, tag).addToBackStack(tag).commit()
+            fragmentManager.beginTransaction().add(R.id.nav_host_fragment, fragment, tag).addToBackStack(tag).commit()
             return
         }
 
         val backStackEntryCount = supportFragmentManager.backStackEntryCount
         if(backStackEntryCount>0){
-            val currentFragmentTag = supportFragmentManager.getBackStackEntryAt(backStackEntryCount-1).name
+            val currentFragmentTag = fragmentManager.getBackStackEntryAt(backStackEntryCount-1).name
             if(currentFragmentTag != tag){
                 println("REPLACING $tag")
-                supportFragmentManager.beginTransaction().replace(R.id.nav_host_fragment, fragment, tag).addToBackStack(tag).commit()
+                fragmentManager.beginTransaction().replace(R.id.nav_host_fragment, fragment, tag).addToBackStack(tag).commit()
             }
         }
     }
 
     fun navigateToPreview(contentId : Int, contentTypeId: Int){
         //Set contentId and ContentType for Preview
-        supportFragmentManager.setFragmentResult("preview", bundleOf("contentId" to contentId, "contentType" to ContentType.from(contentTypeId)))
+        fragmentManager.setFragmentResult("preview", bundleOf("contentId" to contentId, "contentType" to ContentType.from(contentTypeId)))
         addOrReplaceFragment(PreviewFragment(), PreviewFragment::class.simpleName)
     }
 
     fun changeContentGrid(contents : List<Content>){
         val fragment = fragmentManager.findFragmentByTag(ContentGridFragment::class.simpleName)
         if(fragment == null || !fragment.isVisible){
-            val transaction: FragmentTransaction = fragmentManager.beginTransaction()
-            transaction.replace(contentContainer, contentGridFragment, ContentGridFragment::class.simpleName).commit()
+            fragmentManager.beginTransaction()
+                .replace(contentContainer, contentGridFragment, ContentGridFragment::class.simpleName).commit()
         }
         contentGridFragment.updateContents(contents)
     }
 
     fun changeContentGroupedByGenre(contents : List<ContentGroupedByGenre>){
         val fragment = fragmentManager.findFragmentByTag(ContentGroupedByGenreFragment::class.simpleName)
-        if(fragment == null || !fragment.isVisible){
-            println("REPLACING")
-            val transaction: FragmentTransaction = fragmentManager.beginTransaction()
-            transaction.replace(contentContainer, contentGroupedByGenreFragment, ContentGroupedByGenreFragment::class.simpleName).commit()
+        if(fragment == null || !fragment.isVisible || !fragment.isDetached){
+            fragmentManager.beginTransaction()
+                .replace(contentContainer, contentGroupedByGenreFragment, ContentGroupedByGenreFragment::class.simpleName).commit()
         }
         contentGroupedByGenreFragment.updateContents(contents)
     }
 
-    fun refreshFragmentByTag(tag : String?){
-        println("REFRESHING FRAGMENT")
+    private fun refreshFragmentByTag(tag : String?){
+        println("REFRESHING REQUEST")
         val fragment = fragmentManager.findFragmentByTag(tag)
         if(fragment!=null){
+            println("REFRESHING FRAGMENT")
             fragmentManager.beginTransaction().detach(fragment).attach(fragment).commit()
         }
     }
 
     private fun detachFragmentByTag(tag : String?){
-        println("DETACHING")
         val fragment = fragmentManager.findFragmentByTag(tag)
         if(fragment!=null){
-            println("DETACHING $tag")
-            fragmentManager.beginTransaction().remove(fragment).commit()
+            fragmentManager.beginTransaction().detach(fragment).commit()
         }
+    }
+
+    // Activity navigation
+
+    fun navigateToPlayer(contentId : Int, contentType : ContentType, contentSource : String){
+        val intent = Intent(this, PlayerActivity::class.java)
+        intent.putExtra("contentId", contentId)
+        intent.putExtra("contentType", contentType)
+        intent.putExtra("contentSource", contentSource)
+        startActivity(intent)
     }
 }

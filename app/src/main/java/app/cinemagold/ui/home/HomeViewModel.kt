@@ -17,8 +17,7 @@ class HomeViewModel(val contentApi : ContentApi)  : ViewModel() {
     }
 
     val contentPremiere : LiveData<MutableList<Content>> = liveData(Dispatchers.IO) {
-        val data = contentApi.getNew(8)
-        when(data){
+        when(val data = contentApi.getNew(8)){
             is NetworkResponse.Success -> {
                 emit(data.body)
             }
@@ -28,12 +27,12 @@ class HomeViewModel(val contentApi : ContentApi)  : ViewModel() {
             is NetworkResponse.NetworkError -> {
                 error.postValue(data.error.toString())
             }
+            else -> error.postValue("Unknown error")
         }
     }
 
     val contentGroupedByGenre : LiveData<MutableList<ContentGroupedByGenre>> = liveData(Dispatchers.IO) {
-        val data = contentApi.getGroupedByGenre()
-        when(data){
+        when(val data = contentApi.getGroupedByGenre()){
             is NetworkResponse.Success -> {
                 emit(data.body)
             }
@@ -43,10 +42,7 @@ class HomeViewModel(val contentApi : ContentApi)  : ViewModel() {
             is NetworkResponse.NetworkError -> {
                 error.postValue(data.error.toString())
             }
+            else -> error.postValue("Unknown error")
         }
     }
-
-    //Events
-
-
 }

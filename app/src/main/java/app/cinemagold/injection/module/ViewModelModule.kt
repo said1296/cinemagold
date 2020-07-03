@@ -5,6 +5,7 @@ import app.cinemagold.dataaccess.remote.ContentTypeApi
 import app.cinemagold.dataaccess.remote.GenreApi
 import app.cinemagold.ui.home.HomeViewModel
 import app.cinemagold.ui.preview.PreviewViewModel
+import app.cinemagold.ui.search.SearchViewModel
 import app.cinemagold.ui.serialized.MovieViewModel
 import app.cinemagold.ui.serialized.SerializedViewModel
 import dagger.Module
@@ -36,5 +37,11 @@ class ViewModelModule {
     @Singleton
     fun provideMovieViewModel(contentApi : ContentApi, genreApi : GenreApi, contentTypeApi: ContentTypeApi) : MovieViewModel {
         return MovieViewModel(contentApi, genreApi, contentTypeApi)
+    }
+
+    @Provides
+    @Singleton
+    fun provideSearchViewModel(contentApi : ContentApi) : SearchViewModel {
+        return SearchViewModel(contentApi)
     }
 }

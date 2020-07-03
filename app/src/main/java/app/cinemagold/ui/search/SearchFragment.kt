@@ -1,26 +1,26 @@
-package app.cinemagold.ui.movie
+package app.cinemagold.ui.search
 
 import android.content.Context
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.observe
-import androidx.recyclerview.widget.LinearLayoutManager
 import app.cinemagold.R
 import app.cinemagold.injection.ApplicationContextInjector
 import app.cinemagold.ui.MainActivity
 import app.cinemagold.ui.serialized.GenreRVA
-import app.cinemagold.ui.serialized.MovieViewModel
-import kotlinx.android.synthetic.main.fragment_movie.view.*
+import kotlinx.android.synthetic.main.fragment_search.view.*
 import javax.inject.Inject
 
 
-class MovieFragment : Fragment() {
+class SearchFragment : Fragment() {
     @Inject
-    lateinit var viewModel: MovieViewModel
+    lateinit var viewModel: SearchViewModel
     @Inject
     lateinit var genreRVA : GenreRVA
 
@@ -36,13 +36,7 @@ class MovieFragment : Fragment() {
         viewModel.error.observe(this){data ->
             Toast.makeText(context, data, Toast.LENGTH_LONG).show()
         }
-        viewModel.contentGroupedByGenre.observe(this) {data ->
-            (activity as MainActivity).changeContentGroupedByGenre(data)
-        }
-        viewModel.genres.observe(this){data ->
-            genreRVA.setDataset(data)
-        }
-        viewModel.contentGenre.observe(this){data ->
+        viewModel.contentSearch.observe(this) {data ->
             (activity as MainActivity).changeContentGrid(data)
         }
     }
@@ -51,24 +45,25 @@ class MovieFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.fragment_movie, container, false)
-        //Reset selected position
-        genreRVA.selectedPosition = 0
+        val view = inflater.inflate(R.layout.fragment_search, container, false)
+        view.search_input.addTextChangedListener(object : TextWatcher{
+            override fun afterTextChanged(p0: Editable?) {
+            }
 
-        //Recycler views
-        view.movie_recycler_genres.apply {
-            layoutManager = LinearLayoutManager(this@MovieFragment.context, LinearLayoutManager.HORIZONTAL, false)
-            adapter = genreRVA
-        }
-        genreRVA.clickHandler = {genre ->
-            viewModel.selectedGenre(genre)
-        }
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+            }
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                viewModel.inputSearch(p0.toString())
+            }
+
+        })
+
         return view
     }
 
 
     override fun onStop() {
-        viewModel.stoppedFragment()
         super.onStop()
     }
 

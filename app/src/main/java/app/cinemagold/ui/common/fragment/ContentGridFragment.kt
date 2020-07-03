@@ -53,6 +53,8 @@ class ContentGridFragment : Fragment() {
             layoutManager = GridLayoutManager(context, numberOfColumns)
         }
 
+        view.isNestedScrollingEnabled = false
+
         contentGridRVA.setDataset(contents)
 
         return view

@@ -6,7 +6,7 @@
     android:layout_height="wrap_content"
     android:layout_marginRight="@dimen/item_episode_margin_right"
     android:layout_marginEnd="@dimen/item_episode_margin_right"
-    app:cardCornerRadius="@dimen/item_episode_border_radius"
+    app:cardCornerRadius="@dimen/standard_border_radius"
     app:cardElevation="@dimen/item_content_horizontal_elevation"
     app:cardUseCompatPadding="true"
     app:cardPreventCornerOverlap="false">
@@ -49,7 +49,7 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:padding="@dimen/item_episode_info_padding">
-            <androidx.appcompat.widget.AppCompatTextView
+            <app.cinemagold.ui.common.view.TextViewUnescapedHTML
                 android:maxLines="4"
                 android:ellipsize="end"
                 android:id="@+id/item_episode_description"
@@ -74,7 +74,7 @@
                 app:layout_constraintRight_toLeftOf="@id/item_episode_guideline_info"
                 app:layout_constraintBottom_toTopOf="@id/item_episode_title" />
 
-            <androidx.appcompat.widget.AppCompatTextView
+            <app.cinemagold.ui.common.view.TextViewUnescapedHTML
                 android:id="@+id/item_episode_title"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"

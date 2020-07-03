@@ -31,4 +31,7 @@ interface ContentApi {
 
     @GET("content/genre/media_type")
     suspend fun getByGenreIdAndOptionalContentTypeId(@Query("genreId") genreId : Int, @Query("mediaTypeId") contentTypeId : Int?, @Query("max") max : Int) : NetworkResponse<MutableList<Content>, NetworkError>
+
+    @GET("/search/name")
+    suspend fun searchByName(@Query("name") name : String, @Query("max") max : Int) : NetworkResponse<MutableList<Content>, NetworkError>
 }

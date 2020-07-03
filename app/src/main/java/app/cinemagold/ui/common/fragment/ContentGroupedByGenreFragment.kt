@@ -32,7 +32,6 @@ class ContentGroupedByGenreFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        println("CREATEVIEW GROUPED")
         val view = inflater.inflate(R.layout.generic_linear_layout, container, false) as LinearLayoutCompat
         containerView = view
         inflateContentGroupedByGenres()
@@ -40,17 +39,15 @@ class ContentGroupedByGenreFragment : Fragment() {
     }
 
     fun updateContents(contentsNew : List<ContentGroupedByGenre>){
-        println("UPDATE GROUPED")
+        println(this.parentFragment.toString())
         contentGroupedByGenres = contentsNew
         if(this::contentHorizontalRVAProvider.isInitialized && view!=null){
-            println("INITIALIZED AND VIEW NOT NULL")
             inflateContentGroupedByGenres()
         }
     }
 
     //Inflate genres generic_recycler views
     private fun inflateContentGroupedByGenres(){
-        println("INFLATING GROUPED")
         println(contentGroupedByGenres)
         containerView.removeAllViews()
         System.gc()
@@ -68,18 +65,6 @@ class ContentGroupedByGenreFragment : Fragment() {
             }
             contentOfGenreRVAInstance.setDataset(item.contents)
             containerView.addView(contentGroupedByGenreView)
-        }
-
-        for (index in 0 until (containerView as ViewGroup).childCount) {
-            val nextChild = (containerView as ViewGroup).getChildAt(index)
-            println("REVELACION")
-            println(nextChild.parent.toString())
-            if(nextChild.parent.parent != null){
-                println(nextChild.parent.parent.parent.toString())
-                if(nextChild.parent.parent.parent != null){
-                    println(nextChild.parent.parent.parent.toString())
-                }
-            }
         }
     }
 }

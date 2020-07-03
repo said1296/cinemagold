@@ -6,7 +6,7 @@
     android:layout_height="wrap_content"
     android:layout_marginRight="@dimen/item_content_margin_right"
     android:layout_marginEnd="@dimen/item_content_margin_right"
-    app:cardCornerRadius="@dimen/item_content_border_radius"
+    app:cardCornerRadius="@dimen/standard_border_radius"
     app:cardElevation="@dimen/item_content_horizontal_elevation"
     app:cardUseCompatPadding="true"
     app:cardPreventCornerOverlap="false">
@@ -48,7 +48,7 @@
                             app:layout_constraintBottom_toTopOf="@id/item_content_horizontal_title"
                             app:fontFamily="@font/font_medium"
                             android:textSize="@dimen/text4"/>
-                        <androidx.appcompat.widget.AppCompatTextView
+                        <app.cinemagold.ui.common.view.TextViewUnescapedHTML
                             android:id="@+id/item_content_horizontal_title"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"

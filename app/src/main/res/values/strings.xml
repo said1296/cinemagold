@@ -12,4 +12,6 @@
     <string name="preview_info_director">Director:</string>
     <string name="preview_info_length">Duración:</string>
     <string name="movies">Películas</string>
+    <string name="search">Buscar</string>
+    <string name="name">Nombre</string>
 </resources>

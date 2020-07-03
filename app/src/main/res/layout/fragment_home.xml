@@ -44,6 +44,11 @@
                 android:layout_marginBottom="@dimen/item_content_grouped_by_genre_margin_bottom"
                 android:orientation="vertical" />
 
+            <androidx.fragment.app.FragmentContainerView
+                android:id="@+id/content_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
         </LinearLayout>
     </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>
