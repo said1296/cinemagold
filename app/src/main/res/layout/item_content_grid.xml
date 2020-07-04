@@ -39,7 +39,7 @@
 
     </androidx.cardview.widget.CardView>
 
-    <app.cinemagold.ui.common.view.TextViewUnescapedHTML
+    <app.cinemagold.ui.browse.common.view.TextViewUnescapedHTML
         android:id="@+id/item_content_grid_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

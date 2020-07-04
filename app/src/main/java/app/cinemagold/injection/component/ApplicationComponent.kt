@@ -1,15 +1,15 @@
 package app.cinemagold.injection.component
 
 import app.cinemagold.injection.module.*
-import app.cinemagold.ui.MainActivity
-import app.cinemagold.ui.PlayerActivity
-import app.cinemagold.ui.common.fragment.ContentGridFragment
-import app.cinemagold.ui.common.fragment.ContentGroupedByGenreFragment
-import app.cinemagold.ui.home.HomeFragment
-import app.cinemagold.ui.movie.MovieFragment
-import app.cinemagold.ui.preview.PreviewFragment
-import app.cinemagold.ui.search.SearchFragment
-import app.cinemagold.ui.serialized.SerializedFragment
+import app.cinemagold.ui.browse.BrowseActivity
+import app.cinemagold.ui.player.PlayerActivity
+import app.cinemagold.ui.browse.common.fragment.ContentGridFragment
+import app.cinemagold.ui.browse.common.fragment.ContentGroupedByGenreFragment
+import app.cinemagold.ui.browse.home.HomeFragment
+import app.cinemagold.ui.browse.movie.MovieFragment
+import app.cinemagold.ui.browse.preview.PreviewFragment
+import app.cinemagold.ui.browse.search.SearchFragment
+import app.cinemagold.ui.browse.serialized.SerializedFragment
 import dagger.Component
 import javax.inject.Singleton
 
@@ -27,7 +27,7 @@ import javax.inject.Singleton
     ViewModelModule::class
 ])
 interface ApplicationComponent {
-    fun inject(activity: MainActivity)
+    fun inject(activity: BrowseActivity)
     fun inject(fragment: HomeFragment)
     fun inject(fragment: PreviewFragment)
     fun inject(fragment: SerializedFragment)

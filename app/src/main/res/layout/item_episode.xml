@@ -49,7 +49,7 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:padding="@dimen/item_episode_info_padding">
-            <app.cinemagold.ui.common.view.TextViewUnescapedHTML
+            <app.cinemagold.ui.browse.common.view.TextViewUnescapedHTML
                 android:maxLines="4"
                 android:ellipsize="end"
                 android:id="@+id/item_episode_description"
@@ -74,7 +74,7 @@
                 app:layout_constraintRight_toLeftOf="@id/item_episode_guideline_info"
                 app:layout_constraintBottom_toTopOf="@id/item_episode_title" />
 
-            <app.cinemagold.ui.common.view.TextViewUnescapedHTML
+            <app.cinemagold.ui.browse.common.view.TextViewUnescapedHTML
                 android:id="@+id/item_episode_title"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"

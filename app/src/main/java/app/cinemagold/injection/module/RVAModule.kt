@@ -1,11 +1,11 @@
 package app.cinemagold.injection.module
 
 import android.content.Context
-import app.cinemagold.ui.common.recycleradapter.ContentGridRVA
-import app.cinemagold.ui.common.recycleradapter.ContentHorizontalRVA
-import app.cinemagold.ui.common.recycleradapter.ContentVerticalRVA
-import app.cinemagold.ui.preview.EpisodeRVA
-import app.cinemagold.ui.serialized.GenreRVA
+import app.cinemagold.ui.browse.common.recycleradapter.ContentGridRVA
+import app.cinemagold.ui.browse.common.recycleradapter.ContentHorizontalRVA
+import app.cinemagold.ui.browse.common.recycleradapter.ContentVerticalRVA
+import app.cinemagold.ui.browse.preview.EpisodeRVA
+import app.cinemagold.ui.browse.serialized.GenreRVA
 import com.squareup.picasso.Picasso
 import dagger.Module
 import dagger.Provides

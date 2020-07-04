@@ -17,7 +17,7 @@
         android:theme="@style/AppTheme"
         tools:targetApi="n">
         <activity
-            android:name=".ui.MainActivity"
+            android:name=".ui.browse.BrowseActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar"
             android:screenOrientation="portrait">
@@ -27,7 +27,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.PlayerActivity"
+            android:name=".ui.player.PlayerActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.Player"
             android:configChanges="orientation|screenSize|layoutDirection" />

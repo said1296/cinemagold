@@ -3,11 +3,11 @@ package app.cinemagold.injection.module
 import app.cinemagold.dataaccess.remote.ContentApi
 import app.cinemagold.dataaccess.remote.ContentTypeApi
 import app.cinemagold.dataaccess.remote.GenreApi
-import app.cinemagold.ui.home.HomeViewModel
-import app.cinemagold.ui.preview.PreviewViewModel
-import app.cinemagold.ui.search.SearchViewModel
-import app.cinemagold.ui.serialized.MovieViewModel
-import app.cinemagold.ui.serialized.SerializedViewModel
+import app.cinemagold.ui.browse.home.HomeViewModel
+import app.cinemagold.ui.browse.preview.PreviewViewModel
+import app.cinemagold.ui.browse.search.SearchViewModel
+import app.cinemagold.ui.browse.serialized.MovieViewModel
+import app.cinemagold.ui.browse.serialized.SerializedViewModel
 import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton

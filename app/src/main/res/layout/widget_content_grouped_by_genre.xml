@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    tools:context=".ui.home.HomeFragment"
+    tools:context=".ui.browse.home.HomeFragment"
     android:orientation="vertical"
     android:layout_marginBottom="@dimen/item_content_grouped_by_genre_margin_bottom">
 

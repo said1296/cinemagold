@@ -1,7 +1,7 @@
 package app.cinemagold.injection.module
 
-import app.cinemagold.ui.common.fragment.ContentGridFragment
-import app.cinemagold.ui.common.fragment.ContentGroupedByGenreFragment
+import app.cinemagold.ui.browse.common.fragment.ContentGridFragment
+import app.cinemagold.ui.browse.common.fragment.ContentGroupedByGenreFragment
 import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton
