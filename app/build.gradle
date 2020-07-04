@@ -40,7 +40,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
 
             //Constants
-            buildConfigField "String", "BASE_URL", '"http://192.168.15.10:8080/"'
+            buildConfigField "String", "BASE_URL", '"http://192.168.0.103:8080/"'
             buildConfigField "String", "BASE_URL_REMOTE", '"https://api.cinemagold.online/"'
         }
         release {

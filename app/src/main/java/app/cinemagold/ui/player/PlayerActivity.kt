@@ -1,6 +1,5 @@
 package app.cinemagold.ui.player
 
-import android.media.MediaFormat
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -13,14 +12,14 @@ import app.cinemagold.injection.ApplicationContextInjector
 import app.cinemagold.model.content.Content
 import app.cinemagold.model.content.ContentType
 import app.cinemagold.model.content.Subtitle
-import com.fasterxml.jackson.databind.jsonschema.JsonSerializableSchema.NO_VALUE
 import com.google.android.exoplayer2.*
-import com.google.android.exoplayer2.Format.NO_VALUE
 import com.google.android.exoplayer2.source.MediaSource
 import com.google.android.exoplayer2.source.MergingMediaSource
 import com.google.android.exoplayer2.source.ProgressiveMediaSource
 import com.google.android.exoplayer2.source.SingleSampleMediaSource
 import com.google.android.exoplayer2.source.hls.HlsMediaSource
+import com.google.android.exoplayer2.trackselection.AdaptiveTrackSelection
+import com.google.android.exoplayer2.trackselection.DefaultTrackSelector
 import com.google.android.exoplayer2.ui.PlayerView
 import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory
 import com.google.android.exoplayer2.util.MimeTypes
@@ -32,13 +31,14 @@ class PlayerActivity : AppCompatActivity() {
     private lateinit var player : ExoPlayer
     private lateinit var playerView : PlayerView
     private lateinit var content : Content
-    private lateinit var mediaSource : MediaSource
+    private lateinit var trackSelector: DefaultTrackSelector
 
     override fun onCreate(savedInstanceState: Bundle?) {
         (applicationContext as ApplicationContextInjector).applicationComponent.inject(this)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_player)
 
+        //Fullscreen
         if (Build.VERSION.SDK_INT >= 30){
             window.setDecorFitsSystemWindows(false)
         }else{
@@ -71,7 +71,9 @@ class PlayerActivity : AppCompatActivity() {
             content = Gson().fromJson(extras.get("content") as String, Content::class.java)
         }
 
-        player = SimpleExoPlayer.Builder(this).build()
+        //Set-up player
+        trackSelector = DefaultTrackSelector(this)
+        player = SimpleExoPlayer.Builder(this).setTrackSelector(trackSelector).build()
         playerView = findViewById(R.id.player)
         initializePlayer()
         playerView.player = player
@@ -98,26 +100,32 @@ class PlayerActivity : AppCompatActivity() {
         val userAgent =
             Util.getUserAgent(playerView.context, playerView.context.getString(R.string.app_name))
         val dataSourceFactory = DefaultHttpDataSourceFactory(userAgent)
-        val sources : MergingMediaSource
+        var sources : MediaSource
 
         //Handle HLS or MP4 formats
         if(contentSource.endsWith("m3u8")){
-            mediaSource = HlsMediaSource.Factory(dataSourceFactory)
+            sources = HlsMediaSource.Factory(dataSourceFactory)
                 .setAllowChunklessPreparation(true)
                 .createMediaSource(Uri.parse(contentSource))
-            player.prepare(mediaSource, true, false)
         }else{
-            mediaSource = ProgressiveMediaSource
+            sources = ProgressiveMediaSource
                 .Factory(dataSourceFactory)
                 .createMediaSource(Uri.parse(contentSource))
         }
 
         //Handle subtitles
-            val subtitleFormat: Format = Format.createTextSampleFormat(
-                "id", MimeTypes.TEXT_VTT, Format.NO_VALUE, "en"
+        val subtitleSources = arrayListOf<MediaSource>()
+        var subtitleSource : MediaSource
+        var subtitleFormat : Format
+        val subtitleMediaFactory = SingleSampleMediaSource.Factory(dataSourceFactory)
+        for((index, subtitle) in subtitles.withIndex()){
+            subtitleFormat = Format.createTextSampleFormat(
+                index.toString(), MimeTypes.TEXT_VTT, Format.NO_VALUE, subtitle.language.name
             )
-            val subtitleSource = SingleSampleMediaSource(Uri.parse("subtitles[1].src"), dataSourceFactory, subtitleFormat, C.TIME_UNSET)
-            sources = MergingMediaSource(mediaSource, subtitleSource)
-            player.prepare(sources, true, false)
+            subtitleSource = (subtitleMediaFactory.createMediaSource(Uri.parse(subtitle.src), subtitleFormat, C.TIME_UNSET))
+            sources = MergingMediaSource(sources, subtitleSource)
+        }
+
+        player.prepare(sources, false, false)
     }
 }
