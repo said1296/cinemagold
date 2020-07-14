@@ -20,7 +20,7 @@ class SearchViewModel(private val contentApi : ContentApi)  : ViewModel() {
     }
     var partialName : String = ""
     //In milliseconds
-    private val cooldownTime : Long = 1000
+    private val cooldownTime : Long = 500
 
     private val handler = Handler(Looper.getMainLooper())
     private val searchRunnable = Runnable {

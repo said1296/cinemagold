@@ -5,6 +5,7 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.view.MotionEvent
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import app.cinemagold.R
@@ -18,8 +19,8 @@ import com.google.android.exoplayer2.source.MergingMediaSource
 import com.google.android.exoplayer2.source.ProgressiveMediaSource
 import com.google.android.exoplayer2.source.SingleSampleMediaSource
 import com.google.android.exoplayer2.source.hls.HlsMediaSource
-import com.google.android.exoplayer2.trackselection.AdaptiveTrackSelection
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector
+import com.google.android.exoplayer2.trackselection.DefaultTrackSelector.SelectionOverride
 import com.google.android.exoplayer2.ui.PlayerView
 import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory
 import com.google.android.exoplayer2.util.MimeTypes
@@ -79,6 +80,21 @@ class PlayerActivity : AppCompatActivity() {
         playerView.player = player
     }
 
+    override fun onTouchEvent(event: MotionEvent?): Boolean {
+        println("TRACKSELECTOR")
+
+        val mappedTrackInfo = trackSelector.currentMappedTrackInfo
+        if(mappedTrackInfo!=null){
+            println("NOT NULL")
+            val rendererTrackGroups =
+                mappedTrackInfo.getTrackGroups(2)
+            println(rendererTrackGroups[2].getFormat(0))
+            val selectionOverride = SelectionOverride(2, 0)
+            trackSelector.setSelectionOverride(2, rendererTrackGroups, selectionOverride)
+        }
+        return super.onTouchEvent(event)
+    }
+
 
     private fun initializePlayer(){
         val contentSource : String
@@ -119,10 +135,16 @@ class PlayerActivity : AppCompatActivity() {
         var subtitleFormat : Format
         val subtitleMediaFactory = SingleSampleMediaSource.Factory(dataSourceFactory)
         for((index, subtitle) in subtitles.withIndex()){
-            subtitleFormat = Format.createTextSampleFormat(
-                index.toString(), MimeTypes.TEXT_VTT, Format.NO_VALUE, subtitle.language.name
+            println("SUBTITLES")
+            println(subtitle)
+            subtitleFormat = Format.createTextSampleFormat( /* id= */
+                null,
+                MimeTypes.TEXT_VTT,
+                C.SELECTION_FLAG_DEFAULT,
+                subtitle.language.name
             )
-            subtitleSource = (subtitleMediaFactory.createMediaSource(Uri.parse(subtitle.src), subtitleFormat, C.TIME_UNSET))
+            subtitleSource = SingleSampleMediaSource.Factory(dataSourceFactory)
+                .createMediaSource(Uri.parse(subtitle.src), subtitleFormat, C.TIME_UNSET)
             sources = MergingMediaSource(sources, subtitleSource)
         }
 
