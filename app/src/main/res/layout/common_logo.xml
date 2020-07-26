@@ -9,7 +9,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:fontFamily="@font/font_medium"
-        android:textSize="@dimen/heading5"
+        android:textSize="@dimen/heading6"
         android:text="Cinema"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent"/>
@@ -19,7 +19,7 @@
         android:layout_height="wrap_content"
         android:text=" GOLD"
         app:fontFamily="@font/font_medium"
-        android:textSize="@dimen/heading5"
+        android:textSize="@dimen/heading6"
         android:textColor="?brand"
         app:layout_constraintLeft_toRightOf="@id/logo_cinema"
         app:layout_constraintTop_toTopOf="parent"/>

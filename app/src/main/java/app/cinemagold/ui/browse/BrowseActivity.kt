@@ -13,7 +13,6 @@ import app.cinemagold.injection.ApplicationContextInjector
 import app.cinemagold.model.content.Content
 import app.cinemagold.model.content.ContentGroupedByGenre
 import app.cinemagold.model.content.ContentType
-import app.cinemagold.ui.player.PlayerActivity
 import app.cinemagold.ui.browse.common.fragment.ContentGridFragment
 import app.cinemagold.ui.browse.common.fragment.ContentGroupedByGenreFragment
 import app.cinemagold.ui.browse.home.HomeFragment
@@ -21,6 +20,7 @@ import app.cinemagold.ui.browse.movie.MovieFragment
 import app.cinemagold.ui.browse.preview.PreviewFragment
 import app.cinemagold.ui.browse.search.SearchFragment
 import app.cinemagold.ui.browse.serialized.SerializedFragment
+import app.cinemagold.ui.player.PlayerActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.gson.Gson
 import javax.inject.Inject

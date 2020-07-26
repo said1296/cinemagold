@@ -1,8 +1,10 @@
 package app.cinemagold.injection.module
 
+import app.cinemagold.dataaccess.remote.AuthenticationApi
 import app.cinemagold.dataaccess.remote.ContentApi
 import app.cinemagold.dataaccess.remote.ContentTypeApi
 import app.cinemagold.dataaccess.remote.GenreApi
+import app.cinemagold.ui.authentication.login.LoginViewModel
 import app.cinemagold.ui.browse.home.HomeViewModel
 import app.cinemagold.ui.browse.preview.PreviewViewModel
 import app.cinemagold.ui.browse.search.SearchViewModel
@@ -43,5 +45,11 @@ class ViewModelModule {
     @Singleton
     fun provideSearchViewModel(contentApi : ContentApi) : SearchViewModel {
         return SearchViewModel(contentApi)
+    }
+
+    @Provides
+    @Singleton
+    fun provideLoginViewModel(authenticationApi: AuthenticationApi) : LoginViewModel {
+        return LoginViewModel(authenticationApi)
     }
 }

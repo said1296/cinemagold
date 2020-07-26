@@ -32,29 +32,47 @@
 
     <dimen name="item_episode_horizontal_width">350dp</dimen>
     <dimen name="item_episode_margin_right">10dp</dimen>
-    <item name="item_episode_guideline_info" type="dimen" format="float">0.8</item>
+    <item name="item_episode_guideline_info" format="float" type="dimen">0.8</item>
     <dimen name="item_episode_info_padding">19dp</dimen>
 
     <dimen name="item_genre_margin_right">10dp</dimen>
 
     <dimen name="header_margin_vertical">15dp</dimen>
 
-    <item name="navbar_guideline_top_percent" type="dimen" format="float">0.94</item>
+    <item name="navbar_guideline_top_percent" format="float" type="dimen">0.94</item>
 
     <dimen name="sidebar_option_spacing">15dp</dimen>
     <dimen name="sidebar_padding_horizontal">25dp</dimen>
-    <item name="sidebar_guideline_end" type="dimen" format="float">0.85</item>
-    <item name="sidebar_options_main_end" type="dimen" format="float">0.9</item>
-    
+    <item name="sidebar_guideline_end" format="float" type="dimen">0.85</item>
+    <item name="sidebar_options_main_end" format="float" type="dimen">0.9</item>
+
     <dimen name="search_input_padding_vertical">10dp</dimen>
+
+    <!-- PLAYER -->
+    <dimen name="player_selector_title_margin_bottom">15dp</dimen>
+    <dimen name="player_selector_padding">50dp</dimen>
+    <dimen name="item_player_selector_margin_vertical">15dp</dimen>
+
+    <dimen name="login_edit_text_height">55dp</dimen>
+    <dimen name="login_edit_text_padding_horizontal">10dp</dimen>
+    <dimen name="login_edit_text_margin_top">10dp</dimen>
+    <dimen name="login_submit_width">200dp</dimen>
+    <dimen name="login_submit_height">60dp</dimen>
+    <dimen name="login_submit_margin_top">20dp</dimen>
+
+    <dimen name="sign_in_brand_name_hold_margin_left">5dp</dimen>
 
     <dimen name="heading1">45sp</dimen>
     <dimen name="heading2">35sp</dimen>
     <dimen name="heading3">26sp</dimen>
     <dimen name="heading4">24sp</dimen>
-    <dimen name="heading5">18sp</dimen>
+    <dimen name="heading5">22sp</dimen>
+    <dimen name="heading6">18sp</dimen>
     <dimen name="text1">16sp</dimen>
     <dimen name="text2">15sp</dimen>
     <dimen name="text3">14sp</dimen>
     <dimen name="text4">11sp</dimen>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
 </resources>

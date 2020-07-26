@@ -6,6 +6,7 @@ import app.cinemagold.ui.browse.common.recycleradapter.ContentHorizontalRVA
 import app.cinemagold.ui.browse.common.recycleradapter.ContentVerticalRVA
 import app.cinemagold.ui.browse.preview.EpisodeRVA
 import app.cinemagold.ui.browse.serialized.GenreRVA
+import app.cinemagold.ui.player.PlayerSelectorRVA
 import com.squareup.picasso.Picasso
 import dagger.Module
 import dagger.Provides
@@ -41,5 +42,11 @@ class RVAModule {
     @Singleton
     fun provideGenreRVA(context : Context) : GenreRVA {
         return GenreRVA(emptyList(), context)
+    }
+
+    @Provides
+    @Singleton
+    fun providePlayerSelectorRVA(context : Context) : PlayerSelectorRVA {
+        return PlayerSelectorRVA(emptyList(), context)
     }
 }

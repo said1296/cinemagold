@@ -5,7 +5,9 @@
     <color name="red">#DD6F2D</color>
     <color name="grayDark">#212121</color>
     <color name="grayDarkAlpha80">#99212121</color>
+    <color name="grayDarkAlpha90">#E6212121</color>
     <color name="grayMedium">#303030</color>
+    <color name="grayMediumAlpha30">#80212121</color>
     <color name="ashDark">#8B939C</color>
     <color name="ashMedium">#CBCBCB</color>
     <color name="white">#FFFFFF</color>

@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.authentication.login.Login">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:src="@drawable/img_bg_login" />
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/bg_login_mask" />
+
+    <androidx.appcompat.widget.AppCompatEditText
+        android:id="@+id/login_edit_text"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/login_edit_text_height"
+        android:hint="@string/email"
+        android:textColorHint="?lightDark"
+        android:paddingHorizontal="@dimen/login_edit_text_padding_horizontal"
+        app:layout_constraintLeft_toRightOf="@id/guideline_login_edit_text_left"
+        app:layout_constraintRight_toLeftOf="@id/guideline_login_edit_text_right"
+        app:layout_constraintTop_toBottomOf="@id/guideline_login_input"
+        android:background="@drawable/bg_login_edit_text"
+        android:textSize="@dimen/heading4"
+        android:fontFamily="@font/font_semibold"/>
+    <LinearLayout
+        android:id="@+id/login_password"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/login_edit_text_margin_top"
+        app:layout_constraintLeft_toRightOf="@id/guideline_login_edit_text_left"
+        app:layout_constraintRight_toLeftOf="@id/guideline_login_edit_text_right"
+        app:layout_constraintTop_toBottomOf="@id/login_edit_text"
+        android:background="@drawable/bg_login_edit_text"
+        android:orientation="horizontal"
+        android:weightSum="100"
+        android:paddingHorizontal="@dimen/login_edit_text_padding_horizontal">
+        <androidx.appcompat.widget.AppCompatEditText
+            android:id="@+id/login_password_edit_text"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/login_edit_text_height"
+            android:hint="@string/password"
+            android:textColorHint="?lightDark"
+            android:layout_weight="90"
+            android:background="null"
+            android:textSize="@dimen/heading4"
+            android:fontFamily="@font/font_semibold"/>
+        <ImageButton
+            android:id="@+id/login_password_show"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="10"
+            android:src="@drawable/ic_eye_closed_24dp"
+            android:scaleType="fitCenter"
+            android:background="null"/>
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/login_submit"
+        android:layout_width="@dimen/login_submit_width"
+        android:layout_height="@dimen/login_submit_height"
+        android:layout_marginTop="@dimen/login_submit_margin_top"
+        app:layout_constraintTop_toBottomOf="@id/login_password"
+        app:layout_constraintLeft_toRightOf="@id/guideline_login_edit_text_left"
+        app:layout_constraintRight_toLeftOf="@id/guideline_login_edit_text_right"
+        android:background="@drawable/bg_button_call"
+        android:text="@string/LOGIN"
+        android:textSize="@dimen/heading5"
+        android:fontFamily="@font/font_semibold"
+        android:elevation="10dp"/>
+
+
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_login_edit_text_right"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.85" />
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_login_edit_text_left"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.15" />
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_login_input"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.4" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

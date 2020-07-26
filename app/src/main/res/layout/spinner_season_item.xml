@@ -7,7 +7,7 @@
     android:layout_height="wrap_content"
     android:ellipsize="marquee"
     android:background="?dark"
-    android:textSize="@dimen/heading5"
+    android:textSize="@dimen/heading6"
     android:paddingVertical="10dp"
     android:paddingHorizontal="10dp"
     android:textAlignment="center"

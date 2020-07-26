@@ -7,7 +7,7 @@
     android:ellipsize="marquee"
     android:text="Temporada 1"
     android:fontFamily="@font/font_bold"
-    android:textSize="@dimen/heading5"
+    android:textSize="@dimen/heading6"
     android:textColor="@color/white"
     android:textAlignment="inherit"
     android:drawableRight="@drawable/ic_arrow_drop_down_24dp"/>

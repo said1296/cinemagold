@@ -1,6 +1,7 @@
 package app.cinemagold.injection.module;
 
 
+import app.cinemagold.dataaccess.remote.AuthenticationApi
 import app.cinemagold.dataaccess.remote.ContentApi
 import app.cinemagold.dataaccess.remote.ContentTypeApi
 import app.cinemagold.dataaccess.remote.GenreApi
@@ -25,5 +26,11 @@ class ApiModule {
     @Singleton
     fun getContentTypeApi(retrofit: Retrofit): ContentTypeApi {
         return retrofit.create(ContentTypeApi::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun getAuthenticationApi(retrofit: Retrofit): AuthenticationApi {
+        return retrofit.create(AuthenticationApi::class.java)
     }
 }

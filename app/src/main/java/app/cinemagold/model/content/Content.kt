@@ -1,9 +1,7 @@
 package app.cinemagold.model.content
 
-import android.os.Parcelable
 import app.cinemagold.BuildConfig
 import app.cinemagold.model.generic.GenericIdAndName
-import kotlinx.android.parcel.Parcelize
 
 data class Content(
     val id : Int = -1,

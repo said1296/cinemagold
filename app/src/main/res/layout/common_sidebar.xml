@@ -51,7 +51,7 @@
                             android:drawableEnd="@drawable/ic_arrow_drop_down_24dp"
                             android:drawableRight="@drawable/ic_arrow_drop_down_24dp"
                             android:text="Nombre"
-                            android:textSize="@dimen/heading5" />
+                            android:textSize="@dimen/heading6" />
                 </LinearLayout>
         </LinearLayout>
 
@@ -84,7 +84,7 @@
                     android:drawableRight="@drawable/ic_arrow_drop_down_24dp"
                     android:drawablePadding="2dp"
                     android:text="Dispositivos"
-                    android:textSize="@dimen/heading5" />
+                    android:textSize="@dimen/heading6" />
 
                 <TextView
                     android:id="@+id/sidebar_account"
@@ -92,7 +92,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/sidebar_option_spacing"
                     android:text="Cuenta"
-                    android:textSize="@dimen/heading5" />
+                    android:textSize="@dimen/heading6" />
 
                 <TextView
                     android:id="@+id/sidebar_payment"
@@ -100,7 +100,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/sidebar_option_spacing"
                     android:text="Pagos"
-                    android:textSize="@dimen/heading5" />
+                    android:textSize="@dimen/heading6" />
 
                 <TextView
                     android:id="@+id/sidebar_help"
@@ -108,7 +108,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/sidebar_option_spacing"
                     android:text="Ayuda"
-                    android:textSize="@dimen/heading5" />
+                    android:textSize="@dimen/heading6" />
         </LinearLayout>
 
         <LinearLayout
@@ -130,7 +130,7 @@
                     android:text="Cerrar sesión"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintLeft_toLeftOf="parent"
-                    android:textSize="@dimen/heading5"
+                    android:textSize="@dimen/heading6"
                     android:textColor="?lightMedium"/>
         </LinearLayout>
 

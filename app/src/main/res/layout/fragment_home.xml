@@ -35,7 +35,7 @@
                 android:layout_marginLeft="@dimen/standard_margin_horizontal"
                 android:layout_marginBottom="@dimen/item_content_grouped_by_genre_title_margin_bottom"
                 android:text="Estrenos"
-                android:textSize="@dimen/heading5" />
+                android:textSize="@dimen/heading6" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/content_recycler_content_premiere"

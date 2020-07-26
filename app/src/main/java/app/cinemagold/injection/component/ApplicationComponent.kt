@@ -1,8 +1,8 @@
 package app.cinemagold.injection.component
 
 import app.cinemagold.injection.module.*
+import app.cinemagold.ui.authentication.AuthenticationActivity
 import app.cinemagold.ui.browse.BrowseActivity
-import app.cinemagold.ui.player.PlayerActivity
 import app.cinemagold.ui.browse.common.fragment.ContentGridFragment
 import app.cinemagold.ui.browse.common.fragment.ContentGroupedByGenreFragment
 import app.cinemagold.ui.browse.home.HomeFragment
@@ -10,6 +10,7 @@ import app.cinemagold.ui.browse.movie.MovieFragment
 import app.cinemagold.ui.browse.preview.PreviewFragment
 import app.cinemagold.ui.browse.search.SearchFragment
 import app.cinemagold.ui.browse.serialized.SerializedFragment
+import app.cinemagold.ui.player.PlayerActivity
 import dagger.Component
 import javax.inject.Singleton
 
@@ -38,4 +39,6 @@ interface ApplicationComponent {
     fun inject(fragment: ContentGridFragment)
 
     fun inject(activity: PlayerActivity)
+
+    fun inject(activity: AuthenticationActivity)
 }
