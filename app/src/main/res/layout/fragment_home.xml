@@ -6,7 +6,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".ui.browse.home.HomeFragment">
+    android:background="?dark"
+    tools:context=".ui.browse.home.HomeFragment"
+    android:clickable="true"
+    android:focusable="true">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -24,8 +27,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginTop="@dimen/header_margin_vertical"
-                android:layout_marginBottom="@dimen/header_margin_vertical" />
+                android:layout_marginVertical="@dimen/header_margin_vertical" />
 
             <TextView
                 android:id="@+id/content_premiere_title"
@@ -34,11 +36,28 @@
                 android:layout_marginStart="@dimen/standard_margin_horizontal"
                 android:layout_marginLeft="@dimen/standard_margin_horizontal"
                 android:layout_marginBottom="@dimen/item_content_grouped_by_genre_title_margin_bottom"
-                android:text="Estrenos"
+                android:text="@string/premieres"
                 android:textSize="@dimen/heading6" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/content_recycler_content_premiere"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/item_content_grouped_by_genre_margin_bottom"
+                android:orientation="vertical" />
+
+            <TextView
+                android:id="@+id/content_recent_title"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="@dimen/standard_margin_horizontal"
+                android:layout_marginLeft="@dimen/standard_margin_horizontal"
+                android:layout_marginBottom="@dimen/item_content_grouped_by_genre_title_margin_bottom"
+                android:text="@string/recent"
+                android:textSize="@dimen/heading6" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/content_recycler_content_recent"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/item_content_grouped_by_genre_margin_bottom"

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.mikhaellopez.circularimageview.CircularImageView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/widget_avatar"
+    android:layout_width="match_parent"
+    android:layout_height="0dp"
+    app:layout_constraintDimensionRatio="1:1"
+    app:layout_constraintTop_toTopOf="parent"
+    app:layout_constraintLeft_toLeftOf="parent"
+    android:src="@drawable/bg_profile_empty"
+    app:civ_border_color="?brand"
+    app:civ_border_width="3dp"/>

@@ -5,11 +5,11 @@
         android:title="Home" />
     <item android:id="@+id/navbar_movie"
         android:icon="@drawable/ic_movie_24dp"
-        android:title="Movie" />
+        android:title="Pelis" />
     <item android:id="@+id/navbar_serialized"
         android:icon="@drawable/ic_serialized_24dp"
-        android:title="Serialized" />
+        android:title="Series" />
     <item android:id="@+id/navbar_search"
         android:icon="@drawable/ic_search_24dp"
-        android:title="Search" />
+        android:title="Buscar" />
 </menu>

@@ -47,14 +47,6 @@ class ContentGridRVA @Inject constructor(
             .resize(2*scale, 3*scale)
             .centerCrop().into(item.item_content_grid_background)
 
-        //Set start and end padding
-        val params = holder.itemView.layoutParams as RecyclerView.LayoutParams
-        if(position == 0){
-            params.leftMargin = sideMargin
-        } else if (position == dataset.lastIndex){
-            params.rightMargin = sideMargin
-        }
-
         item.setOnClickListener { clickHandler(currentData.id, currentData.mediaType.id) }
     }
 

@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.LinearLayoutCompat
+import androidx.core.view.updatePadding
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import app.cinemagold.R
@@ -34,12 +35,15 @@ class ContentGroupedByGenreFragment : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.generic_linear_layout, container, false) as LinearLayoutCompat
         containerView = view
-        inflateContentGroupedByGenres()
+        //Compensate bottom padding for navbar
+        view.updatePadding(bottom = resources.getDimensionPixelSize(R.dimen.bottom_navbar_height) + 10)
+
+        if(this::contentGroupedByGenres.isInitialized)
+            inflateContentGroupedByGenres()
         return view
     }
 
     fun updateContents(contentsNew : List<ContentGroupedByGenre>){
-        println(this.parentFragment.toString())
         contentGroupedByGenres = contentsNew
         if(this::contentHorizontalRVAProvider.isInitialized && view!=null){
             inflateContentGroupedByGenres()
@@ -48,7 +52,6 @@ class ContentGroupedByGenreFragment : Fragment() {
 
     //Inflate genres generic_recycler views
     private fun inflateContentGroupedByGenres(){
-        println(contentGroupedByGenres)
         containerView.removeAllViews()
         System.gc()
         for(item in contentGroupedByGenres){

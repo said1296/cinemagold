@@ -1,7 +1,7 @@
 package app.cinemagold.model.content
 
 import app.cinemagold.BuildConfig
-import app.cinemagold.model.generic.GenericIdAndName
+import app.cinemagold.model.generic.IdAndName
 
 data class Content(
     val id : Int = -1,
@@ -11,9 +11,9 @@ data class Content(
     var length : String = "-1",
     val description: String = "",
     val descriptionShort: String = "",
-    val genreMain : GenericIdAndName = GenericIdAndName(),
-    val genreSecondary : GenericIdAndName = GenericIdAndName(),
-    val mediaType : GenericIdAndName = GenericIdAndName(),
+    val genreMain : IdAndName = IdAndName(),
+    val genreSecondary : IdAndName = IdAndName(),
+    val mediaType : IdAndName = IdAndName(),
     var score : Float = -1F,
     val movie : Movie = Movie(),
     val seasons : List<Season> = emptyList()

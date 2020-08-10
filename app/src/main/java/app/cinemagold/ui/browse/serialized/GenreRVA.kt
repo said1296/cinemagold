@@ -10,17 +10,17 @@ import android.widget.TextView
 import androidx.appcompat.view.ContextThemeWrapper
 import androidx.recyclerview.widget.RecyclerView
 import app.cinemagold.R
-import app.cinemagold.model.generic.GenericIdAndName
+import app.cinemagold.model.generic.IdAndName
 import kotlinx.android.synthetic.main.item_genre.view.*
 import javax.inject.Inject
 
 
 class GenreRVA @Inject constructor(
-    private var dataset : List<GenericIdAndName>,
+    private var dataset : List<IdAndName>,
     val context : Context
 ) : RecyclerView.Adapter<GenreRVA.ViewHolder>() {
     private val sideMargin = context.resources.getDimensionPixelSize(R.dimen.standard_margin_horizontal)
-    lateinit var clickHandler : (GenericIdAndName) -> Unit
+    lateinit var clickHandler : (IdAndName) -> Unit
     var selectedPosition : Int = 0
     private var lightColor : Int
     private var lightDarkColor : Int
@@ -90,7 +90,7 @@ class GenreRVA @Inject constructor(
         return position
     }
 
-    fun setDataset(datasetNew : List<GenericIdAndName>){
+    fun setDataset(datasetNew : List<IdAndName>){
         dataset = datasetNew
         notifyDataSetChanged()
     }

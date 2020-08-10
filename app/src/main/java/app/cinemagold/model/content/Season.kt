@@ -3,6 +3,7 @@ package app.cinemagold.model.content
 import app.cinemagold.BuildConfig
 
 data class Season (
+    val id : Int = -1,
     val number : Int = -1,
     val year : Int = -1,
     var length : String = "",

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="horizontal"
+    android:weightSum="100"
+    android:gravity="center"
+    android:background="?darkMedium">
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/sidebar_device_name"
+        android:layout_height="wrap_content"
+        android:layout_weight="90"
+        android:layout_width="0dp"
+        android:textColor="?lightMedium"
+        android:text="Mozilla Firefox (Windows 10 / 1.4)"
+        android:textSize="@dimen/heading6"
+        app:fontFamily="@font/font_semibold"/>
+    <androidx.appcompat.widget.AppCompatImageButton
+        android:id="@+id/sidebar_device_deauth"
+        android:layout_weight="10"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_exit_24"
+        android:background="@android:color/transparent"/>
+
+</androidx.appcompat.widget.LinearLayoutCompat>

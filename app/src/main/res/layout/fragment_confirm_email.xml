@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent">
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:src="@drawable/img_bg_login" />
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/bg_login_mask" />
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/confirm_email"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:weightSum="100"
+        android:orientation="vertical"
+        android:layout_marginHorizontal="@dimen/register_form_margin_horizontal"
+        android:layout_marginVertical="@dimen/register_form_margin_vertical">
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="40"/>
+        <androidx.appcompat.widget.AppCompatTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/confirm_email_message"
+            android:textSize="@dimen/heading1"
+            app:fontFamily="@font/font_medium"
+            android:layout_weight="30"/>
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="30"
+            android:gravity="center">
+            <Button
+                android:id="@+id/confirm_email_continue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/continue_string"
+                android:background="@drawable/bg_sign_in_register"
+                android:paddingVertical="@dimen/confirm_email_continue_padding_vertical"
+                android:paddingHorizontal="@dimen/confirm_email_continue_padding_horizontal"
+                android:textSize="@dimen/heading5"
+                android:textColor="?darkMedium"/>
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+</androidx.constraintlayout.widget.ConstraintLayout>

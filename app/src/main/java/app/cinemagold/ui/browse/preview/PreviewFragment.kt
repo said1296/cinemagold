@@ -133,6 +133,9 @@ class PreviewFragment : Fragment() {
             adapter = episodeRVA
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
         }
+        episodeRVA.clickHandler = {data ->
+            (activity as BrowseActivity).navigateToPlayer(content, currentSeasonIndex, data)
+        }
         episodeRVA.setDataset(content.seasons[currentSeasonIndex].episodes)
 
         //Season selector

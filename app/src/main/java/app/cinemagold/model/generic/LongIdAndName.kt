@@ -1,6 +1,6 @@
 package app.cinemagold.model.generic
 
-data class GenericIdAndName (
-    val id: Int = -1,
+data class LongIdAndName (
+    val id: Long = -1,
     val name : String = ""
 )

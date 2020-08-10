@@ -13,7 +13,7 @@ class ApplicationContextInjector : Application() {
         applicationComponent = buildComponent()
     }
 
-    fun buildComponent(): ApplicationComponent {
+    private fun buildComponent(): ApplicationComponent {
         return DaggerApplicationComponent.builder()
             .applicationModule(ApplicationModule(this))
             .build()

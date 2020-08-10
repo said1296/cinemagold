@@ -22,6 +22,8 @@
         <!-- Style for score stars in Preview -->
         <item name="android:ratingBarStyle">@style/score</item>
 
+        <item  name="android:textColorHint">?lightDark</item>
+
         <!--
             <item name="android:statusBarColor" tools:targetApi="lollipop">@android:color/transparent</item>
             <item name="android:navigationBarColor" tools:targetApi="lollipop">@android:color/transparent</item>
@@ -35,6 +37,17 @@
         <item name="android:progressDrawable">@drawable/widget_score</item>
         <item name="android:minHeight">22dp</item>
         <item name="android:maxHeight">22dp</item>
+    </style>
+
+    <style name="AppTheme.Register.EditText" parent="Widget.AppCompat.EditText">
+        <item name="android:textSize">@dimen/heading4</item>
+        <item name="android:background">@drawable/bg_login_edit_text</item>
+        <item name="android:padding">@dimen/register_edit_text_padding</item>
+        <item name="fontFamily">@font/font_semibold</item>
+        <item name="android:textColor">?light</item>
+    </style>
+    <style name="AppTheme.Register" parent="AppTheme">
+        <item name="editTextStyle">@style/AppTheme.Register.EditText</item>
     </style>
 
     <!-- ExoPlayer Custom Controls -->

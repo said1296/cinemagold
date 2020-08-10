@@ -2,6 +2,7 @@ package app.cinemagold.injection.module
 
 import app.cinemagold.ui.browse.common.fragment.ContentGridFragment
 import app.cinemagold.ui.browse.common.fragment.ContentGroupedByGenreFragment
+import app.cinemagold.ui.option.profilecreate.AvatarGridFragment
 import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton
@@ -10,7 +11,7 @@ import javax.inject.Singleton
 class FragmentModule {
     @Provides
     @Singleton
-    fun provideContentGridFragment() : ContentGridFragment {
+    fun provideContentGridFragment(): ContentGridFragment {
         return ContentGridFragment()
     }
 

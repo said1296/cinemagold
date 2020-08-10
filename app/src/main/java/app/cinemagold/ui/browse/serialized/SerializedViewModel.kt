@@ -1,40 +1,47 @@
 package app.cinemagold.ui.browse.serialized
 
+import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.preference.PreferenceManager
+import app.cinemagold.BuildConfig
 import app.cinemagold.dataaccess.remote.ContentApi
 import app.cinemagold.dataaccess.remote.ContentTypeApi
 import app.cinemagold.dataaccess.remote.GenreApi
 import app.cinemagold.model.content.Content
 import app.cinemagold.model.content.ContentGroupedByGenre
 import app.cinemagold.model.content.ContentType
-import app.cinemagold.model.generic.GenericIdAndName
-import app.cinemagold.ui.browse.common.dataholder.LiveEvent
+import app.cinemagold.model.generic.IdAndName
+import app.cinemagold.model.user.Profile
+import app.cinemagold.ui.common.dataholder.LiveEvent
+import com.google.gson.Gson
 import com.haroldadmin.cnradapter.NetworkResponse
 import kotlinx.coroutines.launch
 
-class SerializedViewModel(private val contentApi : ContentApi, private val genreApi : GenreApi, private val contentTypeApi: ContentTypeApi)  : ViewModel() {
-    val error : MutableLiveData<String> by lazy {
-        MutableLiveData<String>()
+class SerializedViewModel(private val contentApi : ContentApi, private val genreApi : GenreApi, private val contentTypeApi: ContentTypeApi, val context : Context)  : ViewModel() {
+    val error : LiveEvent<String> by lazy {
+        LiveEvent<String>()
     }
     val contentGroupedByGenre : MutableLiveData<MutableList<ContentGroupedByGenre>> by lazy {
         MutableLiveData<MutableList<ContentGroupedByGenre>>()
     }
-    val genres : MutableLiveData<MutableList<GenericIdAndName>> by lazy {
-        MutableLiveData<MutableList<GenericIdAndName>>()
+    val genres : MutableLiveData<MutableList<IdAndName>> by lazy {
+        MutableLiveData<MutableList<IdAndName>>()
     }
     val contentGenre : LiveEvent<MutableList<Content>> by lazy {
         LiveEvent<MutableList<Content>>()
     }
-    val contentTypes : MutableLiveData<MutableList<GenericIdAndName>> by lazy {
-        MutableLiveData<MutableList<GenericIdAndName>>()
+    val contentTypes : MutableLiveData<MutableList<IdAndName>> by lazy {
+        MutableLiveData<MutableList<IdAndName>>()
     }
-    var currentGenre = GenericIdAndName()
+    var currentGenre = IdAndName()
     var contentTypeSpinnerItems = mutableListOf<String>()
-    var currentContentType = GenericIdAndName()
+    var currentContentType = IdAndName()
+    var isKids = false
 
     init {
+        setIsKids()
         requestContentTypesAndContentTypeSpinnerItems()
         requestContentGroupedByGenre()
         requestGenres()
@@ -55,7 +62,7 @@ class SerializedViewModel(private val contentApi : ContentApi, private val genre
         }
     }
 
-    fun selectedGenre(genre : GenericIdAndName){
+    fun selectedGenre(genre : IdAndName){
         if(currentGenre!=genre){
             currentGenre=genre
             //If "All genres" selected
@@ -69,7 +76,7 @@ class SerializedViewModel(private val contentApi : ContentApi, private val genre
 
     fun stoppedFragment(){
         //Reinitialize genre value
-        currentGenre = GenericIdAndName()
+        currentGenre = IdAndName()
     }
 
 
@@ -79,9 +86,9 @@ class SerializedViewModel(private val contentApi : ContentApi, private val genre
             println(currentContentType.id)
             val response =
                 if(currentContentType.id == -1){
-                    contentApi.getSerializedGroupedByGenre()
+                    contentApi.getSerializedGroupedByGenre(isKids)
                 } else{
-                    contentApi.getByContentTypeIdAndGroupedByGenre(currentContentType.id)
+                    contentApi.getByContentTypeIdAndGroupedByGenre(currentContentType.id, isKids)
                 }
             when(response){
                 is NetworkResponse.Success -> {
@@ -105,7 +112,7 @@ class SerializedViewModel(private val contentApi : ContentApi, private val genre
                 if(currentContentType.id==-1){
                     contentApi.getSerializedByGenre(currentGenre.id, 21)
                 }else{
-                    contentApi.getByGenreIdAndOptionalContentTypeId(currentGenre.id, currentContentType.id, 21)
+                    contentApi.getByGenreIdAndOptionalContentTypeId(currentGenre.id, currentContentType.id, 21, isKids)
                 }
             println(response)
             when(response){
@@ -134,7 +141,7 @@ class SerializedViewModel(private val contentApi : ContentApi, private val genre
                 }
             when(response){
                 is NetworkResponse.Success -> {
-                    response.body.add(0, GenericIdAndName(-1, "Todos"))
+                    response.body.add(0, IdAndName(-1, "Todos"))
                     genres.postValue(response.body)
                 }
                 is NetworkResponse.ServerError -> {
@@ -154,7 +161,7 @@ class SerializedViewModel(private val contentApi : ContentApi, private val genre
             when(val data = contentTypeApi.getAll()){
                 is NetworkResponse.Success -> {
                     data.body.removeAll { contentType -> contentType.id == ContentType.MOVIE.value}
-                    data.body.add(0, GenericIdAndName(-1, "Programas de TV"))
+                    data.body.add(0, IdAndName(-1, "Programas de TV"))
                     //Set content type spinner items
                     for(contentType in data.body){
                         contentTypeSpinnerItems.add(contentType.name)
@@ -171,5 +178,12 @@ class SerializedViewModel(private val contentApi : ContentApi, private val genre
                 else -> error.postValue("Unknown error")
             }
         }
+    }
+
+    //Actions
+    private fun setIsKids(){
+        val preferences = PreferenceManager.getDefaultSharedPreferences(context)
+        val currentProfile = Gson().fromJson(preferences.getString(BuildConfig.PREFS_PROFILE, ""), Profile::class.java)
+        isKids = currentProfile.id == -1
     }
 }

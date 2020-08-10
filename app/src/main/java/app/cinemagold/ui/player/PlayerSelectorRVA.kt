@@ -11,16 +11,16 @@ import android.widget.TextView
 import androidx.appcompat.view.ContextThemeWrapper
 import androidx.recyclerview.widget.RecyclerView
 import app.cinemagold.R
-import app.cinemagold.model.generic.GenericIdAndName
+import app.cinemagold.model.generic.IdAndName
 import javax.inject.Inject
 
 
 class PlayerSelectorRVA @Inject constructor(
-    private var dataset : List<GenericIdAndName>,
+    private var dataset : List<IdAndName>,
     val context : Context
 ) : RecyclerView.Adapter<PlayerSelectorRVA.ViewHolder>() {
     private val sideMargin = context.resources.getDimensionPixelSize(R.dimen.standard_margin_horizontal)
-    lateinit var clickHandler : (GenericIdAndName) -> Unit
+    lateinit var clickHandler : (IdAndName) -> Unit
     var selectedId : Int = -1
     private var lightColor : Int
     private var lightDarkColor : Int
@@ -79,7 +79,7 @@ class PlayerSelectorRVA @Inject constructor(
         return position
     }
 
-    fun setDataset(datasetNew : List<GenericIdAndName>){
+    fun setDataset(datasetNew : List<IdAndName>){
         dataset = datasetNew
         notifyDataSetChanged()
     }

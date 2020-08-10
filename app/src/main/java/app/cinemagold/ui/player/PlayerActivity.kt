@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.view.Gravity
+import android.view.MotionEvent
 import android.view.View
 import android.widget.ImageButton
 import androidx.appcompat.app.AppCompatActivity
@@ -17,11 +18,13 @@ import app.cinemagold.injection.ApplicationContextInjector
 import app.cinemagold.model.content.Content
 import app.cinemagold.model.content.ContentType
 import app.cinemagold.model.content.SubtitleType
-import app.cinemagold.model.generic.GenericIdAndName
+import app.cinemagold.model.generic.IdAndName
+import app.cinemagold.ui.browse.home.HomeFragment
 import com.google.android.exoplayer2.C
 import com.google.android.exoplayer2.ExoPlayer
 import com.google.android.exoplayer2.Format
 import com.google.android.exoplayer2.SimpleExoPlayer
+import com.google.android.exoplayer2.ext.cast.CastPlayer
 import com.google.android.exoplayer2.source.MediaSource
 import com.google.android.exoplayer2.source.MergingMediaSource
 import com.google.android.exoplayer2.source.ProgressiveMediaSource
@@ -33,7 +36,15 @@ import com.google.android.exoplayer2.ui.PlayerView
 import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory
 import com.google.android.exoplayer2.util.MimeTypes
 import com.google.android.exoplayer2.util.Util
+import com.google.android.gms.cast.MediaInfo
+import com.google.android.gms.cast.MediaLoadRequestData
+import com.google.android.gms.cast.MediaMetadata
+import com.google.android.gms.cast.MediaTrack
+import com.google.android.gms.cast.framework.CastButtonFactory
+import com.google.android.gms.cast.framework.CastContext
+import com.google.android.gms.cast.framework.CastState
 import com.google.gson.Gson
+import kotlinx.android.synthetic.main.activity_player.view.*
 import kotlinx.android.synthetic.main.player_control_movie.view.*
 import kotlinx.android.synthetic.main.player_selector.view.*
 import java.util.stream.Collectors
@@ -44,25 +55,63 @@ class PlayerActivity : AppCompatActivity() {
     private lateinit var player : ExoPlayer
     private lateinit var playerView : PlayerView
     private lateinit var content : Content
+    private var seasonIndex : Int = 0
+    private var episodeIndex : Int = 0
     private lateinit var trackSelector: DefaultTrackSelector
+    private lateinit var  mediaInfo: MediaInfo
     private lateinit var sources : MediaSource
+    private var mediaTracks = mutableListOf<MediaTrack>()
     private lateinit var dataSourceFactory  : DefaultHttpDataSourceFactory
-    private lateinit var subtitleItems : List<GenericIdAndName>
-    private var audioTrackItems : ArrayList<GenericIdAndName> = arrayListOf()
+    private lateinit var subtitleItems : List<IdAndName>
+    private var audioTrackItems : ArrayList<IdAndName> = arrayListOf()
     private lateinit var rootView : ConstraintLayout
     private lateinit var selectorView : LinearLayoutCompat
-    private val playerListener = PlayerListener { onLoaded() }
+    private val playerListener = PlayerListener (
+        { onLoaded() },
+        {
+            val elapsedPercent = (player.currentPosition.toFloat() / player.duration)
+            if(content.mediaType.id==ContentType.MOVIE.value){
+                playerViewModel.triggeredUpdateElapsed(content.id, player.currentPosition.toInt(), elapsedPercent)
+            }else{
+                playerViewModel.triggeredUpdateElapsed(content.id,
+                    content.seasons[seasonIndex].episodes[episodeIndex].id, player.currentPosition.toInt(), elapsedPercent)
+            }
+        }
+    )
     private var audioTrackSelected = 0
     private var subtitleSelected = -1
-
     @Inject
     lateinit var playerSelectorRVA : PlayerSelectorRVA
+    @Inject
+    lateinit var playerViewModel: PlayerViewModel
+    lateinit var castPlayer: CastPlayer
+    lateinit var castContext: CastContext
+    var elapsed = -1L
 
     override fun onCreate(savedInstanceState: Bundle?) {
         (applicationContext as ApplicationContextInjector).applicationComponent.inject(this)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_player)
         rootView = findViewById(R.id.player)
+
+        //Cast
+        val mediaRouteButton = rootView.media_route_button
+        val castControlView = rootView.cast_control_view
+        CastButtonFactory.setUpMediaRouteButton(applicationContext, mediaRouteButton)
+
+        castContext = CastContext.getSharedInstance(this)
+        castPlayer = CastPlayer(castContext)
+
+        if (castContext.castState != CastState.NO_DEVICES_AVAILABLE) mediaRouteButton.visibility = View.VISIBLE
+        castContext.addCastStateListener { state ->
+            if (state == CastState.NO_DEVICES_AVAILABLE) mediaRouteButton.visibility = View.GONE else {
+                if (mediaRouteButton.visibility == View.GONE) mediaRouteButton.visibility = View.VISIBLE
+            }
+        }
+
+        //TODO: VIEW
+        /*castControlView.player = castPlayer*/
+        castControlView.visibility = View.GONE
 
         //Fullscreen
         if (Build.VERSION.SDK_INT >= 30){
@@ -95,6 +144,14 @@ class PlayerActivity : AppCompatActivity() {
         val extras = intent.extras
         if(extras != null){
             content = Gson().fromJson(extras.get("content") as String, Content::class.java)
+            if(content.mediaType.id != ContentType.MOVIE.value){
+                episodeIndex = extras.getInt("episodeIndex")
+                seasonIndex = extras.getInt("seasonIndex")
+            }
+            //Get elapsed time if a Recently Played content was clicked
+            if(extras.getInt("elapsed") != -1){
+                elapsed = extras.getInt("elapsed").toLong()
+            }
         }
 
         //Set-up player
@@ -117,6 +174,20 @@ class PlayerActivity : AppCompatActivity() {
         preparePlayer()
     }
 
+    override fun onTouchEvent(event: MotionEvent?): Boolean {
+/*        if(castContext.sessionManager.currentCastSession!=null){
+            castContext.sessionManager.currentCastSession.remoteMediaClient.load(
+                MediaLoadRequestData.Builder().setMediaInfo(mediaInfo).build()
+            )
+        }*/
+        return super.onTouchEvent(event)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        playerListener.stopUpdatingElapsed()
+    }
+
     private fun onLoaded(){
         //MappedTrackInfo can only be accessed once the player is loaded
         val mappedTrackInfo = trackSelector.currentMappedTrackInfo
@@ -128,15 +199,12 @@ class PlayerActivity : AppCompatActivity() {
                 //Handle disable option
                 val rendererTrackGroups =
                     mappedTrackInfo!!.getTrackGroups(i)
-                println("AUDIOTRACKGROUPS")
-                println(rendererTrackGroups)
                 for(trackGroupIndex in 0 until rendererTrackGroups.length){
-                    println(rendererTrackGroups[trackGroupIndex].toString())
                     for(formatIndex in 0 until rendererTrackGroups[trackGroupIndex].length){
                         val language = rendererTrackGroups[trackGroupIndex].getFormat(formatIndex).language?.capitalize()
                         if(currentTrackGroupLanguage != language){
                             currentTrackGroupLanguage = language
-                            audioTrackItems.add(GenericIdAndName(trackGroupIndex, language!!))
+                            audioTrackItems.add(IdAndName(trackGroupIndex, language!!))
                         }
                     }
                 }
@@ -152,7 +220,7 @@ class PlayerActivity : AppCompatActivity() {
             findViewById<ImageButton>(R.id.exo_custom_subtitles).visibility = View.GONE
         }else{
             //Add disable option at beginning of selector list
-            subtitleItems = listOf(GenericIdAndName(-1, getString(R.string.disable))) + subtitleItems
+            subtitleItems = listOf(IdAndName(-1, getString(R.string.disable))) + subtitleItems
         }
         if(audioTrackItems.size <= 1){
             findViewById<ImageButton>(R.id.exo_custom_audio_track).visibility = View.GONE
@@ -167,7 +235,7 @@ class PlayerActivity : AppCompatActivity() {
         super.onStop()
     }
 
-    private fun showSelector(title : String, items : List<GenericIdAndName>, trackType : Int){
+    private fun showSelector(title : String, items : List<IdAndName>, trackType : Int){
         playerView.visibility = View.GONE
         player.playWhenReady = false
 
@@ -213,7 +281,7 @@ class PlayerActivity : AppCompatActivity() {
         }
     }
 
-    private fun changeItemSelected(item : GenericIdAndName, trackType : Int){
+    private fun changeItemSelected(item : IdAndName, trackType : Int){
         when(trackType) {
             C.TRACK_TYPE_AUDIO -> audioTrackSelected = item.id
             C.TRACK_TYPE_TEXT -> subtitleSelected = item.id
@@ -254,20 +322,35 @@ class PlayerActivity : AppCompatActivity() {
     private fun preparePlayer(){
         val userAgent =
             Util.getUserAgent(playerView.context, playerView.context.getString(R.string.app_name))
-        dataSourceFactory = DefaultHttpDataSourceFactory(userAgent)
-        prepareVideo()
-        prepareSubtitles()
-        player.prepare(sources, false, false)
-    }
-
-    private fun prepareVideo(){
         val contentSource =
             if(content.mediaType.id == ContentType.MOVIE.value){
                 content.movie.src
             }else{
-                content.seasons[0].episodes[0].src
+                content.seasons[seasonIndex].episodes[episodeIndex].src
             }
+        dataSourceFactory = DefaultHttpDataSourceFactory(userAgent)
+        prepareVideo(contentSource)
+        prepareSubtitles()
+        prepareCast(contentSource)
+        player.prepare(sources, false, false)
+        if(elapsed != -1L){
+            player.seekTo(elapsed)
+        }
+    }
 
+    private fun prepareCast(contentSource : String){
+        val movieMetadata = MediaMetadata(MediaMetadata.MEDIA_TYPE_MOVIE)
+        movieMetadata.putString(MediaMetadata.KEY_TITLE, content.name)
+        mediaInfo = MediaInfo.Builder(contentSource).apply {
+            setStreamType(MediaInfo.STREAM_TYPE_BUFFERED)
+            setContentType(MimeTypes.APPLICATION_M3U8)
+            setMetadata(movieMetadata)
+            if(mediaTracks.isNotEmpty())
+                setMediaTracks(mediaTracks)
+        }.build()
+    }
+
+    private fun prepareVideo(contentSource : String){
         //Handle if HLS or MP4
         sources =
             if(contentSource.endsWith("m3u8")){
@@ -289,7 +372,7 @@ class PlayerActivity : AppCompatActivity() {
             if(content.mediaType.id == ContentType.MOVIE.value){
                 content.movie.subtitles
             }else{
-                content.seasons[0].episodes[0].subtitles
+                content.seasons[seasonIndex].episodes[episodeIndex].subtitles
             }
 
         //Create list for subtitle selector
@@ -297,9 +380,9 @@ class PlayerActivity : AppCompatActivity() {
         this.subtitleItems =  subtitles.stream().map { subtitle ->
                 index += 1
                 if(SubtitleType.from(subtitle.subtitleType.id) == SubtitleType.NORMAL){
-                    GenericIdAndName(index, subtitle.language.name)
+                    IdAndName(index, subtitle.language.name)
                 }else{
-                    GenericIdAndName(index, subtitle.language.name + "[" + getString(R.string.forced) + "]")
+                    IdAndName(index, subtitle.language.name + "[" + getString(R.string.forced) + "]")
                 }
             }.collect(Collectors.toList())
 
@@ -314,6 +397,15 @@ class PlayerActivity : AppCompatActivity() {
             subtitleSource = SingleSampleMediaSource.Factory(dataSourceFactory)
                 .createMediaSource(Uri.parse(subtitle.src), subtitleFormat, C.TIME_UNSET)
             sources = MergingMediaSource(sources, subtitleSource)
+
+            mediaTracks.add(
+                MediaTrack.Builder(1, MediaTrack.TYPE_TEXT)
+                    .setName(subtitle.language.name)
+                    .setSubtype(MediaTrack.SUBTYPE_SUBTITLES)
+                    .setContentId(subtitle.src) /* language is required for subtitle type but optional otherwise */
+                    .setLanguage(subtitle.language.name)
+                    .build()
+            )
         }
     }
 }

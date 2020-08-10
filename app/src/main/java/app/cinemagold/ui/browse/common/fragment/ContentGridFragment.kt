@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.updatePadding
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.GridLayoutManager
@@ -39,6 +40,8 @@ class ContentGridFragment : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.generic_recycler, container, false) as RecyclerView
 
+        val padding = resources.getDimensionPixelSize(R.dimen.bottom_navbar_height)
+
         //Set callback for navigation to Preview on click of an item
         contentGridRVA.clickHandler = {contentId, contentType ->
             (this.activity as BrowseActivity).navigateToPreview(contentId, contentType)
@@ -51,6 +54,8 @@ class ContentGridFragment : Fragment() {
         view.apply {
             adapter = contentGridRVA
             layoutManager = GridLayoutManager(context, numberOfColumns)
+            //Compensate bottom padding for navbar
+            updatePadding(bottom = resources.getDimensionPixelSize(R.dimen.bottom_navbar_height) + 10)
         }
 
         view.isNestedScrollingEnabled = false
@@ -63,17 +68,6 @@ class ContentGridFragment : Fragment() {
     fun updateContents(contentsNew : List<Content>){
         contents = contentsNew
         if(this::contentGridRVA.isInitialized && view!=null){
-            for (index in 0 until (view as ViewGroup).childCount) {
-                val nextChild = (view as ViewGroup).getChildAt(index)
-                println("REVELACION")
-                println(nextChild.parent.toString())
-                if(nextChild.parent.parent != null){
-                    println(nextChild.parent.parent.parent.toString())
-                    if(nextChild.parent.parent.parent != null){
-                        println(nextChild.parent.parent.parent.toString())
-                    }
-                }
-            }
             contentGridRVA.setDataset(contents)
         }
     }

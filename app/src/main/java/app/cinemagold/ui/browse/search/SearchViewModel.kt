@@ -1,19 +1,25 @@
 package app.cinemagold.ui.browse.search
 
+import android.content.Context
 import android.os.Handler
 import android.os.Looper
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.preference.PreferenceManager
+import app.cinemagold.BuildConfig
 import app.cinemagold.dataaccess.remote.ContentApi
 import app.cinemagold.model.content.Content
+import app.cinemagold.model.user.Profile
+import app.cinemagold.ui.common.dataholder.LiveEvent
+import com.google.gson.Gson
 import com.haroldadmin.cnradapter.NetworkResponse
 import kotlinx.coroutines.launch
 
 
-class SearchViewModel(private val contentApi : ContentApi)  : ViewModel() {
-    val error : MutableLiveData<String> by lazy {
-        MutableLiveData<String>()
+class SearchViewModel(private val contentApi : ContentApi, val context : Context)  : ViewModel() {
+    val error: LiveEvent<String> by lazy {
+            LiveEvent<String>()
     }
     val contentSearch : MutableLiveData<MutableList<Content>> by lazy {
         MutableLiveData<MutableList<Content>>(mutableListOf())
@@ -25,6 +31,11 @@ class SearchViewModel(private val contentApi : ContentApi)  : ViewModel() {
     private val handler = Handler(Looper.getMainLooper())
     private val searchRunnable = Runnable {
         requestSearchContentByName()
+    }
+    private var isKids = false
+
+    init {
+        setIsKids()
     }
 
 
@@ -45,7 +56,7 @@ class SearchViewModel(private val contentApi : ContentApi)  : ViewModel() {
     //Requests
     private fun requestSearchContentByName(){
         viewModelScope.launch {
-            when(val response = contentApi.searchByName(partialName, 21)){
+            when(val response = contentApi.searchByName(partialName, 21, isKids)){
                 is NetworkResponse.Success -> {
                     contentSearch.postValue(response.body)
                 }
@@ -59,5 +70,13 @@ class SearchViewModel(private val contentApi : ContentApi)  : ViewModel() {
                 else -> error.postValue("Unknown error")
             }
         }
+    }
+
+    //Actions
+    //Actions
+    private fun setIsKids(){
+        val preferences = PreferenceManager.getDefaultSharedPreferences(context)
+        val currentProfile = Gson().fromJson(preferences.getString(BuildConfig.PREFS_PROFILE, ""), Profile::class.java)
+        isKids = currentProfile.id == -1
     }
 }

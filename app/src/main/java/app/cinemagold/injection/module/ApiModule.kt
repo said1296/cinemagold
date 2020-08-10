@@ -1,10 +1,7 @@
 package app.cinemagold.injection.module;
 
 
-import app.cinemagold.dataaccess.remote.AuthenticationApi
-import app.cinemagold.dataaccess.remote.ContentApi
-import app.cinemagold.dataaccess.remote.ContentTypeApi
-import app.cinemagold.dataaccess.remote.GenreApi
+import app.cinemagold.dataaccess.remote.*
 import dagger.Module;
 import dagger.Provides
 import retrofit2.Retrofit
@@ -32,5 +29,23 @@ class ApiModule {
     @Singleton
     fun getAuthenticationApi(retrofit: Retrofit): AuthenticationApi {
         return retrofit.create(AuthenticationApi::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun getCountryApi(retrofit: Retrofit): CountryApi {
+        return retrofit.create(CountryApi::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideProfileApi(retrofit: Retrofit): ProfileApi {
+        return retrofit.create(ProfileApi::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideRecentApi(retrofit: Retrofit): RecentApi{
+        return retrofit.create(RecentApi::class.java)
     }
 }

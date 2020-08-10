@@ -4,7 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.authentication.login.Login">
+    android:clickable="true"
+    android:focusable="true"
+    tools:context=".ui.authentication.login.LoginFragment">
 
     <ImageView
         android:layout_width="match_parent"
@@ -18,18 +20,19 @@
         android:src="@drawable/bg_login_mask" />
 
     <androidx.appcompat.widget.AppCompatEditText
-        android:id="@+id/login_edit_text"
+        android:id="@+id/login_email_edit_text"
         android:layout_width="0dp"
         android:layout_height="@dimen/login_edit_text_height"
+        android:singleLine="true"
         android:hint="@string/email"
-        android:textColorHint="?lightDark"
         android:paddingHorizontal="@dimen/login_edit_text_padding_horizontal"
         app:layout_constraintLeft_toRightOf="@id/guideline_login_edit_text_left"
         app:layout_constraintRight_toLeftOf="@id/guideline_login_edit_text_right"
         app:layout_constraintTop_toBottomOf="@id/guideline_login_input"
         android:background="@drawable/bg_login_edit_text"
         android:textSize="@dimen/heading4"
-        android:fontFamily="@font/font_semibold"/>
+        app:fontFamily="@font/font_semibold"
+        android:textColor="?light"/>
     <LinearLayout
         android:id="@+id/login_password"
         android:layout_width="0dp"
@@ -37,7 +40,7 @@
         android:layout_marginTop="@dimen/login_edit_text_margin_top"
         app:layout_constraintLeft_toRightOf="@id/guideline_login_edit_text_left"
         app:layout_constraintRight_toLeftOf="@id/guideline_login_edit_text_right"
-        app:layout_constraintTop_toBottomOf="@id/login_edit_text"
+        app:layout_constraintTop_toBottomOf="@id/login_email_edit_text"
         android:background="@drawable/bg_login_edit_text"
         android:orientation="horizontal"
         android:weightSum="100"
@@ -46,12 +49,14 @@
             android:id="@+id/login_password_edit_text"
             android:layout_width="0dp"
             android:layout_height="@dimen/login_edit_text_height"
+            android:singleLine="true"
             android:hint="@string/password"
-            android:textColorHint="?lightDark"
             android:layout_weight="90"
-            android:background="null"
+            android:background="@null"
             android:textSize="@dimen/heading4"
-            android:fontFamily="@font/font_semibold"/>
+            app:fontFamily="@font/font_semibold"
+            android:textColor="?light"
+            android:inputType="text" />
         <ImageButton
             android:id="@+id/login_password_show"
             android:layout_width="0dp"
@@ -59,7 +64,8 @@
             android:layout_weight="10"
             android:src="@drawable/ic_eye_closed_24dp"
             android:scaleType="fitCenter"
-            android:background="null"/>
+            android:tint="@color/item_genre_text"
+            android:background="@null"/>
     </LinearLayout>
 
     <Button
@@ -75,6 +81,17 @@
         android:textSize="@dimen/heading5"
         android:fontFamily="@font/font_semibold"
         android:elevation="10dp"/>
+
+
+    <ImageView
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_width="wrap_content"
+        app:layout_constraintHeight_percent="0.15"
+        android:layout_height="0dp"
+        android:layout_marginBottom="20dp"
+        android:src="@drawable/logo_cinemagold"/>
 
 
 

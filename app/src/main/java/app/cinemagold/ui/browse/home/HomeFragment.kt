@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.observe
@@ -13,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import app.cinemagold.R
 import app.cinemagold.injection.ApplicationContextInjector
+import app.cinemagold.model.content.ContentType
 import app.cinemagold.ui.browse.BrowseActivity
 import app.cinemagold.ui.browse.common.recycleradapter.ContentHorizontalRVA
 import app.cinemagold.ui.browse.common.recycleradapter.ContentVerticalRVA
@@ -29,8 +29,9 @@ class HomeFragment : Fragment() {
     @Inject
     lateinit var contentVerticalRVA: ContentVerticalRVA
     @Inject
+    lateinit var contentRecentRVA: ContentRecentRVA
+    @Inject
     lateinit var contentHorizontalRVAProvider : Provider<ContentHorizontalRVA>
-    lateinit var homeFragmentLinearLayout: LinearLayout
     var recyclerViews : MutableList<RecyclerView> = mutableListOf()
 
     override fun onAttach(context: Context) {
@@ -40,6 +41,7 @@ class HomeFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         //Observers
         viewModel.error.observe(this){data->
             Toast.makeText(context, data, Toast.LENGTH_LONG).show()
@@ -50,6 +52,22 @@ class HomeFragment : Fragment() {
         viewModel.contentPremiere.observe(this){data ->
             contentVerticalRVA.setDataset(data)
         }
+        viewModel.contentRecent.observe(this){data ->
+            contentRecentRVA.setDataset(data)
+            if(data.size==0){
+                requireView().content_recent_title.visibility = View.GONE
+                requireView().content_recycler_content_recent.visibility = View.GONE
+                return@observe
+            }
+            buildRecent()
+        }
+        viewModel.contentRecentSelected.observe(this){data ->
+            if(viewModel.recentSelected.mediaType.id==ContentType.MOVIE.value){
+                (activity as BrowseActivity).navigateToPlayer(data, viewModel.recentSelected.elapsed)
+            }else{
+                (activity as BrowseActivity).navigateToPlayer(data, viewModel.seasonSelectedIndex, viewModel.episodeSelectedIndex, viewModel.recentSelected.elapsed)
+            }
+        }
     }
 
     override fun onCreateView(
@@ -57,10 +75,12 @@ class HomeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_home, container, false)
-        homeFragmentLinearLayout = view.home
+
+        //Hide recent until it has values
+        view.content_recent_title.visibility = View.GONE
+        view.content_recycler_content_recent.visibility = View.GONE
 
         //Recycler views
-        recyclerViews.add(view.content_recycler_content_premiere)
         view.content_recycler_content_premiere.apply {
             layoutManager = LinearLayoutManager(this@HomeFragment.context, LinearLayoutManager.HORIZONTAL, false)
             adapter = contentVerticalRVA
@@ -70,5 +90,22 @@ class HomeFragment : Fragment() {
         }
         
         return view
+    }
+
+    override fun onStart() {
+        super.onStart()
+        viewModel.startedFragment()
+    }
+
+    private fun buildRecent(){
+        view!!.content_recent_title.visibility = View.VISIBLE
+        view!!.content_recycler_content_recent.visibility = View.VISIBLE
+        view!!.content_recycler_content_recent.apply {
+            layoutManager = LinearLayoutManager(this@HomeFragment.context, LinearLayoutManager.HORIZONTAL, false)
+            adapter = contentRecentRVA
+        }
+        contentRecentRVA.clickHandler = {data ->
+            viewModel.clickedRecent(data)
+        }
     }
 }

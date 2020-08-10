@@ -13,7 +13,6 @@ import app.cinemagold.R
 import app.cinemagold.injection.ApplicationContextInjector
 import app.cinemagold.ui.browse.BrowseActivity
 import app.cinemagold.ui.browse.serialized.GenreRVA
-import app.cinemagold.ui.browse.serialized.MovieViewModel
 import kotlinx.android.synthetic.main.fragment_movie.view.*
 import javax.inject.Inject
 

@@ -1,15 +1,18 @@
 package app.cinemagold.ui.authentication.login
 
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import app.cinemagold.dataaccess.remote.AuthenticationApi
+import app.cinemagold.ui.common.dataholder.LiveEvent
 import com.haroldadmin.cnradapter.NetworkResponse
 import kotlinx.coroutines.launch
 
-class LoginViewModel(val authenticationApi: AuthenticationApi) : ViewModel() {
-    val error : MutableLiveData<String> by lazy {
-        MutableLiveData<String>()
+class LoginViewModel(private val authenticationApi: AuthenticationApi) : ViewModel() {
+    val error : LiveEvent<String> by lazy {
+        LiveEvent<String>()
+    }
+    val isSuccessful : LiveEvent<Boolean> by lazy {
+        LiveEvent<Boolean>()
     }
 
     //Events
@@ -17,12 +20,10 @@ class LoginViewModel(val authenticationApi: AuthenticationApi) : ViewModel() {
         viewModelScope.launch {
             when(val response = authenticationApi.authenticate(email, password)){
                 is NetworkResponse.Success -> {
-                    if(response.body.status){
-                        println("NICE")
-                        println(response.body)
+                    if(!response.body.status){
+                        error.postValue(response.body.error?.get(0))
                     }else{
-                        println("NOT NICE >:|")
-                        println(response.body)
+                        isSuccessful.postValue(true)
                     }
                 }
                 is NetworkResponse.ServerError -> {

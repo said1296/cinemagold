@@ -1,9 +1,9 @@
 package app.cinemagold.model.content
 
-import app.cinemagold.model.generic.GenericIdAndName
+import app.cinemagold.model.generic.IdAndName
 
 data class Subtitle(
     val src : String = "",
-    val language : GenericIdAndName,
-    val subtitleType : GenericIdAndName
+    val language : IdAndName,
+    val subtitleType : IdAndName
 )

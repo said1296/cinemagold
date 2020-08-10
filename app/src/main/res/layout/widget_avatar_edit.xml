@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:id="@+id/widget_avatar_edit"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <include
+        android:id="@+id/widget_profile_avatar_edit_avatar"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        layout="@layout/widget_avatar" />
+    <com.mikhaellopez.circularimageview.CircularImageView
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toBottomOf="@id/widget_profile_avatar_edit_avatar"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintWidth_percent=".35"
+        app:civ_circle_color_start="?brandGradient"
+        app:civ_circle_color_end="?brand"
+        app:civ_border="false"
+        android:src="@drawable/bg_avatar_edit" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

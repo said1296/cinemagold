@@ -57,7 +57,7 @@ class EpisodeRVA @Inject constructor(
             params.rightMargin = sideMargin
         }
 
-        item.setOnClickListener { clickHandler(currentData.id) }
+        item.setOnClickListener { clickHandler(position) }
         holder.itemView.layoutParams = params
     }
 

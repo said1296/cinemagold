@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.AppCompatCheckedTextView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/spinner_country_item"
+    android:minWidth="150dp"
+    android:singleLine="true"
+    android:textAlignment="center"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?darkMedium"
+    android:text="Anime"
+    android:paddingVertical="10dp"
+    android:paddingHorizontal="10dp"
+    android:gravity="center_horizontal"
+    android:textSize="@dimen/heading4"
+    app:fontFamily="@font/font_medium"/>
