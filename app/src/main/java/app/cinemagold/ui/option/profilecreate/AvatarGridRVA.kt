@@ -1,7 +1,5 @@
 package app.cinemagold.ui.option.profilecreate
 
-import app.cinemagold.model.generic.IdAndName
-import com.mikhaellopez.circularimageview.CircularImageView
 import android.content.Context
 import android.graphics.Bitmap
 import android.view.LayoutInflater
@@ -10,9 +8,9 @@ import android.view.ViewGroup
 import androidx.appcompat.widget.LinearLayoutCompat
 import androidx.recyclerview.widget.RecyclerView
 import app.cinemagold.R
+import app.cinemagold.model.generic.IdAndName
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.item_avatar_grid.view.*
-import kotlinx.android.synthetic.main.item_content_grid.view.*
 import javax.inject.Inject
 
 

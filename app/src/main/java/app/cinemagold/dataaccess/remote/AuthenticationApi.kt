@@ -1,6 +1,5 @@
 package app.cinemagold.dataaccess.remote
 
-import app.cinemagold.model.generic.IdAndName
 import app.cinemagold.model.generic.LongIdAndName
 import app.cinemagold.model.network.NetworkError
 import app.cinemagold.model.network.Response
@@ -23,6 +22,9 @@ interface AuthenticationApi {
 
     @DELETE("authenticate/deauth")
     suspend fun deauthDevice(@Query("tokenId") id : Long) : NetworkResponse<Response, NetworkError>
+
+    @DELETE("authenticate/deauth/all")
+    suspend fun deauthAllDevices() : NetworkResponse<Response, NetworkError>
 
     @GET("authenticate/device")
     suspend fun getDevices() : NetworkResponse<List<LongIdAndName>, NetworkError>

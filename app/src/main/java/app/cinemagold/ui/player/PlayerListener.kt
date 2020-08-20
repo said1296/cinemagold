@@ -2,11 +2,7 @@ package app.cinemagold.ui.player
 
 import android.os.Handler
 import android.os.Looper
-import androidx.core.os.postDelayed
 import com.google.android.exoplayer2.Player
-import com.google.android.exoplayer2.Timeline
-import com.google.android.exoplayer2.source.TrackGroupArray
-import com.google.android.exoplayer2.trackselection.TrackSelectionArray
 
 
 class PlayerListener(val onLoadedCallback : () -> Unit, val updateElapsed : () -> Unit) : Player.EventListener {

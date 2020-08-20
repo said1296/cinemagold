@@ -6,14 +6,14 @@ import app.cinemagold.ui.authentication.login.LoginViewModel
 import app.cinemagold.ui.authentication.register.RegisterViewModel
 import app.cinemagold.ui.browse.SidebarViewModel
 import app.cinemagold.ui.browse.home.HomeViewModel
+import app.cinemagold.ui.browse.movie.MovieViewModel
 import app.cinemagold.ui.browse.preview.PreviewViewModel
 import app.cinemagold.ui.browse.search.SearchViewModel
-import app.cinemagold.ui.browse.movie.MovieViewModel
-import app.cinemagold.ui.player.PlayerViewModel
 import app.cinemagold.ui.browse.serialized.SerializedViewModel
 import app.cinemagold.ui.option.profile.ProfileViewModel
 import app.cinemagold.ui.option.profilecreate.AvatarGridViewModel
 import app.cinemagold.ui.option.profilecreate.ProfileCreateViewModel
+import app.cinemagold.ui.player.PlayerViewModel
 import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton

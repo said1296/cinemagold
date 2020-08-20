@@ -10,16 +10,15 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
 import androidx.lifecycle.observe
+import app.cinemagold.BuildConfig
 import app.cinemagold.R
 import app.cinemagold.injection.ApplicationContextInjector
-import app.cinemagold.model.content.ContentType
 import app.cinemagold.model.generic.IdAndName
+import app.cinemagold.model.user.Profile
 import app.cinemagold.ui.option.OptionActivity
 import com.mikhaellopez.circularimageview.CircularImageView
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_profile_create.view.*
-import kotlinx.android.synthetic.main.item_content_vertical.view.*
-import kotlinx.android.synthetic.main.widget_avatar.view.*
 import kotlinx.android.synthetic.main.widget_avatar_edit.view.*
 import javax.inject.Inject
 
@@ -48,8 +47,13 @@ class ProfileCreateFragment : Fragment() {
         viewModel.error.observe(this){data ->
             Toast.makeText(context, data, Toast.LENGTH_SHORT).show()
         }
-        viewModel.isSuccessful.observe(this){data ->
+        viewModel.isSuccessfulCreate.observe(this){data ->
             if(data){
+                (activity as OptionActivity).navigateToBrowse()
+            }
+        }
+        viewModel.isSuccessfulDelete.observe(this){data ->
+            if(data.first){
                 (activity as OptionActivity).navigateToBrowse()
             }
         }
@@ -76,6 +80,10 @@ class ProfileCreateFragment : Fragment() {
             .into(avatarView)
         view!!.profile_create_name.setText(viewModel.profile.name)
         view!!.profile_create_name.requestFocus()
+        view!!.profile_delete.visibility = View.VISIBLE
+        view!!.profile_delete.setOnClickListener {
+            viewModel.deleteProfile()
+        }
     }
 
     fun selectedAvatar(avatar: IdAndName){

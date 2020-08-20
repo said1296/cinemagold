@@ -24,7 +24,6 @@ import app.cinemagold.model.content.ContentGroupedByGenre
 import app.cinemagold.model.content.ContentType
 import app.cinemagold.model.user.Profile
 import app.cinemagold.ui.authentication.AuthenticationActivity
-import app.cinemagold.ui.option.OptionActivity
 import app.cinemagold.ui.browse.common.fragment.ContentGridFragment
 import app.cinemagold.ui.browse.common.fragment.ContentGroupedByGenreFragment
 import app.cinemagold.ui.browse.home.HomeFragment
@@ -32,6 +31,7 @@ import app.cinemagold.ui.browse.movie.MovieFragment
 import app.cinemagold.ui.browse.preview.PreviewFragment
 import app.cinemagold.ui.browse.search.SearchFragment
 import app.cinemagold.ui.browse.serialized.SerializedFragment
+import app.cinemagold.ui.option.OptionActivity
 import app.cinemagold.ui.option.help.HelpFragment
 import app.cinemagold.ui.option.help.PaymentFragment
 import app.cinemagold.ui.option.profile.ProfileFragment
@@ -67,13 +67,15 @@ class BrowseActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        //Get Shared Preferences values
+        preferences = PreferenceManager.getDefaultSharedPreferences(this)
+        if(!getIsProfileSet())
+            return
+        currentProfile = Gson().fromJson(preferences.getString(BuildConfig.PREFS_PROFILE, ""), Profile::class.java)
+
         (applicationContext as ApplicationContextInjector).applicationComponent.inject(this)
         setContentView(R.layout.activity_browse)
         addOrReplaceFragment(HomeFragment(), HomeFragment::class.simpleName, false)
-
-        //Get Shared Preferences values
-        preferences = PreferenceManager.getDefaultSharedPreferences(this)
-        currentProfile = Gson().fromJson(preferences.getString(BuildConfig.PREFS_PROFILE, ""), Profile::class.java)
 
         //Find needed views
         profilesView = findViewById(R.id.sidebar_profiles)
@@ -174,8 +176,24 @@ class BrowseActivity : AppCompatActivity() {
         }
     }
 
+    override fun onStart() {
+        super.onStart()
+        getIsProfileSet()
+    }
+
     override fun onBackPressed() {
         fragmentManager.popBackStack()
+    }
+
+    private fun getIsProfileSet(): Boolean{
+        val currentProfileString = preferences.getString(BuildConfig.PREFS_PROFILE, "")
+        println(currentProfileString)
+        if(currentProfileString.isNullOrEmpty()){
+            navigateToOption(ProfileFragment::class.simpleName!!)
+            finish()
+            return  false
+        }
+        return true
     }
 
     private fun buildProfileViews(){
@@ -237,6 +255,11 @@ class BrowseActivity : AppCompatActivity() {
             deviceView.layoutParams = params
             devicesView.addView(deviceView)
         }
+        val deleteAllView = layoutInflater.inflate(R.layout.sidebar_delete_all_devices, null)
+        deleteAllView.setOnClickListener {
+            sidebarViewModel.deauthAllDevices()
+        }
+        devicesView.addView(deleteAllView)
         //Add separator at bottom of list of devices
         val separatorView = layoutInflater.inflate(R.layout.sidebar_device_separator, null)
         params.bottomMargin = marginItems
@@ -251,7 +274,6 @@ class BrowseActivity : AppCompatActivity() {
 
     //Fragment transactions
     private fun addOrReplaceFragment(fragment : Fragment, tag : String?, addToBackStack : Boolean = true){
-        println(fragmentManager.findFragmentByTag(tag))
         val fragmentInFragmentManager = fragmentManager.findFragmentByTag(tag)
         if(fragmentInFragmentManager==null){
             fragmentManager.beginTransaction().apply {

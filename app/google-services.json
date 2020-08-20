@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "352982035193",
+    "firebase_url": "https://cinemagold-9df08.firebaseio.com",
+    "project_id": "cinemagold-9df08",
+    "storage_bucket": "cinemagold-9df08.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:352982035193:android:f83675fc28fed6e8dd1028",
+        "android_client_info": {
+          "package_name": "app.cinemagold"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "352982035193-jkm4esqsup52aue8ooboauvglagfdc5i.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAUqcpQZWEqwywHvuuDrEbpiqAxSthBDtk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "352982035193-jkm4esqsup52aue8ooboauvglagfdc5i.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

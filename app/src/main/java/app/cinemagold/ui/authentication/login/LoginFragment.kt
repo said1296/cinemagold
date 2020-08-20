@@ -16,6 +16,7 @@ import app.cinemagold.injection.ApplicationContextInjector
 import app.cinemagold.ui.authentication.AuthenticationActivity
 import app.cinemagold.ui.option.profile.ProfileFragment
 import kotlinx.android.synthetic.main.fragment_login.view.*
+import kotlinx.android.synthetic.main.fragment_register.view.*
 import javax.inject.Inject
 
 class LoginFragment : Fragment() {
@@ -44,14 +45,18 @@ class LoginFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val rootView = inflater.inflate(R.layout.fragment_login, container, false)
-        rootView.login_password_edit_text.transformationMethod = PasswordTransformationMethod()
+        val passwordEditText = rootView.login_password_edit_text
+        passwordEditText.transformationMethod = PasswordTransformationMethod()
+        passwordEditText.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
         rootView.login_password_show.setOnClickListener { view ->
-            if(rootView.login_password_edit_text.inputType == InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD){
-                rootView.login_password_edit_text.inputType = InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
+            if(passwordEditText.inputType == InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD){
+                passwordEditText.inputType = InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
                 view.isSelected = true
                 (view as ImageButton).setImageResource(R.drawable.ic_eye_open_24dp)
+                //For some reason Typeface changes when changing input type so we have to set it manually
+                passwordEditText.typeface = rootView.login_email_edit_text.typeface
             }else{
-                rootView.login_password_edit_text.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
+                passwordEditText.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
                 view.isSelected = false
                 (view as ImageButton).setImageResource(R.drawable.ic_eye_closed_24dp)
             }

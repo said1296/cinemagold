@@ -83,7 +83,6 @@ class SerializedViewModel(private val contentApi : ContentApi, private val genre
     //Requests
     private fun requestContentGroupedByGenre(){
         viewModelScope.launch {
-            println(currentContentType.id)
             val response =
                 if(currentContentType.id == -1){
                     contentApi.getSerializedGroupedByGenre(isKids)
@@ -112,9 +111,8 @@ class SerializedViewModel(private val contentApi : ContentApi, private val genre
                 if(currentContentType.id==-1){
                     contentApi.getSerializedByGenre(currentGenre.id, 21)
                 }else{
-                    contentApi.getByGenreIdAndOptionalContentTypeId(currentGenre.id, currentContentType.id, 21, isKids)
+                    contentApi.getByGenreIdAndOptionalContentTypeId(currentGenre.id, currentContentType.id, 60, isKids)
                 }
-            println(response)
             when(response){
                 is NetworkResponse.Success -> {
                     contentGenre.postValue(response.body)

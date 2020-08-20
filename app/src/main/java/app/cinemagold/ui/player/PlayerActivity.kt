@@ -19,7 +19,6 @@ import app.cinemagold.model.content.Content
 import app.cinemagold.model.content.ContentType
 import app.cinemagold.model.content.SubtitleType
 import app.cinemagold.model.generic.IdAndName
-import app.cinemagold.ui.browse.home.HomeFragment
 import com.google.android.exoplayer2.C
 import com.google.android.exoplayer2.ExoPlayer
 import com.google.android.exoplayer2.Format
@@ -37,7 +36,6 @@ import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory
 import com.google.android.exoplayer2.util.MimeTypes
 import com.google.android.exoplayer2.util.Util
 import com.google.android.gms.cast.MediaInfo
-import com.google.android.gms.cast.MediaLoadRequestData
 import com.google.android.gms.cast.MediaMetadata
 import com.google.android.gms.cast.MediaTrack
 import com.google.android.gms.cast.framework.CastButtonFactory

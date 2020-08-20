@@ -22,8 +22,12 @@ import okhttp3.Response
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.jackson.JacksonConverterFactory
+import java.security.SecureRandom
+import java.security.cert.CertificateException
+import java.security.cert.X509Certificate
 import javax.inject.Named
 import javax.inject.Singleton
+import javax.net.ssl.*
 
 
 //Injectable dependencies for remote data access
@@ -47,6 +51,37 @@ class NetworkModule {
                          @Named("handleCookiesInterceptor") handleCookiesInterceptor: Interceptor,
                          @Named("addCookiesInterceptor") addCookiesInterceptor: Interceptor,
                          @Named("forbiddenInterceptor") forbiddenInterceptor: Interceptor): OkHttpClient {
+        val trustAllCerts: Array<TrustManager> = arrayOf<TrustManager>(
+            object : X509TrustManager {
+                @Throws(CertificateException::class)
+                override fun checkClientTrusted(
+                    chain: Array<X509Certificate?>?,
+                    authType: String?
+                ) {
+                }
+
+                @Throws(CertificateException::class)
+                override fun checkServerTrusted(
+                    chain: Array<X509Certificate?>?,
+                    authType: String?
+                ) {
+                }
+
+                override fun getAcceptedIssuers(): Array<X509Certificate?>?{
+                    return arrayOfNulls(0)
+                }
+            }
+        )
+
+        // Install the all-trusting trust manager
+
+        // Install the all-trusting trust manager
+        val sslContext: SSLContext = SSLContext.getInstance("SSL")
+        sslContext.init(null, trustAllCerts, SecureRandom())
+        // Create an ssl socket factory with our all-trusting manager
+        // Create an ssl socket factory with our all-trusting manager
+        val sslSocketFactory: SSLSocketFactory = sslContext.getSocketFactory()
+
         return OkHttpClient.Builder()
             .addInterceptor(httpLoggingInterceptor)
             .addInterceptor(object: Interceptor{
@@ -60,6 +95,9 @@ class NetworkModule {
             .addInterceptor(handleCookiesInterceptor)
             .addInterceptor(addCookiesInterceptor)
             .addInterceptor(forbiddenInterceptor)
+            //TODO: Delete these two for production
+            .sslSocketFactory(sslSocketFactory, trustAllCerts[0] as X509TrustManager)
+            .hostnameVerifier(HostnameVerifier { _, _ -> true })
             .build()
     }
 

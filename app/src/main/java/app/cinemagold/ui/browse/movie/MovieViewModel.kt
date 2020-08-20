@@ -84,8 +84,7 @@ class MovieViewModel(private val contentApi : ContentApi, private val genreApi :
 
     private fun requestContentByGenre(){
         viewModelScope.launch {
-            val response = contentApi.getByGenreIdAndOptionalContentTypeId(currentGenre.id, contentTypeId, 21, isKids)
-            println(response)
+            val response = contentApi.getByGenreIdAndOptionalContentTypeId(currentGenre.id, contentTypeId, 60, isKids)
             when(response){
                 is NetworkResponse.Success -> {
                     contentGenre.postValue(response.body)
@@ -122,7 +121,6 @@ class MovieViewModel(private val contentApi : ContentApi, private val genreApi :
     }
 
     //Action
-    //Actions
     private fun setIsKids(){
         val preferences = PreferenceManager.getDefaultSharedPreferences(context)
         val currentProfile = Gson().fromJson(preferences.getString(BuildConfig.PREFS_PROFILE, ""), Profile::class.java)

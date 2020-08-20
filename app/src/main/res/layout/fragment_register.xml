@@ -96,14 +96,11 @@
             android:layout_height="wrap_content"
             android:hint="@string/phone_number"
             android:layout_marginTop="@dimen/register_edit_text_margin_top"/>
-        <Spinner
-            android:id="@+id/register_spinner_country"
+        <app.cinemagold.ui.authentication.register.AutoCompleteTextViewLax
+            android:id="@+id/register_country"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            tools:listitem="@layout/spinner_country"
-            android:background="@drawable/bg_login_edit_text"
-            android:padding="@dimen/register_edit_text_padding"
-            app:fontFamily="@font/font_bold"
+            android:hint="@string/country"
             android:layout_marginTop="@dimen/register_edit_text_margin_top"/>
         <androidx.appcompat.widget.AppCompatEditText
             android:id="@+id/register_email"
@@ -111,12 +108,29 @@
             android:layout_height="wrap_content"
             android:hint="@string/email"
             android:layout_marginTop="@dimen/register_edit_text_margin_top"/>
-        <androidx.appcompat.widget.AppCompatEditText
+        <LinearLayout
             android:id="@+id/register_password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/password"
-            android:layout_marginTop="@dimen/register_edit_text_margin_top"/>
+            android:layout_marginTop="@dimen/register_edit_text_margin_top"            android:background="@drawable/bg_login_edit_text"
+            android:orientation="horizontal"
+            android:weightSum="100">
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/register_password_edit_text"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="90"
+                android:hint="@string/password"/>
+            <ImageButton
+                android:id="@+id/register_password_show"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="10"
+                android:src="@drawable/ic_eye_closed_24dp"
+                android:scaleType="fitCenter"
+                android:tint="@color/item_genre_text"
+                android:background="@null"/>
+        </LinearLayout>
             <Button
                 android:id="@+id/register_submit"
                 android:layout_width="@dimen/login_submit_width"

@@ -8,7 +8,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import app.cinemagold.R
-import kotlinx.android.synthetic.main.fragment_help.view.*
 import kotlinx.android.synthetic.main.fragment_payment.view.*
 
 

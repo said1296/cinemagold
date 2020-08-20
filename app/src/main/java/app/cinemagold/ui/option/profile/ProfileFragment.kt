@@ -1,8 +1,10 @@
 package app.cinemagold.ui.option.profile
 
 import android.content.Context
+import android.content.SharedPreferences
 import android.content.res.Resources
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.util.TypedValue
 import android.view.LayoutInflater
@@ -14,17 +16,18 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResult
 import androidx.lifecycle.observe
+import androidx.preference.PreferenceManager
+import app.cinemagold.BuildConfig
 import app.cinemagold.R
 import app.cinemagold.injection.ApplicationContextInjector
 import app.cinemagold.ui.authentication.AuthenticationActivity
 import app.cinemagold.ui.option.OptionActivity
 import app.cinemagold.ui.option.profilecreate.ProfileCreateFragment
+import com.google.gson.Gson
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_profile.view.*
-import kotlinx.android.synthetic.main.widget_avatar.view.*
 import kotlinx.android.synthetic.main.widget_avatar.view.widget_avatar
 import kotlinx.android.synthetic.main.widget_avatar_edit_with_name.view.*
-import kotlinx.android.synthetic.main.widget_avatar_with_name.view.*
 import kotlinx.android.synthetic.main.widget_avatar_with_name.view.widget_avatar_name
 import javax.inject.Inject
 
@@ -35,6 +38,7 @@ class ProfileFragment : Fragment() {
     @Inject
     lateinit var picasso: Picasso
     var avatarViews: MutableList<View> = mutableListOf()
+    lateinit var preferences : SharedPreferences
 
     private val typedValue = TypedValue()
 
@@ -44,12 +48,16 @@ class ProfileFragment : Fragment() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        viewModel.startedFragment()
+
         val theme : Resources.Theme = ContextThemeWrapper(context, R.style.AppTheme).theme
         theme.resolveAttribute(R.attr.light, typedValue, true)
-        super.onCreate(savedInstanceState)
 
         val origin = (activity as OptionActivity).intent.getStringExtra("ORIGIN")
-        if(origin!= AuthenticationActivity::class.simpleName){
+        preferences = PreferenceManager.getDefaultSharedPreferences(context)
+        val currentProfileString = preferences.getString(BuildConfig.PREFS_PROFILE, "")
+        if(origin!=AuthenticationActivity::class.simpleName && !currentProfileString.isNullOrEmpty()){
             viewModel.receivedIsEdit(true)
         }
 
@@ -91,6 +99,11 @@ class ProfileFragment : Fragment() {
         return rootView
     }
 
+    override fun onStart() {
+        super.onStart()
+        viewModel.startedFragment()
+    }
+
     private fun buildAvatars(){
         val profiles = viewModel.profiles.value
         val profilesSize = profiles!!.size
@@ -99,6 +112,8 @@ class ProfileFragment : Fragment() {
                 avatarView.widget_avatar_edit_icon.visibility = View.GONE
             }
             if(index>=profilesSize){
+                avatarView.widget_avatar_name.text = ""
+                avatarView.widget_avatar.setImageResource(R.drawable.bg_profile_empty)
                 avatarView.widget_avatar.borderColor = context!!.getColor(typedValue.resourceId)
                 avatarView.setOnClickListener {
                     setFragmentResult(ProfileCreateFragment::class.simpleName!!, bundleOf("IS_EDIT" to false))

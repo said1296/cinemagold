@@ -1,11 +1,7 @@
 package app.cinemagold.dataaccess.remote
 
-import app.cinemagold.model.content.Content
-import app.cinemagold.model.content.ContentGroupedByGenre
 import app.cinemagold.model.content.Recent
 import app.cinemagold.model.network.NetworkError
-import app.cinemagold.model.network.Response
-import app.cinemagold.model.user.RegisterForm
 import com.haroldadmin.cnradapter.NetworkResponse
 import retrofit2.http.Body
 import retrofit2.http.GET

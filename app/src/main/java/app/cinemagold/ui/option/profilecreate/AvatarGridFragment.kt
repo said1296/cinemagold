@@ -9,8 +9,6 @@ import androidx.lifecycle.observe
 import androidx.recyclerview.widget.GridLayoutManager
 import app.cinemagold.R
 import app.cinemagold.injection.ApplicationContextInjector
-import app.cinemagold.ui.authentication.AuthenticationActivity
-import app.cinemagold.ui.browse.BrowseActivity
 import app.cinemagold.ui.option.OptionActivity
 import kotlinx.android.synthetic.main.fragment_avatar_grid.view.*
 import javax.inject.Inject

@@ -5,14 +5,12 @@ import android.graphics.Bitmap
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import app.cinemagold.R
 import app.cinemagold.model.content.ContentType
 import app.cinemagold.model.content.Recent
 import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.item_content_horizontal.view.*
 import kotlinx.android.synthetic.main.item_content_recent.view.*
 import javax.inject.Inject
 
@@ -55,7 +53,6 @@ class ContentRecentRVA @Inject constructor(
         }
 
         //Set background
-        println(currentData)
         picasso.load(currentData.sliderSrc)
             .config(Bitmap.Config.RGB_565)
             .resize(16*scale, 9*scale)

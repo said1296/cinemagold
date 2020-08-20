@@ -3,7 +3,6 @@ package app.cinemagold.ui.option.profilecreate
 import android.content.Context
 import android.content.SharedPreferences
 import android.view.View
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.preference.PreferenceManager
@@ -22,13 +21,20 @@ class ProfileCreateViewModel(private val profileApi: ProfileApi, private val con
     val error : LiveEvent<String> by lazy {
         LiveEvent<String>()
     }
-    val isSuccessful : LiveEvent<Boolean> by lazy {
+    val isSuccessfulCreate : LiveEvent<Boolean> by lazy {
         LiveEvent<Boolean>()
+    }
+    val isSuccessfulDelete : LiveEvent<Pair<Boolean, Boolean>> by lazy {
+        LiveEvent<Pair<Boolean, Boolean>>()
     }
     var isEdit = false
     var profile : Profile = Profile(null, IdAndName(-1, ""), "")
 
     //Events
+    fun deleteProfile(){
+        requestDeleteProfile()
+    }
+
     fun selectedAvatar(avatar: IdAndName){
         profile.avatar = avatar
     }
@@ -59,7 +65,31 @@ class ProfileCreateViewModel(private val profileApi: ProfileApi, private val con
             when(val response = profileApi.createProfile(profile)){
                 is NetworkResponse.Success -> {
                     preferences.edit().putString(BuildConfig.PREFS_PROFILE, Gson().toJson(response.body)).apply()
-                    isSuccessful.postValue(true)
+                    isSuccessfulCreate.postValue(true)
+                }
+                is NetworkResponse.ServerError -> {
+                    error.postValue(response.body?.status.toString() + " " + response.body?.message)
+                }
+                is NetworkResponse.NetworkError -> {
+                    error.postValue(response.error.toString())
+                    println(response.error.toString())
+                }
+                else -> error.postValue("Unknown error")
+            }
+        }
+    }
+
+    private fun requestDeleteProfile(){
+        viewModelScope.launch {
+            when(val response = profileApi.deleteProfile(profile.id!!)){
+                is NetworkResponse.Success -> {
+                    val currentProfile = Gson().fromJson(preferences.getString(BuildConfig.PREFS_PROFILE, ""), Profile::class.java)
+                    var isCurrentProfile = false
+                    if(currentProfile.id == profile.id){
+                        isCurrentProfile = true
+                        preferences.edit().remove(BuildConfig.PREFS_PROFILE).apply()
+                    }
+                    isSuccessfulDelete.postValue(Pair(true, isCurrentProfile))
                 }
                 is NetworkResponse.ServerError -> {
                     error.postValue(response.body?.status.toString() + " " + response.body?.message)

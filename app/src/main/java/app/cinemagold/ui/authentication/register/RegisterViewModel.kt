@@ -24,6 +24,7 @@ class RegisterViewModel(private val authenticationApi: AuthenticationApi, privat
         LiveEvent<Boolean>()
     }
     lateinit var countries : MutableList<IdAndName>
+    var selectedCountry = IdAndName()
     val countrySpinnerItems : MutableLiveData<List<String>> by lazy {
         MutableLiveData<List<String>>()
     }
@@ -33,16 +34,18 @@ class RegisterViewModel(private val authenticationApi: AuthenticationApi, privat
     }
 
     //Events
+    fun selectedCountry(country: String){
+        val selectedCountryIndex = countrySpinnerItems.value!!.indexOf(country)
+        selectedCountry = countries[selectedCountryIndex]
+    }
     fun submit(formView : View){
         val registerForm = RegisterForm()
         registerForm.name = formView.findViewById<AppCompatEditText>(R.id.register_name).text.toString()
-        println(registerForm.name)
         registerForm.lastname = formView.findViewById<AppCompatEditText>(R.id.register_lastname).text.toString()
         registerForm.phone = formView.findViewById<AppCompatEditText>(R.id.register_phone_number).text.toString()
-        val countrySelectedPosition = formView.findViewById<Spinner>(R.id.register_spinner_country).selectedItemPosition
-        registerForm.countryId = countries[countrySelectedPosition].id
         registerForm.mail = formView.findViewById<AppCompatEditText>(R.id.register_email).text.toString()
-        registerForm.password = formView.findViewById<AppCompatEditText>(R.id.register_password).text.toString()
+        registerForm.password = formView.findViewById<AppCompatEditText>(R.id.register_password_edit_text).text.toString()
+        registerForm.countryId = selectedCountry.id
 
         if(registerForm.name.isNullOrBlank()){
             error.value = "Proporciona un nombre"

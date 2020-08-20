@@ -71,91 +71,93 @@
             android:orientation="vertical">
         </androidx.appcompat.widget.LinearLayoutCompat>
 
-        <LinearLayout
-            android:id="@+id/sidebar_options_main"
+        <ScrollView
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:background="?darkMedium"
-            android:orientation="vertical"
-            android:paddingHorizontal="@dimen/sidebar_padding_horizontal"
-            android:paddingVertical="20dp"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@id/sidebar_profiles"
-            app:layout_constraintBottom_toTopOf="@id/sidebar_options_main_end">
-
-                <TextView
-                    android:id="@+id/sidebar_devices"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:drawableEnd="@drawable/ic_arrow_drop_down_24dp"
-                    android:drawableRight="@drawable/ic_arrow_drop_down_24dp"
-                    android:drawablePadding="2dp"
-                    android:text="Dispositivos"
-                    android:textSize="@dimen/heading6" />
-
-                <androidx.appcompat.widget.LinearLayoutCompat
-                    android:id="@+id/sidebar_devices_container"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:fillViewport="true">
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="?darkMedium"
                     android:orientation="vertical">
-                </androidx.appcompat.widget.LinearLayoutCompat>
+                        <LinearLayout
+                            android:id="@+id/sidebar_options_main"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="?darkMedium"
+                            android:orientation="vertical"
+                            android:paddingHorizontal="@dimen/sidebar_padding_horizontal"
+                            android:paddingVertical="20dp">
 
-                <TextView
-                    android:id="@+id/sidebar_account"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/sidebar_option_spacing"
-                    android:text="Cuenta"
-                    android:textSize="@dimen/heading6" />
+                                <TextView
+                                    android:id="@+id/sidebar_devices"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:drawableEnd="@drawable/ic_arrow_drop_down_24dp"
+                                    android:drawableRight="@drawable/ic_arrow_drop_down_24dp"
+                                    android:drawablePadding="2dp"
+                                    android:text="Dispositivos"
+                                    android:textSize="@dimen/heading6" />
 
-                <TextView
-                    android:id="@+id/sidebar_payment"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/sidebar_option_spacing"
-                    android:text="Pagos"
-                    android:textSize="@dimen/heading6" />
 
-                <TextView
-                    android:id="@+id/sidebar_help"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/sidebar_option_spacing"
-                    android:text="Ayuda"
-                    android:textSize="@dimen/heading6" />
-        </LinearLayout>
 
-        <LinearLayout
-            android:id="@+id/sidebar_options_secondary"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:background="@drawable/bg_sidebar_bottom"
-            android:orientation="vertical"
-            android:paddingHorizontal="@dimen/sidebar_padding_horizontal"
-            android:paddingVertical="20dp"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/sidebar_options_main_end"
-            app:layout_constraintBottom_toBottomOf="parent">
-                <TextView
-                    android:id="@+id/sidebar_logout"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Cerrar sesión"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    android:textSize="@dimen/heading6"
-                    android:textColor="?lightMedium"/>
-        </LinearLayout>
+                                <androidx.appcompat.widget.LinearLayoutCompat
+                                    android:id="@+id/sidebar_devices_container"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:background="?darkMedium"
+                                    android:orientation="vertical">
+                                </androidx.appcompat.widget.LinearLayoutCompat>
 
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/sidebar_options_main_end"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintGuide_percent="@dimen/sidebar_options_main_end" />
+                                <TextView
+                                    android:id="@+id/sidebar_account"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="@dimen/sidebar_option_spacing"
+                                    android:text="Cuenta"
+                                    android:textSize="@dimen/heading6" />
+
+                                <TextView
+                                    android:id="@+id/sidebar_payment"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="@dimen/sidebar_option_spacing"
+                                    android:text="Pagos"
+                                    android:textSize="@dimen/heading6" />
+
+                                <TextView
+                                    android:id="@+id/sidebar_help"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="@dimen/sidebar_option_spacing"
+                                    android:text="Ayuda"
+                                    android:textSize="@dimen/heading6" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/sidebar_options_secondary"
+                            android:background="@drawable/bg_sidebar_bottom"
+                            android:orientation="vertical"
+                            android:paddingHorizontal="@dimen/sidebar_padding_horizontal"
+                            android:paddingVertical="20dp"
+                            android:layout_width="fill_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="1"
+                            android:gravity="bottom">
+                                <TextView
+                                    android:id="@+id/sidebar_logout"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="Cerrar sesión"
+                                    android:textSize="@dimen/heading6"
+                                    android:textColor="?lightMedium"/>
+                        </LinearLayout>
+                </LinearLayout>
+        </ScrollView>
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

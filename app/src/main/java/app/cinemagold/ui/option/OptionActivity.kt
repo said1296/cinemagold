@@ -2,7 +2,6 @@ package app.cinemagold.ui.option
 
 import android.content.Intent
 import android.os.Bundle
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import app.cinemagold.R
@@ -24,7 +23,9 @@ class OptionActivity : AppCompatActivity() {
         fragment = when(intent.getStringExtra("FRAGMENT")){
             HelpFragment::class.simpleName -> HelpFragment()
             PaymentFragment::class.simpleName -> PaymentFragment()
-            else -> ProfileFragment()
+            else -> {
+                ProfileFragment()
+            }
         }
         supportFragmentManager.beginTransaction().add(fragmentContainer, fragment, fragment::class.simpleName).commit()
     }

@@ -53,4 +53,6 @@
     <string name="pick_an_option">Escoge una opción</string>
     <string name="premieres">Estrenos</string>
     <string name="recent">Recientes</string>
+    <string name="delete_profile">Eliminar perfil</string>
+    <string name="delete_all">Eliminar todos</string>
 </resources>

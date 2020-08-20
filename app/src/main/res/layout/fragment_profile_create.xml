@@ -53,6 +53,18 @@
             android:paddingHorizontal="@dimen/sign_in_buttons_padding_horizontal"
             android:layout_marginTop="@dimen/profile_create_submit_margin_top"
             android:textSize="@dimen/heading6"/>
+
+        <Button
+            android:visibility="gone"
+            android:id="@+id/profile_delete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/delete_profile"
+            android:background="@drawable/bg_button_call"
+            android:paddingVertical="@dimen/sign_in_buttons_padding_vertical"
+            android:paddingHorizontal="@dimen/sign_in_buttons_padding_horizontal"
+            android:layout_marginTop="@dimen/profile_create_submit_margin_top"
+            android:textSize="@dimen/heading6"/>
     </LinearLayout>
 
     <androidx.fragment.app.FragmentContainerView

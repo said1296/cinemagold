@@ -46,8 +46,18 @@
         <item name="fontFamily">@font/font_semibold</item>
         <item name="android:textColor">?light</item>
     </style>
+
+    <style name="AppTheme.Register.AutoComplete" parent="Widget.AppCompat.AutoCompleteTextView">
+        <item name="android:textSize">@dimen/heading4</item>
+        <item name="android:background">@drawable/bg_login_edit_text</item>
+        <item name="android:padding">@dimen/register_edit_text_padding</item>
+        <item name="fontFamily">@font/font_semibold</item>
+        <item name="android:textColor">?light</item>
+    </style>
+
     <style name="AppTheme.Register" parent="AppTheme">
         <item name="editTextStyle">@style/AppTheme.Register.EditText</item>
+        <item name="autoCompleteTextViewStyle">@style/AppTheme.Register.AutoComplete</item>
     </style>
 
     <!-- ExoPlayer Custom Controls -->

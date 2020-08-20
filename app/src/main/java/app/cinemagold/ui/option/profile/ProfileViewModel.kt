@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.preference.PreferenceManager
 import app.cinemagold.BuildConfig
+import app.cinemagold.R
 import app.cinemagold.dataaccess.remote.ProfileApi
 import app.cinemagold.model.generic.IdAndName
 import app.cinemagold.model.user.Profile
@@ -26,11 +27,11 @@ class ProfileViewModel(private val profileApi: ProfileApi, private val context: 
     }
     var isEdit = false
 
-    init {
+    //Events
+    fun startedFragment(){
         requestProfiles()
     }
 
-    //Events
     fun selectedProfile(profilePosition: Int){
         val selectedProfile = profiles.value!![profilePosition]
         savePrefsProfile(selectedProfile)
@@ -40,7 +41,7 @@ class ProfileViewModel(private val profileApi: ProfileApi, private val context: 
         savePrefsProfile(
             Profile(-1,
                 IdAndName(1, "https://www.ibbymexico.org.mx/dos/wp-content/uploads/revslider/splash-creative-light-01-animated/Slider-CL01-Background-1024x709.png"),
-                "KIDS"
+                    context.resources.getString(R.string.KIDS)
                 )
         )
     }

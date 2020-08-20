@@ -6,7 +6,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import app.cinemagold.dataaccess.remote.AuthenticationApi
 import app.cinemagold.dataaccess.remote.ProfileApi
-import app.cinemagold.model.generic.IdAndName
 import app.cinemagold.model.generic.LongIdAndName
 import app.cinemagold.model.user.Profile
 import app.cinemagold.ui.common.dataholder.LiveEvent
@@ -28,6 +27,10 @@ class SidebarViewModel(val authenticationApi: AuthenticationApi, val profileApi:
     var layoutInflater : LayoutInflater = LayoutInflater.from(context)
 
     //Events
+    fun deauthAllDevices(){
+        requestDeauthAll()
+    }
+
     fun clickedProfiles(){
         if(isOpenProfiles.value!=null && isOpenProfiles.value!!){
             isOpenProfiles.value=false
@@ -95,6 +98,25 @@ class SidebarViewModel(val authenticationApi: AuthenticationApi, val profileApi:
                 is NetworkResponse.Success -> {
                     isOpenDevices.postValue(false)
                     requestDevices()
+                }
+                is NetworkResponse.ServerError -> {
+                    error.postValue(response.body?.status.toString() + " " + response.body?.message)
+                }
+                is NetworkResponse.NetworkError -> {
+                    error.postValue(response.error.toString())
+                    println(response.error.toString())
+                }
+                else -> error.postValue("Unknown error")
+            }
+        }
+    }
+
+    private fun requestDeauthAll(){
+        viewModelScope.launch {
+            when(val response = authenticationApi.deauthAllDevices()){
+                is NetworkResponse.Success -> {
+                    isOpenDevices.postValue(false)
+                    devices = emptyList()
                 }
                 is NetworkResponse.ServerError -> {
                     error.postValue(response.body?.status.toString() + " " + response.body?.message)
