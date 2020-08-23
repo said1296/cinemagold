@@ -20,13 +20,38 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             android:orientation="vertical">
-                <include
-                    android:id="@+id/sidebar_logo"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    android:layout_height="25dp"
-                    layout="@layout/common_logo"
-                    android:layout_width="match_parent" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                        <include
+                            android:id="@+id/sidebar_logo"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintLeft_toLeftOf="parent"
+                            android:layout_height="25dp"
+                            layout="@layout/common_logo"
+                            android:layout_width="wrap_content" />
+                        <LinearLayout
+                            android:id="@+id/sidebar_notification"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="end"
+                            android:orientation="horizontal">
+                                <TextView
+                                    android:id="@+id/sidebar_notification_count"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="3"/>
+                                <androidx.appcompat.widget.AppCompatImageView
+                                    android:id="@+id/sidebar_notification_icon"
+                                    app:layout_constraintTop_toTopOf="parent"
+                                    app:layout_constraintLeft_toLeftOf="parent"
+                                    android:layout_height="match_parent"
+                                    android:layout_width="wrap_content"
+                                    app:layout_constraintDimensionRatio="1:1"
+                                    android:background="@drawable/ic_notifications_24dp"/>
+                        </LinearLayout>
+                </LinearLayout>
+
                 <androidx.appcompat.widget.LinearLayoutCompat
                     android:id="@+id/sidebar_avatar_active"
                     android:layout_width="match_parent"

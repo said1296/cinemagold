@@ -12,7 +12,8 @@ interface AuthenticationApi {
     @Multipart
     suspend fun authenticate(@Query("email") email : String,
                              @Query("password") password : String,
-                             @Part("remember") remember: Boolean = true) : NetworkResponse<Response, NetworkError>
+                             @Part("remember") remember: Boolean = true,
+                             @Query("isMobileApp") isMobileApp : Boolean = true) : NetworkResponse<Response, NetworkError>
 
     @GET("authenticate/check")
     suspend fun isAuthenticated() : NetworkResponse<Response, NetworkError>

@@ -38,10 +38,6 @@ class AvatarGridRVA @Inject constructor(
         val currentData = dataset[position]
         val item = holder.itemView
 
-        item.item_avatar_grid_background.layoutParams = LinearLayoutCompat.LayoutParams(
-            LinearLayoutCompat.LayoutParams.MATCH_PARENT, LinearLayoutCompat.LayoutParams.WRAP_CONTENT
-        )
-
         val params = item.layoutParams as RecyclerView.LayoutParams
         params.rightMargin = itemMargin
         params.leftMargin = itemMargin

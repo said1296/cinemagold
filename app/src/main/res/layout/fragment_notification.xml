@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    android:layout_marginHorizontal="@dimen/standard_margin_horizontal"
+    android:clickable="true"
+    android:focusable="true">
+    <include
+        android:id="@+id/notification_logo"
+        layout="@layout/common_logo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="@dimen/header_margin_vertical"/>
+
+    <TextView
+        android:id="@+id/notification_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/notifications"
+        android:textSize="@dimen/heading2"
+        android:gravity="center_horizontal"/>
+    <View
+        android:id="@+id/notification_separator"
+        android:layout_width="250dp"
+        android:layout_height="2dp"
+        android:background="?lightDark"
+        android:layout_marginTop="@dimen/profile_separator_margin_top"/>
+    <ScrollView
+        android:id="@+id/notification_scroll"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/notification_scroll_margin_top">
+        <LinearLayout
+            android:id="@+id/notification_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+        </LinearLayout>
+    </ScrollView>
+</androidx.appcompat.widget.LinearLayoutCompat>

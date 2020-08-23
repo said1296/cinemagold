@@ -27,7 +27,9 @@ interface ContentApi {
     suspend fun getSerialized(@Query("id") contentId : Int) : NetworkResponse<Content, NetworkError>
 
     @GET("content/serialized/genre")
-    suspend fun getSerializedByGenre(@Query("genreId") genreId : Int, @Query("max") max : Int) : NetworkResponse<MutableList<Content>, NetworkError>
+    suspend fun getSerializedByGenre(@Query("genreId") genreId : Int,
+                                     @Query("max") max : Int,
+                                     @Query("isKids") isKids: Boolean) : NetworkResponse<MutableList<Content>, NetworkError>
 
     @GET("content/genre/media_type")
     suspend fun getByGenreIdAndOptionalContentTypeId(@Query("genreId") genreId : Int,

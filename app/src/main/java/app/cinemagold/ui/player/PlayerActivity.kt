@@ -1,5 +1,7 @@
 package app.cinemagold.ui.player
 
+import android.app.AlertDialog
+import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -12,6 +14,7 @@ import android.widget.ImageButton
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.LinearLayoutCompat
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.lifecycle.observe
 import androidx.recyclerview.widget.LinearLayoutManager
 import app.cinemagold.R
 import app.cinemagold.injection.ApplicationContextInjector
@@ -19,6 +22,10 @@ import app.cinemagold.model.content.Content
 import app.cinemagold.model.content.ContentType
 import app.cinemagold.model.content.SubtitleType
 import app.cinemagold.model.generic.IdAndName
+import app.cinemagold.model.user.PlayerAuthorization
+import app.cinemagold.ui.authentication.AuthenticationActivity
+import app.cinemagold.ui.option.OptionActivity
+import app.cinemagold.ui.option.help.PaymentFragment
 import com.google.android.exoplayer2.C
 import com.google.android.exoplayer2.ExoPlayer
 import com.google.android.exoplayer2.Format
@@ -68,12 +75,18 @@ class PlayerActivity : AppCompatActivity() {
         { onLoaded() },
         {
             val elapsedPercent = (player.currentPosition.toFloat() / player.duration)
-            if(content.mediaType.id==ContentType.MOVIE.value){
+            if(content.mediaType.id== ContentType.MOVIE.value){
                 playerViewModel.triggeredUpdateElapsed(content.id, player.currentPosition.toInt(), elapsedPercent)
             }else{
                 playerViewModel.triggeredUpdateElapsed(content.id,
                     content.seasons[seasonIndex].episodes[episodeIndex].id, player.currentPosition.toInt(), elapsedPercent)
             }
+        },
+        {isOnPlay ->
+            if(isOnPlay)
+                playerViewModel.videoPlaying(player.duration - player.currentPosition, content.mediaType.id)
+            else
+                playerViewModel.videoPaused()
         }
     )
     private var audioTrackSelected = 0
@@ -91,6 +104,30 @@ class PlayerActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_player)
         rootView = findViewById(R.id.player)
+
+        //Observers
+        playerViewModel.authorizationError.observe(this){authorizationError ->
+            player.playWhenReady = false
+            AlertDialog.Builder(this, R.style.AppTheme_AlertDialog)
+                .setMessage(authorizationError.name)
+                .setPositiveButton("Entendido") { _, _ ->
+                    when(authorizationError.id){
+                        PlayerAuthorization.SUSPENDED.value -> {
+                            navigateToAuthentication()
+                        }
+                        PlayerAuthorization.MEMBERSHIP_EXPIRED.value-> {
+                            navigateToOption(PaymentFragment::class.simpleName!!)
+                        }
+                        PlayerAuthorization.DEVICE_LIMIT_REACHED.value -> {
+                            this.onBackPressed()
+                        }
+                        PlayerAuthorization.CONTENT_TYPE_PERMISSION_DENIED.value -> {
+                            this.onBackPressed()
+                        }
+                    }
+                }
+                .create().show()
+        }
 
         //Cast
         val mediaRouteButton = rootView.media_route_button
@@ -172,18 +209,10 @@ class PlayerActivity : AppCompatActivity() {
         preparePlayer()
     }
 
-    override fun onTouchEvent(event: MotionEvent?): Boolean {
-/*        if(castContext.sessionManager.currentCastSession!=null){
-            castContext.sessionManager.currentCastSession.remoteMediaClient.load(
-                MediaLoadRequestData.Builder().setMediaInfo(mediaInfo).build()
-            )
-        }*/
-        return super.onTouchEvent(event)
-    }
-
     override fun onPause() {
         super.onPause()
         playerListener.stopUpdatingElapsed()
+        playerViewModel.videoPaused()
     }
 
     private fun onLoaded(){
@@ -405,5 +434,29 @@ class PlayerActivity : AppCompatActivity() {
                     .build()
             )
         }
+    }
+
+    //Navigation
+    fun navigateToAuthentication() {
+        val intent = Intent(applicationContext, AuthenticationActivity::class.java)
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY)
+        intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
+        startActivity(intent)
+        finish()
+    }
+
+    fun navigateToOption(fragmentToLoad : String){
+        val intent = Intent(this, OptionActivity::class.java)
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY)
+        intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
+        intent.putExtra("FRAGMENT", fragmentToLoad)
+        //Send information about where the intent came from
+        intent.putExtra("ORIGIN", this::class.simpleName)
+        startActivity(intent)
+        finish()
     }
 }

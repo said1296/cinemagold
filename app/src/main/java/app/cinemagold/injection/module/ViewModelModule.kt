@@ -10,6 +10,7 @@ import app.cinemagold.ui.browse.movie.MovieViewModel
 import app.cinemagold.ui.browse.preview.PreviewViewModel
 import app.cinemagold.ui.browse.search.SearchViewModel
 import app.cinemagold.ui.browse.serialized.SerializedViewModel
+import app.cinemagold.ui.option.notification.NotificationViewModel
 import app.cinemagold.ui.option.profile.ProfileViewModel
 import app.cinemagold.ui.option.profilecreate.AvatarGridViewModel
 import app.cinemagold.ui.option.profilecreate.ProfileCreateViewModel
@@ -75,19 +76,25 @@ class ViewModelModule {
 
     @Provides
     @Singleton
-    fun provideSidebarViewModel(authenticationApi: AuthenticationApi, profileApi: ProfileApi, context: Context) : SidebarViewModel{
-        return SidebarViewModel(authenticationApi, profileApi, context)
+    fun provideSidebarViewModel(authenticationApi: AuthenticationApi, profileApi: ProfileApi, notificationApi: NotificationApi, context: Context) : SidebarViewModel{
+        return SidebarViewModel(authenticationApi, profileApi, notificationApi, context)
     }
 
     @Provides
     @Singleton
-    fun providePlayerViewModel(recentApi: RecentApi, context: Context) : PlayerViewModel {
-        return PlayerViewModel(recentApi, context)
+    fun providePlayerViewModel(recentApi: RecentApi, playerApi: PlayerApi, context: Context) : PlayerViewModel {
+        return PlayerViewModel(recentApi, playerApi, context)
     }
 
     @Provides
     @Singleton
     fun provideAvatarGridViewModel(profileApi: ProfileApi) : AvatarGridViewModel {
         return AvatarGridViewModel(profileApi)
+    }
+
+    @Provides
+    @Singleton
+    fun provideNotificationViewModel(notificationApi: NotificationApi) : NotificationViewModel {
+        return NotificationViewModel(notificationApi)
     }
 }

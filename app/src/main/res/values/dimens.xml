@@ -109,6 +109,8 @@
     <dimen name="item_avatar_grid_width">100dp</dimen>
     <dimen name="item_avatar_grid_margin">5dp</dimen>
 
+    <dimen name="notification_scroll_margin_top">40dp</dimen>
+
     <dimen name="heading1">45sp</dimen>
     <dimen name="heading2">35sp</dimen>
     <dimen name="heading3">26sp</dimen>

@@ -51,6 +51,9 @@ class ContentHorizontalRVA @Inject constructor(
             .config(Bitmap.Config.RGB_565)
             .resize(16*scale, 9*scale)
             .centerCrop().into(item.item_content_horizontal_background)
+        if(currentData.hasNewSeason)
+            item.item_content_horizontal_new_season.visibility = View.VISIBLE
+
         //Set start and end padding
         val params = holder.itemView.layoutParams as RecyclerView.LayoutParams
         if(position == 0){

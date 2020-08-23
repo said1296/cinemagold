@@ -1,4 +1,4 @@
-package app.cinemagold.ui.browse.common.recycleradapter;
+package app.cinemagold.ui.browse.home;
 
 import android.content.Context
 import android.graphics.Bitmap
@@ -46,6 +46,9 @@ class ContentVerticalRVA (
             .config(Bitmap.Config.RGB_565)
             .resize(2*scale, 3*scale)
             .centerCrop().into(item.item_content_vertical_background)
+        if(currentData.hasNewSeason){
+            item.item_content_vertical_new_season.visibility = View.VISIBLE
+        }
 
         //Set start and end padding
         val params = item.layoutParams as RecyclerView.LayoutParams

@@ -32,7 +32,7 @@ class PreviewViewModel(val contentApi : ContentApi) : ViewModel() {
         viewModelScope.launch {
 
             val response : NetworkResponse<Content, NetworkError> =
-                if(currentContentType==ContentType.MOVIE){
+                if(currentContentType== ContentType.MOVIE){
                     contentApi.getMovie(currentContentId)
                 }else{
                     contentApi.getSerialized(currentContentId)

@@ -40,7 +40,7 @@ class SerializedViewModel(private val contentApi : ContentApi, private val genre
     var currentContentType = IdAndName()
     var isKids = false
 
-    init {
+    fun initialize(){
         setIsKids()
         requestContentTypesAndContentTypeSpinnerItems()
         requestContentGroupedByGenre()
@@ -109,7 +109,7 @@ class SerializedViewModel(private val contentApi : ContentApi, private val genre
         viewModelScope.launch {
             val response =
                 if(currentContentType.id==-1){
-                    contentApi.getSerializedByGenre(currentGenre.id, 21)
+                    contentApi.getSerializedByGenre(currentGenre.id, 21, isKids)
                 }else{
                     contentApi.getByGenreIdAndOptionalContentTypeId(currentGenre.id, currentContentType.id, 60, isKids)
                 }

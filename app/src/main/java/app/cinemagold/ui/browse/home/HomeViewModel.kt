@@ -130,7 +130,7 @@ class HomeViewModel(val contentApi : ContentApi, private val recentApi: RecentAp
     private fun requestContent(ids : List<Int>){
         viewModelScope.launch {
             val response : NetworkResponse<Content, NetworkError> =
-                if(recentSelected.mediaType.id==ContentType.MOVIE.value){
+                if(recentSelected.mediaType.id== ContentType.MOVIE.value){
                     contentApi.getMovie(ids[0])
                 }else{
                     contentApi.getSerialized(ids[0])
@@ -139,7 +139,7 @@ class HomeViewModel(val contentApi : ContentApi, private val recentApi: RecentAp
             when(response){
                 is NetworkResponse.Success -> {
                     val content = response.body
-                    if(recentSelected.mediaType.id!=ContentType.MOVIE.value){
+                    if(recentSelected.mediaType.id!= ContentType.MOVIE.value){
                         //Find position of season and episode
                         for((seasonIndex, season) in content.seasons.withIndex()){
                             if(season.id==ids[1]){

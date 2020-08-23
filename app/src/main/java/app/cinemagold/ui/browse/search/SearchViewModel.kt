@@ -34,10 +34,9 @@ class SearchViewModel(private val contentApi : ContentApi, val context : Context
     }
     private var isKids = false
 
-    init {
+    fun initialize(){
         setIsKids()
     }
-
 
     //Events
     fun inputSearch(partialNameNew : String){
@@ -72,7 +71,6 @@ class SearchViewModel(private val contentApi : ContentApi, val context : Context
         }
     }
 
-    //Actions
     //Actions
     private fun setIsKids(){
         val preferences = PreferenceManager.getDefaultSharedPreferences(context)

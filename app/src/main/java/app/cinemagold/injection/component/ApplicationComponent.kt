@@ -12,6 +12,7 @@ import app.cinemagold.ui.browse.movie.MovieFragment
 import app.cinemagold.ui.browse.preview.PreviewFragment
 import app.cinemagold.ui.browse.search.SearchFragment
 import app.cinemagold.ui.browse.serialized.SerializedFragment
+import app.cinemagold.ui.option.notification.NotificationFragment
 import app.cinemagold.ui.option.profile.ProfileFragment
 import app.cinemagold.ui.option.profilecreate.AvatarGridFragment
 import app.cinemagold.ui.option.profilecreate.ProfileCreateFragment
@@ -52,4 +53,5 @@ interface ApplicationComponent {
     fun inject(fragment: ProfileFragment)
     fun inject(fragment: ProfileCreateFragment)
     fun inject(fragment: AvatarGridFragment)
+    fun inject(fragment: NotificationFragment)
 }

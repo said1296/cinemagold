@@ -56,7 +56,6 @@ class ProfileViewModel(private val profileApi: ProfileApi, private val context: 
             when(val response = profileApi.getProfiles()){
                 is NetworkResponse.Success -> {
                     profiles.postValue(response.body)
-                    println(response.body)
                 }
                 is NetworkResponse.ServerError -> {
                     error.postValue(response.body?.status.toString() + " " + response.body?.message)

@@ -54,12 +54,7 @@ class ProfileFragment : Fragment() {
         val theme : Resources.Theme = ContextThemeWrapper(context, R.style.AppTheme).theme
         theme.resolveAttribute(R.attr.light, typedValue, true)
 
-        val origin = (activity as OptionActivity).intent.getStringExtra("ORIGIN")
         preferences = PreferenceManager.getDefaultSharedPreferences(context)
-        val currentProfileString = preferences.getString(BuildConfig.PREFS_PROFILE, "")
-        if(origin!=AuthenticationActivity::class.simpleName && !currentProfileString.isNullOrEmpty()){
-            viewModel.receivedIsEdit(true)
-        }
 
         //Observers
         viewModel.error.observe(this){data ->
@@ -82,11 +77,20 @@ class ProfileFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        val currentProfileString = preferences.getString(BuildConfig.PREFS_PROFILE, "")
+        val origin = (activity as OptionActivity).intent.getStringExtra("ORIGIN")
+        if(origin!=AuthenticationActivity::class.simpleName && !currentProfileString.isNullOrEmpty()){
+            viewModel.receivedIsEdit(true)
+        }else{
+            viewModel.receivedIsEdit(false)
+        }
+
         val rootView = inflater.inflate(R.layout.fragment_profile, container, false)
         if(viewModel.isEdit){
             rootView.profile_avatar_first_flipper.displayedChild = 1
             rootView.profile_avatar_second_filpper.displayedChild = 1
             rootView.profile_avatar_third_flipper.displayedChild = 1
+            rootView.profile_kids.visibility = View.GONE
         }
         avatarViews.apply {
             add(rootView.profile_avatar_first_flipper.currentView)
@@ -100,8 +104,8 @@ class ProfileFragment : Fragment() {
     }
 
     override fun onStart() {
-        super.onStart()
         viewModel.startedFragment()
+        super.onStart()
     }
 
     private fun buildAvatars(){

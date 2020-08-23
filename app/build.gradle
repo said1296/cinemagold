@@ -8,7 +8,7 @@ apply plugin: 'com.google.gms.google-services'
 android {
     signingConfigs {
         release {
-            storeFile file('/home/mr/Desktop/alias_cinemagold_pwd_cinemagold.jks')
+            storeFile file('C:\\Users\\kirim\\Desktop\\cinemagold.jks')
             storePassword 'cinemagold'
             keyAlias = 'cinemagold'
             keyPassword 'cinemagold'
@@ -44,8 +44,8 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
 
             //Constants
-            buildConfigField "String", "BASE_URL", '"https://192.168.0.104:8080/"'
-            buildConfigField "String", "BASE_URL_REMOTE", '"https://api.cinemagold.online/"'
+            buildConfigField "String", "BASE_URL_REMOTE", '"https://192.168.0.104:8080/"'
+            buildConfigField "String", "BASE_URL", '"https://api.cinemagold.online/"'
         }
         release {
             minifyEnabled false

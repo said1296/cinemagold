@@ -16,7 +16,8 @@ data class Content(
     val mediaType : IdAndName = IdAndName(),
     var score : Float = -1F,
     val movie : Movie = Movie(),
-    val seasons : List<Season> = emptyList()
+    val seasons : List<Season> = emptyList(),
+    val hasNewSeason: Boolean = false
 ){
     init {
         //Handle if asset is in local server

@@ -15,7 +15,6 @@ import app.cinemagold.injection.ApplicationContextInjector
 import app.cinemagold.model.content.ContentType
 import app.cinemagold.ui.browse.BrowseActivity
 import app.cinemagold.ui.browse.common.recycleradapter.ContentHorizontalRVA
-import app.cinemagold.ui.browse.common.recycleradapter.ContentVerticalRVA
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_home.view.*
 import javax.inject.Inject
@@ -62,7 +61,7 @@ class HomeFragment : Fragment() {
             buildRecent()
         }
         viewModel.contentRecentSelected.observe(this){data ->
-            if(viewModel.recentSelected.mediaType.id==ContentType.MOVIE.value){
+            if(viewModel.recentSelected.mediaType.id== ContentType.MOVIE.value){
                 (activity as BrowseActivity).navigateToPlayer(data, viewModel.recentSelected.elapsed)
             }else{
                 (activity as BrowseActivity).navigateToPlayer(data, viewModel.seasonSelectedIndex, viewModel.episodeSelectedIndex, viewModel.recentSelected.elapsed)

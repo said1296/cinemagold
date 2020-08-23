@@ -55,4 +55,10 @@
     <string name="recent">Recientes</string>
     <string name="delete_profile">Eliminar perfil</string>
     <string name="delete_all">Eliminar todos</string>
+    <string name="notifications">Notificaciones</string>
+
+    <string name="confirmation_delete_device">¿Seguro que desea eliminar este dispositivo?</string>
+    <string name="confirmation_delete_devices">¿Seguro que desea eliminar todos los dispositivos?</string>
+    <string name="NEW_SEASON">NUEVA TEMPORADA</string>
+    <string name="NEW_SEASON__VERTICAL">N\nU\nE\nV\nA\n\nT\nE\nM\nP\nO\nR\nA\nD\nA</string>
 </resources>

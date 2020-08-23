@@ -51,7 +51,6 @@
                     android:ellipsize="end"
                     android:maxWidth="270dp"
                     android:maxLines="3"
-                    android:text="TÍTULO LARGO MUY LARGO"
                     android:textSize="@dimen/heading4"
                     app:fontFamily="@font/font_semibold" />
 
@@ -68,7 +67,6 @@
                         android:layout_height="wrap_content"
                         android:paddingEnd="25dp"
                         android:paddingRight="25dp"
-                        android:text="Acción"
                         android:textSize="@dimen/text1"
                         app:fontFamily="@font/font_regular" />
 
@@ -76,7 +74,6 @@
                         android:id="@+id/preview_info_genre_secondary"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Crimen"
                         android:textSize="@dimen/text1"
                         app:fontFamily="@font/font_light" />
                 </LinearLayout>
@@ -93,7 +90,6 @@
                     android:id="@+id/preview_info_pg"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Edad +16"
                     android:textSize="@dimen/text1"
                     app:fontFamily="@font/font_regular" />
 
@@ -114,9 +110,6 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/preview_info_description_short_margin_top"
             android:layout_marginBottom="@dimen/preview_info_description_short_margin_bottom"
-            android:text="VINE a Comala porque me dijeron que acá vivía mi padre, un tal Pedro Páramo. Mi madre me
-            lo dijo. Y yo le prometí que vendría a verlo en cuanto ella muriera. Le apreté sus manos en
-            señal de que lo haría, pues ella estaba por morirse y yo en un plan de prometerlo todo."
             android:textSize="@dimen/text1"
             app:fontFamily="@font/font_regular" />
 

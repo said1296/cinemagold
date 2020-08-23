@@ -33,6 +33,15 @@
 
     </style>
 
+    <style name="AppTheme.AlertDialog" parent="Theme.AppCompat.Dialog.Alert">
+        <!-- Used for the buttons -->
+        <item name="colorAccent">?brand</item>
+        <!-- Used for the title and text -->
+        <item name="android:textColorPrimary">?light</item>
+        <!-- Used for the background -->
+        <item name="android:background">?darkMedium</item>
+    </style>
+
     <style name="score" parent="@android:style/Widget.RatingBar">
         <item name="android:progressDrawable">@drawable/widget_score</item>
         <item name="android:minHeight">22dp</item>

@@ -8,6 +8,7 @@ import app.cinemagold.R
 import app.cinemagold.ui.browse.BrowseActivity
 import app.cinemagold.ui.option.help.HelpFragment
 import app.cinemagold.ui.option.help.PaymentFragment
+import app.cinemagold.ui.option.notification.NotificationFragment
 import app.cinemagold.ui.option.profile.ProfileFragment
 
 
@@ -23,6 +24,7 @@ class OptionActivity : AppCompatActivity() {
         fragment = when(intent.getStringExtra("FRAGMENT")){
             HelpFragment::class.simpleName -> HelpFragment()
             PaymentFragment::class.simpleName -> PaymentFragment()
+            NotificationFragment::class.simpleName -> NotificationFragment()
             else -> {
                 ProfileFragment()
             }

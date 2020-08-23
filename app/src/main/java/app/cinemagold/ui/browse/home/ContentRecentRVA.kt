@@ -48,7 +48,7 @@ class ContentRecentRVA @Inject constructor(
         val elapsedBarParams = item.item_content_recent_elapsed.layoutParams as ConstraintLayout.LayoutParams
         elapsedBarParams.matchConstraintPercentWidth = currentData.elapsedPercent
 
-        if(currentData.mediaType.id!=ContentType.MOVIE.value){
+        if(currentData.mediaType.id!= ContentType.MOVIE.value){
             item.item_content_recent_info.text = "T${currentData.seasonNumber} · Cap.${currentData.episode!!.number}"
         }
 

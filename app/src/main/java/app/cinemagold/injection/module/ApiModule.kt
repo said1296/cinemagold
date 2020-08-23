@@ -2,6 +2,7 @@ package app.cinemagold.injection.module;
 
 
 import app.cinemagold.dataaccess.remote.*
+import com.google.android.exoplayer2.Player
 import dagger.Module;
 import dagger.Provides
 import retrofit2.Retrofit
@@ -47,5 +48,17 @@ class ApiModule {
     @Singleton
     fun provideRecentApi(retrofit: Retrofit): RecentApi{
         return retrofit.create(RecentApi::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideNotificationApi(retrofit: Retrofit): NotificationApi{
+        return retrofit.create(NotificationApi::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun providePlayerApi(retrofit: Retrofit): PlayerApi {
+        return retrofit.create(PlayerApi::class.java)
     }
 }

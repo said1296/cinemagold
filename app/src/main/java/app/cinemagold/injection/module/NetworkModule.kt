@@ -125,7 +125,18 @@ class NetworkModule {
                     val cookies = PreferenceManager.getDefaultSharedPreferences(context)
                         .getStringSet(BuildConfig.PREFS_COOKIES, HashSet()) as HashSet<String>?
                     for (header in originalResponse.headers("Set-Cookie")) {
-                        cookies!!.add(header)
+                        //Remove cookie if already exists and add new one,
+                        //only checks cookie name, doesn't care for path
+                        val cookieNameSeparatorIndex = header.indexOf("=")
+                        val cookieName = header.substring(0, cookieNameSeparatorIndex)
+                        val cookiesToRemove : MutableList<String> = mutableListOf()
+                        for(cookie in cookies!!){
+                            if(cookie.substring(0, cookieNameSeparatorIndex).equals(cookieName))
+                                cookiesToRemove.add(cookie)
+                        }
+                        for(cookieToRemove in cookiesToRemove)
+                            cookies.remove(cookieToRemove)
+                        cookies.add(header)
                     }
                     val preferences = PreferenceManager.getDefaultSharedPreferences(context).edit()
                     preferences.putStringSet(BuildConfig.PREFS_COOKIES, cookies).apply()

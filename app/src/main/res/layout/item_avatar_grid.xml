@@ -1,15 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.appcompat.widget.LinearLayoutCompat
+<androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content">
     <com.mikhaellopez.circularimageview.CircularImageView
+        app:layout_constraintTop_toTopOf="parent"
         android:id="@+id/item_avatar_grid_background"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        app:layout_constraintDimensionRatio="1:1"
+        android:layout_height="0dp"
         android:src="@drawable/ic_exit_24"
         app:civ_border="true"
         app:civ_border_width="2dp"
         app:civ_border_color="?lightMedium" />
-</androidx.appcompat.widget.LinearLayoutCompat>
+</androidx.constraintlayout.widget.ConstraintLayout>

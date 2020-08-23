@@ -36,7 +36,7 @@ class MovieViewModel(private val contentApi : ContentApi, private val genreApi :
     private val contentTypeId = ContentType.MOVIE.value
     var isKids = false
 
-    init {
+    fun initialize(){
         setIsKids()
         requestContentGroupedByGenre()
         requestGenres()

@@ -33,7 +33,7 @@ class SerializedFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+        viewModel.initialize()
         //Observers
         viewModel.error.observe(this){ data ->
             Toast.makeText(context, data, Toast.LENGTH_LONG).show()
