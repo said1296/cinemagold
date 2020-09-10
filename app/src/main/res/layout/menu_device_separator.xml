@@ -6,7 +6,7 @@
     android:weightSum="100"
     android:gravity="center">
     <View
-        android:id="@+id/sidebar_devide_separator"
+        android:id="@+id/menu_devide_separator"
         android:layout_weight="70"
         android:layout_width="0dp"
         android:layout_height="1dp"

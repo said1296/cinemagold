@@ -4,6 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:clickable="true"
+    android:focusable="true"
+    android:duplicateParentState="true"
     android:background="@drawable/bg_button_call"
     android:paddingVertical="10dp">
 

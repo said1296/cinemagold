@@ -1,14 +1,11 @@
 package app.cinemagold.ui.option.notification
 
-import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import app.cinemagold.dataaccess.remote.AuthenticationApi
 import app.cinemagold.dataaccess.remote.NotificationApi
-import app.cinemagold.dataaccess.remote.ProfileApi
 import app.cinemagold.model.generic.IdAndName
-import app.cinemagold.ui.common.dataholder.LiveEvent
+import app.cinemagold.ui.common.LiveEvent
 import com.haroldadmin.cnradapter.NetworkResponse
 import kotlinx.coroutines.launch
 

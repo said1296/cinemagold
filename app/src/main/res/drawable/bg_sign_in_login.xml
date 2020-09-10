@@ -1,10 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <item>
-        <shape android:shape="rectangle">
-            <solid android:color="?darkMedium" />
-            <stroke android:width="2dp" android:color="?brand"/>
-            <corners android:radius="10dp"/>
-        </shape>
-    </item>
+    <item android:state_focused="true" android:drawable="@drawable/bg_sign_in_login_focused" />
+    <item android:drawable="@drawable/bg_sign_in_login_default" />
 </selector>

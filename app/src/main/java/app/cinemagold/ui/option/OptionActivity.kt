@@ -1,14 +1,15 @@
 package app.cinemagold.ui.option
 
 import android.content.Intent
+import android.content.pm.ActivityInfo
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import app.cinemagold.R
 import app.cinemagold.ui.browse.BrowseActivity
 import app.cinemagold.ui.option.help.HelpFragment
-import app.cinemagold.ui.option.help.PaymentFragment
 import app.cinemagold.ui.option.notification.NotificationFragment
+import app.cinemagold.ui.option.payment.PaymentFragment
 import app.cinemagold.ui.option.profile.ProfileFragment
 
 
@@ -19,6 +20,9 @@ class OptionActivity : AppCompatActivity() {
 
 
     override fun onCreate(savedInstanceState: Bundle?){
+        if (resources.getBoolean(R.bool.isTelevision)) {
+            requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
+        }
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_option)
         fragment = when(intent.getStringExtra("FRAGMENT")){
@@ -48,10 +52,21 @@ class OptionActivity : AppCompatActivity() {
         }
     }
 
+    fun detachFragmentByTag(tag: String?) {
+        val fragment = fragmentManager.findFragmentByTag(tag)
+        if (fragment != null) {
+            fragmentManager.beginTransaction().detach(fragment).commit()
+        }
+    }
+
     fun navigateToBrowse(){
         val intent = Intent(this, BrowseActivity::class.java)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         startActivity(intent)
+    }
+
+    fun getIsEdit(): Boolean {
+        return intent.getBooleanExtra("IS_EDIT", false)
     }
 }

@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.LinearLayoutCompat
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    android:clickable="true"
+    android:focusable="true">
+    <include
+        android:id="@+id/payment_logo"
+        layout="@layout/common_logo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="@dimen/header_margin_vertical"/>
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/payment_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/payment_options"
+        android:textSize="@dimen/heading2"
+        android:gravity="center_horizontal"/>
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/bg_payment"
+        android:orientation="vertical"
+        android:gravity="center_horizontal"
+        android:layout_weight="100"
+        android:paddingHorizontal="@dimen/payment_options_padding_horizontal"
+        android:paddingVertical="@dimen/payment_options_padding_vertical"
+        android:layout_marginTop="@dimen/payment_options_margin_top">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="20"
+            android:weightSum="100">
+            <ImageView
+                android:id="@+id/payment_paypal"
+                android:layout_weight="40"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:src="@drawable/logo_paypal" />
+            <View
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="20" />
+            <ImageView
+                android:id="@+id/payment_venmo"
+                android:layout_weight="40"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:src="@drawable/logo_venmo" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="10" />
+        <ImageView
+            android:id="@+id/payment_cashapp"
+            android:layout_weight="20"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:src="@drawable/logo_cashapp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="10" />
+
+        <LinearLayout
+            android:layout_weight="20"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:orientation="horizontal"
+            android:weightSum="100"
+            android:gravity="bottom">
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="50"
+                android:orientation="vertical">
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Cuenta Produbanco:"
+                    android:textColor="?dark"
+                    android:textSize="@dimen/heading3"
+                    android:textAlignment="center"
+                    android:gravity="center_horizontal" />
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="18005924388"
+                    android:textColor="?dark"
+                    android:textSize="@dimen/heading4"
+                    android:textAlignment="center"
+                    android:gravity="center_horizontal"
+                    app:fontFamily="@font/font_medium"/>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_weight="50"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Cuenta Banco Pichincha:"
+                    android:textColor="?dark"
+                    android:textSize="@dimen/heading3"
+                    android:textAlignment="center"
+                    android:gravity="center_horizontal"/>
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="2200946162"
+                    android:textColor="?dark"
+                    android:textSize="@dimen/heading4"
+                    android:textAlignment="center"
+                    android:gravity="center_horizontal"
+                    app:fontFamily="@font/font_medium"/>
+            </LinearLayout>
+        </LinearLayout>
+        <androidx.appcompat.widget.AppCompatTextView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="20"
+            android:textColor="@color/black"
+            android:gravity="center_horizontal|center_vertical"
+            android:textSize="@dimen/heading2"
+            android:text="www.cinemagold.online/payment"/>
+
+
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+</androidx.appcompat.widget.LinearLayoutCompat>

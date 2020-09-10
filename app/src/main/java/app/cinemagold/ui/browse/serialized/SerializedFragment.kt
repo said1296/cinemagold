@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.widget.LinearLayoutCompat
 import androidx.fragment.app.Fragment
@@ -45,7 +46,10 @@ class SerializedFragment : Fragment() {
             genreRVA.setDataset(data)
         }
         viewModel.contentTypes.observe(this){
-            buildContentTypesSpinner()
+            if((activity as BrowseActivity).isTelevision)
+                buildContentTypesButtons()
+            else
+                buildContentTypesSpinner()
         }
         viewModel.contentGenre.observe(this){data ->
             (activity as BrowseActivity).changeContentGrid(data)
@@ -56,14 +60,19 @@ class SerializedFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.fragment_serialized, container, false)
+        val rootView = inflater.inflate(R.layout.fragment_serialized, container, false)
+
+        //Handle views for TV
+        if((activity as BrowseActivity).isTelevision)
+            rootView.serialized_header.visibility = View.GONE
+
         //Reset selected position
         genreRVA.selectedPosition = 0
 
-        serializedFragmentLayout = view.serialized
+        serializedFragmentLayout = rootView.serialized
 
         //Recycler views
-        view.serialized_recycler_genres.apply {
+        rootView.serialized_recycler_genres.apply {
             layoutManager = LinearLayoutManager(this@SerializedFragment.context, LinearLayoutManager.HORIZONTAL, false)
             adapter = genreRVA
         }
@@ -71,7 +80,7 @@ class SerializedFragment : Fragment() {
             viewModel.selectedGenre(genre)
         }
 
-        return view
+        return rootView
     }
 
     override fun onStop() {
@@ -95,4 +104,23 @@ class SerializedFragment : Fragment() {
         }
     }
 
+    private fun buildContentTypesButtons(){
+        val contentTypes = viewModel.contentTypeSpinnerItems
+        val contentTypesContainer = serializedFragmentLayout.serialized_content_types
+        for ((index, contentType) in contentTypes.withIndex()){
+            val contentTypeButton = layoutInflater.inflate(R.layout.item_content_type, contentTypesContainer, false) as TextView
+            contentTypeButton.text = contentType
+            if(index == 0){
+                contentTypeButton.setTextColor(context!!.resources.getColorStateList(R.color.light_focused_brand, context!!.applicationContext.theme))
+            }
+            contentTypeButton.setOnClickListener {
+                for(viewIndex in 0 until contentTypesContainer.childCount)
+                    (contentTypesContainer.getChildAt(viewIndex) as TextView).
+                        setTextColor(context!!.resources.getColorStateList(R.color.light_dark_focused_brand, context!!.applicationContext.theme))
+                contentTypeButton.setTextColor(context!!.resources.getColorStateList(R.color.light_focused_brand, context!!.applicationContext.theme))
+                viewModel.selectedContentType(index)
+            }
+            contentTypesContainer?.addView(contentTypeButton)
+        }
+    }
 }

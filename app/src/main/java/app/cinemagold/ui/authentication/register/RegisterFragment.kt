@@ -41,7 +41,10 @@ class RegisterFragment : Fragment() {
             Toast.makeText(context, data, Toast.LENGTH_LONG).show()
         }
         viewModel.countrySpinnerItems.observe(this){
-            buildCountrySpinnerAuto()
+            if(resources.getBoolean(R.bool.isTelevision))
+                buildCountrySpinner()
+            else
+                buildCountrySpinnerAuto()
         }
         viewModel.isSuccessful.observe(this){
             (activity as AuthenticationActivity).addOrReplaceFragment(ConfirmEmailFragment(), ConfirmEmailFragment::class.simpleName)
@@ -93,6 +96,37 @@ class RegisterFragment : Fragment() {
         autoCompleteView.setOnFocusChangeListener { _, hasFocus ->
             if(!hasFocus){
                 autoCompleteView.setText(viewModel.selectedCountry.name)
+            }
+        }
+    }
+
+    private fun buildCountrySpinner() {
+        val countrySpinnerItems = viewModel.countrySpinnerItems.value
+        val adapter =
+            ArrayAdapter<String>(context!!.applicationContext, R.layout.spinner_country, countrySpinnerItems!!)
+        adapter.setDropDownViewResource(R.layout.spinner_country_item)
+        view!!.register_spinner_country.adapter = adapter
+        view!!.register_spinner_country.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onNothingSelected(p0: AdapterView<*>?) {
+            }
+
+            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
+                //Grey out first option
+                viewModel.selectedCountry(p2)
+                val typedValue = TypedValue()
+                val theme: Resources.Theme = ContextThemeWrapper(context, R.style.AppTheme).theme
+                if (p2 == 0) {
+                    theme.resolveAttribute(R.attr.lightDark, typedValue, true)
+                } else {
+                    theme.resolveAttribute(R.attr.light, typedValue, true)
+                }
+                (view!!.spinner_country_selected as TextView).setTextColor(context!!.getColor(typedValue.resourceId))
+                for (drawable in (view!!.spinner_country_selected as TextView).compoundDrawables) {
+                    if (drawable != null) {
+                        drawable.colorFilter =
+                            PorterDuffColorFilter(context!!.getColor(typedValue.resourceId), PorterDuff.Mode.SRC_IN)
+                    }
+                }
             }
         }
     }

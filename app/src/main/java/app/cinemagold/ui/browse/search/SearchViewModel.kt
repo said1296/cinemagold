@@ -11,7 +11,7 @@ import app.cinemagold.BuildConfig
 import app.cinemagold.dataaccess.remote.ContentApi
 import app.cinemagold.model.content.Content
 import app.cinemagold.model.user.Profile
-import app.cinemagold.ui.common.dataholder.LiveEvent
+import app.cinemagold.ui.common.LiveEvent
 import com.google.gson.Gson
 import com.haroldadmin.cnradapter.NetworkResponse
 import kotlinx.coroutines.launch

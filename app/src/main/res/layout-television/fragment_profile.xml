@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?dark"
+    android:clickable="true"
+    android:focusable="true">
+
+    <include
+        android:id="@+id/profile_logo"
+        layout="@layout/common_logo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="@dimen/header_margin_vertical"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"/>
+
+    <TextView
+        android:id="@+id/profile_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/profiles"
+        android:textSize="@dimen/heading2"
+        app:layout_constraintTop_toBottomOf="@id/profile_logo"
+        android:gravity="center_horizontal"
+        android:layout_marginTop="@dimen/profile_title_margin_top"/>
+
+    <View
+        android:id="@+id/profile_separator"
+        app:layout_constraintTop_toBottomOf="@id/profile_title"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_width="250dp"
+        android:layout_height="2dp"
+        android:background="?lightDark"
+        android:layout_marginTop="@dimen/profile_separator_margin_top"/>
+
+    <LinearLayout
+        app:layout_constraintTop_toBottomOf="@id/profile_separator"
+        android:layout_marginTop="@dimen/profile_avatar_margin_top"
+        android:id="@+id/profile_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center">
+        <ViewFlipper
+            android:id="@+id/profile_avatar_first_flipper"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:focusable="true">
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:id="@+id/profile_avatar_first"
+                android:layout_height="wrap_content"
+                android:layout_width="@dimen/profile_avatar_width"
+                android:focusable="true">
+                <include
+                    layout="@layout/widget_avatar_with_name" />
+            </androidx.appcompat.widget.LinearLayoutCompat>
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:id="@+id/profile_avatar_first_edit"
+                android:layout_height="wrap_content"
+                android:layout_width="@dimen/profile_avatar_width"
+                android:focusable="true"
+                tools:ignore="DuplicateIds">
+                <include
+                    layout="@layout/widget_avatar_edit_with_name" />
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+        </ViewFlipper>
+
+        <View
+            android:layout_width="@dimen/profile_avatar_top_row_separation"
+            android:layout_height="0dp" />
+
+        <ViewFlipper
+            android:id="@+id/profile_avatar_second_flipper"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content">
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:id="@+id/profile_avatar_second"
+                android:layout_height="wrap_content"
+                android:layout_width="@dimen/profile_avatar_width"
+                android:focusable="true">
+                <include
+                    layout="@layout/widget_avatar_with_name" />
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:id="@+id/profile_avatar_second_edit"
+                android:layout_height="wrap_content"
+                android:layout_width="@dimen/profile_avatar_width"
+                android:focusable="true"
+                tools:ignore="DuplicateIds">
+                <include
+                    layout="@layout/widget_avatar_edit_with_name" />
+            </androidx.appcompat.widget.LinearLayoutCompat>
+        </ViewFlipper>
+        <View
+            android:layout_width="@dimen/profile_avatar_top_row_separation"
+            android:layout_height="0dp" />
+        <ViewFlipper
+            android:id="@+id/profile_avatar_third_flipper"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content">
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:id="@+id/profile_avatar_third"
+                android:layout_height="wrap_content"
+                android:layout_width="@dimen/profile_avatar_width"
+                android:focusable="true">
+                <include
+                    layout="@layout/widget_avatar_with_name" />
+            </androidx.appcompat.widget.LinearLayoutCompat>
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:id="@+id/profile_avatar_third_edit"
+                android:layout_height="wrap_content"
+                android:layout_width="@dimen/profile_avatar_width"
+                android:focusable="true"
+                tools:ignore="DuplicateIds">
+                <include
+                    layout="@layout/widget_avatar_edit_with_name" />
+            </androidx.appcompat.widget.LinearLayoutCompat>
+        </ViewFlipper>
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/profile_kids"
+        app:layout_constraintTop_toBottomOf="@id/profile_container"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/KIDS"
+        android:background="@drawable/bg_button_call"
+        android:textSize="@dimen/heading2"
+        android:paddingHorizontal="@dimen/profile_kids_padding_horizontal"
+        android:paddingVertical="@dimen/profile_kids_padding_vertical"
+        android:layout_marginTop="@dimen/profile_kids_margin_top"
+        android:nextFocusUp="@id/profile_avatar_first"
+        android:nextFocusDown="@id/profile_kids"
+        android:nextFocusLeft="@id/profile_kids"
+        android:nextFocusRight="@id/profile_kids"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -2,6 +2,7 @@ package app.cinemagold.ui.browse.serialized;
 
 import android.content.Context
 import android.content.res.Resources
+import android.graphics.Rect
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
@@ -9,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.appcompat.view.ContextThemeWrapper
 import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView.ItemDecoration
 import app.cinemagold.R
 import app.cinemagold.model.generic.IdAndName
 import kotlinx.android.synthetic.main.item_genre.view.*
@@ -16,10 +18,11 @@ import javax.inject.Inject
 
 
 class GenreRVA @Inject constructor(
-    private var dataset : List<IdAndName>,
-    val context : Context
+    private var dataset: List<IdAndName>,
+    val context: Context
 ) : RecyclerView.Adapter<GenreRVA.ViewHolder>() {
-    private val sideMargin = context.resources.getDimensionPixelSize(R.dimen.standard_margin_horizontal)
+    private val sideMargin =
+        context.resources.getDimensionPixelSize(R.dimen.standard_margin_horizontal)
     lateinit var clickHandler : (IdAndName) -> Unit
     var selectedPosition : Int = 0
     private var lightColor : Int
@@ -37,11 +40,11 @@ class GenreRVA @Inject constructor(
     }
 
 
-    class ViewHolder(itemView : View) : RecyclerView.ViewHolder(itemView)
+    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.item_genre, parent,false)
+            .inflate(R.layout.item_genre, parent, false)
         return ViewHolder(view)
     }
 
@@ -57,9 +60,19 @@ class GenreRVA @Inject constructor(
 
         //Highlight selected
         if(selectedPosition==position){
-            item.setTextColor(lightColor)
+            item.setTextColor(
+                context.resources.getColorStateList(
+                    R.color.light_focused_brand,
+                    context.applicationContext.theme
+                )
+            )
         }else{
-            item.setTextColor(lightDarkColor)
+            item.setTextColor(
+                context.resources.getColorStateList(
+                    R.color.light_dark_focused_brand,
+                    context.applicationContext.theme
+                )
+            )
         }
 
         //Show or hide "All genres" button
@@ -67,13 +80,6 @@ class GenreRVA @Inject constructor(
             item.visibility = View.GONE
             params.width = 0
             params.rightMargin = 0
-        }
-
-        //Set start and end padding
-        if(position == 0){
-            params.leftMargin = sideMargin
-        } else if (position == dataset.lastIndex){
-            params.rightMargin = sideMargin
         }
 
         item.setOnClickListener {
@@ -90,9 +96,22 @@ class GenreRVA @Inject constructor(
         return position
     }
 
-    fun setDataset(datasetNew : List<IdAndName>){
+    fun setDataset(datasetNew: List<IdAndName>){
         dataset = datasetNew
         notifyDataSetChanged()
     }
 
+    val itemDecoration = object: ItemDecoration() {
+        override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State) {
+            super.getItemOffsets(outRect, view, parent, state)
+            //Add padding to first and last item of list
+            if (parent.getChildAdapterPosition(view) == 0) {
+                outRect.left += sideMargin
+            }
+            else if (parent.getChildAdapterPosition(view) == dataset.lastIndex){
+                outRect.right += sideMargin
+            }
+        }
+    }
 }
+

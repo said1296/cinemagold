@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.content.res.Resources
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.util.TypedValue
 import android.view.LayoutInflater
@@ -20,10 +19,9 @@ import androidx.preference.PreferenceManager
 import app.cinemagold.BuildConfig
 import app.cinemagold.R
 import app.cinemagold.injection.ApplicationContextInjector
-import app.cinemagold.ui.authentication.AuthenticationActivity
+import app.cinemagold.ui.common.ContentItemTarget
 import app.cinemagold.ui.option.OptionActivity
 import app.cinemagold.ui.option.profilecreate.ProfileCreateFragment
-import com.google.gson.Gson
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_profile.view.*
 import kotlinx.android.synthetic.main.widget_avatar.view.widget_avatar
@@ -78,23 +76,19 @@ class ProfileFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val currentProfileString = preferences.getString(BuildConfig.PREFS_PROFILE, "")
-        val origin = (activity as OptionActivity).intent.getStringExtra("ORIGIN")
-        if(origin!=AuthenticationActivity::class.simpleName && !currentProfileString.isNullOrEmpty()){
-            viewModel.receivedIsEdit(true)
-        }else{
-            viewModel.receivedIsEdit(false)
-        }
+        val isEdit = (activity as OptionActivity).getIsEdit()
+        viewModel.receivedIsEdit(isEdit && !currentProfileString.isNullOrEmpty())
 
         val rootView = inflater.inflate(R.layout.fragment_profile, container, false)
         if(viewModel.isEdit){
             rootView.profile_avatar_first_flipper.displayedChild = 1
-            rootView.profile_avatar_second_filpper.displayedChild = 1
+            rootView.profile_avatar_second_flipper.displayedChild = 1
             rootView.profile_avatar_third_flipper.displayedChild = 1
             rootView.profile_kids.visibility = View.GONE
         }
         avatarViews.apply {
             add(rootView.profile_avatar_first_flipper.currentView)
-            add(rootView.profile_avatar_second_filpper.currentView)
+            add(rootView.profile_avatar_second_flipper.currentView)
             add(rootView.profile_avatar_third_flipper.currentView)
         }
         rootView.profile_kids.setOnClickListener {
@@ -108,10 +102,37 @@ class ProfileFragment : Fragment() {
         super.onStart()
     }
 
+    override fun onResume() {
+        super.onResume()
+        view?.profile_avatar_first_flipper?.profile_avatar_first?.requestFocus()
+    }
+
     private fun buildAvatars(){
         val profiles = viewModel.profiles.value
         val profilesSize = profiles!!.size
         for((index, avatarView) in avatarViews.withIndex()){
+            //Build focuses for TV
+            if(context!!.resources.getBoolean(R.bool.isTelevision)){
+                avatarView.apply {
+                    when(index){
+                        0 -> {
+                            nextFocusLeftId = avatarView.id
+                            nextFocusRightId = avatarViews[index+1].id
+                        }
+                        avatarViews.size-1 -> {
+                            nextFocusLeftId = avatarViews[index-1].id
+                            nextFocusRightId = avatarView.id
+                        }
+                        else -> {
+                            nextFocusLeftId = avatarViews[index-1].id
+                            nextFocusRightId = avatarViews[index+1].id
+                        }
+                    }
+                    nextFocusUpId = avatarView.id
+                    nextFocusDownId = R.id.profile_kids
+                }
+            }
+
             if(viewModel.isEdit && index>=profilesSize){
                 avatarView.widget_avatar_edit_icon.visibility = View.GONE
             }
@@ -124,14 +145,20 @@ class ProfileFragment : Fragment() {
                     (activity as OptionActivity).addOrReplaceFragment(ProfileCreateFragment(), ProfileCreateFragment::class.simpleName)
                 }
             }else{
+                val target = ContentItemTarget(resources) { stateListDrawable ->
+                    avatarView.widget_avatar.setImageDrawable(stateListDrawable)
+                }
+                //Keep strong reference to target with a tag to avoid garbage collection
+                avatarView.widget_avatar.widget_avatar.tag = target
                 picasso.load(profiles[index].avatar.name)
                     .config(Bitmap.Config.RGB_565)
-                    .into(avatarView.widget_avatar)
+                    .into(target)
                 avatarView.widget_avatar_name.text = profiles[index].name
                 avatarView.setOnClickListener {
                     viewModel.selectedProfile(index)
                 }
             }
         }
+        avatarViews[0].requestFocus()
     }
 }

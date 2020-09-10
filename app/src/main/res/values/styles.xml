@@ -12,6 +12,7 @@
         <item name="light">@color/white</item>
         <item name="lightDark">@color/ashDark</item>
         <item name="lightMedium">@color/ashMedium</item>
+        <item name="colorButtonNormal">?dark</item>
 
         <item name="fontFamily">@font/font_bold</item>
         <item name="android:textColor">?light</item>
@@ -42,6 +43,27 @@
         <item name="android:background">?darkMedium</item>
     </style>
 
+    <style name="AppTheme.Navbar" parent="AppTheme">
+        <item name="buttonStyle">@style/AppTheme.Navbar.Button</item>
+        <item name="imageButtonStyle">@style/AppTheme.Navbar.ImageButton</item>
+    </style>
+    <style name="AppTheme.Navbar.Button" parent="Widget.AppCompat.Button">
+        <item name="android:paddingLeft">@dimen/navbar_button_padding_horizontal</item>
+        <item name="android:paddingRight">@dimen/navbar_button_padding_horizontal</item>
+        <item name="android:paddingTop">@dimen/navbar_button_padding_vertical</item>
+        <item name="android:paddingBottom">@dimen/navbar_button_padding_vertical</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:minHeight">0dp</item>
+        <item name="android:minWidth">0dp</item>
+        <item name="android:background">@drawable/bg_navbar_button_ripple</item>
+    </style>
+    <style name="AppTheme.Navbar.ImageButton" parent="Widget.AppCompat.ImageButton">
+        <item name="android:paddingLeft">@dimen/navbar_image_button_padding_horizontal</item>
+        <item name="android:paddingRight">@dimen/navbar_image_button_padding_horizontal</item>
+        <item name="background">@drawable/bg_navbar_button_ripple</item>
+        <item name="android:background">@drawable/bg_navbar_button_ripple</item>
+    </style>
+
     <style name="score" parent="@android:style/Widget.RatingBar">
         <item name="android:progressDrawable">@drawable/widget_score</item>
         <item name="android:minHeight">22dp</item>
@@ -54,6 +76,7 @@
         <item name="android:padding">@dimen/register_edit_text_padding</item>
         <item name="fontFamily">@font/font_semibold</item>
         <item name="android:textColor">?light</item>
+        <item name="android:singleLine">true</item>
     </style>
 
     <style name="AppTheme.Register.AutoComplete" parent="Widget.AppCompat.AutoCompleteTextView">

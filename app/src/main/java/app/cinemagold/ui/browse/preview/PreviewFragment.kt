@@ -36,6 +36,9 @@ class PreviewFragment : Fragment() {
     lateinit var content : Content
     private val scale : Int = 30
     private var currentSeasonIndex : Int = 0
+
+    var isTelevision : Boolean = false
+
     //Views
     lateinit var infoSpecificContainerView : LinearLayout
     lateinit var titleView : TextView
@@ -54,6 +57,8 @@ class PreviewFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        isTelevision = resources.getBoolean(R.bool.isTelevision)
+
         //Listen for contentId set on Home fragment
         setFragmentResultListener("preview") { _, bundle ->
             contentId = bundle.getInt("contentId")
@@ -68,6 +73,7 @@ class PreviewFragment : Fragment() {
         viewModel.content.observe(this) {data ->
             content = data
             updateCommonView()
+
             if(viewModel.currentContentType == ContentType.MOVIE){
                 updateInfoSpecificMovieView()
             } else {
@@ -75,6 +81,13 @@ class PreviewFragment : Fragment() {
             }
             infoSpecificView.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT)
             infoSpecificContainerView.addView(infoSpecificView)
+
+            if(isTelevision)
+                if(viewModel.currentContentType == ContentType.MOVIE){
+                    requireView().widget_button_play_movie.requestFocus()
+                }
+                else
+                    requireView().widget_button_play_serialized.requestFocus()
 
             //Set onClickListener for Play button that is added in any of the two specific views
             requireView().widget_button_play.setOnClickListener {
@@ -108,11 +121,14 @@ class PreviewFragment : Fragment() {
     }
     //Add information specific to movies
     private fun updateInfoSpecificMovieView(){
-        picasso.load(content.sliderSrc)
-            .placeholder(R.drawable.bg_dark)
-            .config(Bitmap.Config.RGB_565)
-            .resize(16*scale, 9*scale)
-            .centerCrop().into(sliderView)
+        val previewImageSrc = if(resources.getBoolean(R.bool.isTelevision)) content.posterSrc else content.sliderSrc
+        picasso.load(previewImageSrc).apply {
+            placeholder(R.drawable.bg_dark)
+            config(Bitmap.Config.RGB_565)
+            fit()
+            centerCrop()
+            into(sliderView)
+        }
         infoSpecificView = layoutInflater.inflate(R.layout.preview_info_specific_movie, null)
         infoSpecificView.preview_info_length.text = content.length
         infoSpecificView.preview_info_director.text = content.movie.director
@@ -120,18 +136,13 @@ class PreviewFragment : Fragment() {
 
     //Add information specific to serialized content
     private fun updateInfoSpecificSerializedView(){
-        picasso.load(content.seasons[currentSeasonIndex].sliderSrc)
-            .placeholder(R.drawable.bg_dark)
-            .config(Bitmap.Config.RGB_565)
-            .resize(16*scale, 9*scale)
-            .centerCrop().into(sliderView)
-
         infoSpecificView = layoutInflater.inflate(R.layout.preview_info_specific_serialized, null)
 
         //Episodes generic_recycler view
+        val recyclerViewOrientation = if (isTelevision) LinearLayoutManager.VERTICAL else LinearLayoutManager.HORIZONTAL
         infoSpecificView.preview_recycler_episode.apply {
             adapter = episodeRVA
-            layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+            layoutManager = LinearLayoutManager(context, recyclerViewOrientation, false)
         }
         episodeRVA.clickHandler = {data ->
             (activity as BrowseActivity).navigateToPlayer(content, currentSeasonIndex, data)
@@ -143,19 +154,27 @@ class PreviewFragment : Fragment() {
         val adapter = ArrayAdapter<String>(context!!.applicationContext, R.layout.spinner_season, seasonSpinnerItems)
         adapter.setDropDownViewResource(R.layout.spinner_season_item)
         infoSpecificView.preview_spinner_season.adapter = adapter
+        var previewImageSrc : String
+        var firstSelection = true
         infoSpecificView.preview_spinner_season.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onNothingSelected(p0: AdapterView<*>?) {
             }
 
             override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
-                if(currentSeasonIndex!=p2){
+                //onItemSelected is called on first run, even if nothing was manually selected
+                if(currentSeasonIndex!=p2 || firstSelection){
+                    firstSelection = false
                     currentSeasonIndex = p2
+                    previewImageSrc = if(resources.getBoolean(R.bool.isTelevision)) content.seasons[currentSeasonIndex].posterSrc else content.seasons[currentSeasonIndex].sliderSrc
+                    println(previewImageSrc)
                     episodeRVA.setDataset(content.seasons[currentSeasonIndex].episodes)
-                    picasso.load(content.seasons[currentSeasonIndex].sliderSrc)
-                        .placeholder(R.drawable.bg_dark)
-                        .config(Bitmap.Config.RGB_565)
-                        .resize(16*scale, 9*scale)
-                        .centerCrop().into(sliderView)
+                    picasso.load(previewImageSrc).apply{
+                        placeholder(R.drawable.bg_dark)
+                        config(Bitmap.Config.RGB_565)
+                        fit()
+                        centerCrop()
+                        into(sliderView)
+                    }
                 }
             }
         }

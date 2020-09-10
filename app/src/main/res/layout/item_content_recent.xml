@@ -4,19 +4,22 @@
     android:id="@+id/item_content_recent"
     android:layout_width="@dimen/item_content_horizontal_width"
     android:layout_height="wrap_content"
-    android:layout_marginRight="@dimen/item_content_margin_right"
     android:layout_marginEnd="@dimen/item_content_margin_right"
     app:cardCornerRadius="@dimen/standard_border_radius"
     app:cardElevation="@dimen/item_content_horizontal_elevation"
     app:cardUseCompatPadding="true"
-    app:cardPreventCornerOverlap="false">
+    app:cardPreventCornerOverlap="false"
+    android:focusable="true">
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:duplicateParentState="true"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/bg_item_content">
 
-        <app.cinemagold.ui.browse.common.view.ImageViewRecycledBitmap
+        <androidx.appcompat.widget.AppCompatImageView
+            android:duplicateParentState="true"
+            android:id="@+id/item_content_recent_background"
             android:layout_width="0dp"
             android:layout_height="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -24,7 +27,6 @@
             app:layout_constraintRight_toRightOf="parent"
             android:scaleType="centerCrop"
             app:layout_constraintLeft_toLeftOf="parent"
-            android:id="@+id/item_content_recent_background"
             app:layout_constraintDimensionRatio="16:9"
             android:contentDescription="Content slider" />
 

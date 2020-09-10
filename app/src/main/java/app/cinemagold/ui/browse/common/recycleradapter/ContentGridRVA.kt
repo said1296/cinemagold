@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import app.cinemagold.R
 import app.cinemagold.model.content.Content
+import app.cinemagold.ui.common.ContentItemTarget
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.item_content_grid.view.*
 import javax.inject.Inject
@@ -42,10 +43,15 @@ class ContentGridRVA @Inject constructor(
         item.item_content_grid_title.text = currentData.name
 
         //Set background
+        val target = ContentItemTarget(context.resources)
         picasso.load(currentData.posterSrc)
             .config(Bitmap.Config.RGB_565)
             .resize(2*scale, 3*scale)
-            .centerCrop().into(item.item_content_grid_background)
+            .centerCrop()
+            .into(target)
+        //Add tag to keep strong reference to target and avoid Garbage Collection
+        item.item_content_grid_background.tag = target
+        item.item_content_grid_background.setImageDrawable(target.stateListDrawable)
 
         item.setOnClickListener { clickHandler(currentData.id, currentData.mediaType.id) }
     }

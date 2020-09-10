@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import app.cinemagold.R
 import app.cinemagold.model.content.Episode
+import app.cinemagold.ui.common.ContentItemTarget
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.item_episode.view.*
 import javax.inject.Inject
@@ -23,6 +24,7 @@ class EpisodeRVA @Inject constructor(
             context.resources.getDimensionPixelSize(R.dimen.item_content_horizontal_elevation)
     private val scale : Int = 30
     lateinit var clickHandler : (Int) -> Unit
+    val isTelevision = context.resources.getBoolean(R.bool.isTelevision)
 
     class ViewHolder(itemView : View) : RecyclerView.ViewHolder(itemView)
 
@@ -43,22 +45,33 @@ class EpisodeRVA @Inject constructor(
         item.item_episode_title.text = currentData.name
         item.item_episode_length.text = currentData.length
         item.item_episode_number.text = currentData.number
+        item.id = dataset[position].id
 
         //Set background
+        val target = ContentItemTarget(context.resources) { stateListDrawable ->
+            item.item_episode_background.setImageDrawable(stateListDrawable)
+        }
+        //Keep strong reference to target with a tag to avoid garbage collection
+        item.item_episode_background.tag = target
         picasso.load(currentData.thumbnailSrc)
             .config(Bitmap.Config.RGB_565)
             .resize(16*scale, 9*scale)
-            .centerCrop().into(item.item_episode_background)
-        //Set start and end padding
+            .centerCrop().into(target)
+
+        //Set start and end padding for mobile, and focuses for TV
         val params = holder.itemView.layoutParams as RecyclerView.LayoutParams
         if(position == 0){
-            params.leftMargin = sideMargin
+            if(!isTelevision) params.leftMargin = sideMargin else item.nextFocusUpId = R.id.preview_spinner_season
         } else if (position == dataset.lastIndex){
-            params.rightMargin = sideMargin
+            if(!isTelevision) params.rightMargin = sideMargin else item.nextFocusDownId = item.id
         }
+        if(isTelevision){
+            item.nextFocusLeftId = item.id
+            item.nextFocusLeftId = item.id
+        }
+        holder.itemView.layoutParams = params
 
         item.setOnClickListener { clickHandler(position) }
-        holder.itemView.layoutParams = params
     }
 
     override fun getItemId(position: Int) = dataset[position].id.toLong()

@@ -11,7 +11,6 @@
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
     <string name="preview_info_director">Director:</string>
     <string name="preview_info_length">Duración:</string>
-    <string name="movies">Películas</string>
     <string name="search">Buscar</string>
     <string name="name">Nombre</string>
     <string name="subtitles">Subtítulos</string>
@@ -61,4 +60,12 @@
     <string name="confirmation_delete_devices">¿Seguro que desea eliminar todos los dispositivos?</string>
     <string name="NEW_SEASON">NUEVA TEMPORADA</string>
     <string name="NEW_SEASON__VERTICAL">N\nU\nE\nV\nA\n\nT\nE\nM\nP\nO\nR\nA\nD\nA</string>
+    <string name="home">Inicio</string>
+    <string name="movies">Películas</string>
+    <string name="tv_shows">Programas de TV</string>
+    <string name="devices">Dispositivos</string>
+    <string name="account">Cuenta</string>
+    <string name="payments">Pagos</string>
+    <string name="logout">Cerrar sesión</string>
+    <string name="payment_options">Opciones de pago</string>
 </resources>

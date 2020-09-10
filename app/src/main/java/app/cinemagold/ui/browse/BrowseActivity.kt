@@ -3,17 +3,20 @@ package app.cinemagold.ui.browse
 import android.app.AlertDialog
 import android.content.Intent
 import android.content.SharedPreferences
+import android.content.pm.ActivityInfo
 import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
 import android.view.Gravity
+import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AnimationUtils
 import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.AppCompatTextView
 import androidx.appcompat.widget.LinearLayoutCompat
 import androidx.core.os.bundleOf
+import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.observe
@@ -33,19 +36,19 @@ import app.cinemagold.ui.browse.movie.MovieFragment
 import app.cinemagold.ui.browse.preview.PreviewFragment
 import app.cinemagold.ui.browse.search.SearchFragment
 import app.cinemagold.ui.browse.serialized.SerializedFragment
+import app.cinemagold.ui.common.ContentItemTarget
 import app.cinemagold.ui.option.OptionActivity
 import app.cinemagold.ui.option.help.HelpFragment
-import app.cinemagold.ui.option.help.PaymentFragment
 import app.cinemagold.ui.option.notification.NotificationFragment
+import app.cinemagold.ui.option.payment.PaymentFragment
 import app.cinemagold.ui.option.profile.ProfileFragment
 import app.cinemagold.ui.player.PlayerActivity
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.gson.Gson
 import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.common_sidebar.view.*
-import kotlinx.android.synthetic.main.sidebar_device.view.*
+import kotlinx.android.synthetic.main.menu.view.*
+import kotlinx.android.synthetic.main.menu_avatar_with_name.view.*
+import kotlinx.android.synthetic.main.menu_device.view.*
 import kotlinx.android.synthetic.main.widget_avatar.view.*
-import kotlinx.android.synthetic.main.widget_avatar_with_name_horizontal.view.*
 import javax.inject.Inject
 
 
@@ -60,9 +63,10 @@ class BrowseActivity : AppCompatActivity() {
     lateinit var picasso: Picasso
 
     @Inject
-    lateinit var sidebarViewModel: SidebarViewModel
+    lateinit var menuViewModel: MenuViewModel
     lateinit var preferences: SharedPreferences
     lateinit var currentProfile: Profile
+    var isTelevision: Boolean = false
 
     //Views
     private val contentContainer = R.id.content_container
@@ -70,9 +74,14 @@ class BrowseActivity : AppCompatActivity() {
     private val fragmentManager = supportFragmentManager
     lateinit var profilesView: LinearLayoutCompat
     lateinit var devicesView: LinearLayoutCompat
+    lateinit var activityView: DrawerLayout
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        isTelevision = resources.getBoolean(R.bool.isTelevision)
+        if (isTelevision) {
+            requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
+        }
         super.onCreate(savedInstanceState)
         //Get Shared Preferences values
         preferences = PreferenceManager.getDefaultSharedPreferences(this)
@@ -85,112 +94,86 @@ class BrowseActivity : AppCompatActivity() {
         addOrReplaceFragment(HomeFragment(), HomeFragment::class.simpleName, false)
 
         //Find needed views
-        profilesView = findViewById(R.id.sidebar_profiles)
-        devicesView = findViewById(R.id.sidebar_devices_container)
+        profilesView = findViewById(R.id.menu_profiles)
+        devicesView = findViewById(R.id.menu_devices_container)
 
         //Observers
-        sidebarViewModel.error.observe(this) { data ->
+        menuViewModel.error.observe(this) { data ->
             Toast.makeText(applicationContext, data, Toast.LENGTH_SHORT)
         }
-        sidebarViewModel.isOpenProfiles.observe(this) { data ->
+        menuViewModel.isOpenProfiles.observe(this) { data ->
             if (data) {
                 buildProfileViews()
             } else {
-                profilesView.removeAllViews()
+                if(!isTelevision)
+                    profilesView.visibility = View.GONE
             }
         }
-        sidebarViewModel.isOpenDevices.observe(this) { data ->
+        menuViewModel.isOpenDevices.observe(this) { data ->
             if (data) {
                 buildDevicesView()
             } else {
                 devicesView.removeAllViews()
             }
         }
-        sidebarViewModel.notificationsCount.observe(this) { data ->
-            findViewById<AppCompatTextView>(R.id.sidebar_notification_count).text = data.toString()
+        menuViewModel.notificationsCount.observe(this) { count ->
+            val count = 1
+            if(count > 0){
+                val menuNotificationView = findViewById<LinearLayoutCompat>(R.id.menu_notification)
+                menuNotificationView.menu_notification_count.text = count.toString()
+                menuNotificationView.menu_notification_icon.startAnimation(AnimationUtils.loadAnimation(this, R.anim.shake))
+            }
         }
 
-        //Sidebar setup
-        val activityLayout = findViewById<DrawerLayout>(R.id.activity_browse)
-        val toggle = ActionBarDrawerToggle(
-            this,
-            activityLayout,
-            R.string.navigation_drawer_open,
-            R.string.navigation_drawer_close
-        )
-        activityLayout.addDrawerListener(toggle)
+        //Menu setup
+        activityView = findViewById(R.id.activity_browse)
+        val toggle = object: ActionBarDrawerToggle(this, activityView, R.string.navigation_drawer_open, R.string.navigation_drawer_close){
+            override fun onDrawerOpened(drawerView: View) {
+                super.onDrawerOpened(drawerView)
+                activityView.menu_devices.requestFocus()
+            }
+        }
+        activityView.addDrawerListener(toggle)
         toggle.syncState()
-        activityLayout.closeDrawer(Gravity.START)
-        activityLayout.sidebar_logout.setOnClickListener {
+        activityView.closeDrawer(Gravity.START)
+        activityView.menu_logout.setOnClickListener {
             logout()
         }
         if (currentProfile.id != -1) {
-            activityLayout.sidebar_avatar_active.setOnClickListener {
-                sidebarViewModel.clickedProfiles()
-            }
+            if(!isTelevision)
+                activityView.menu_avatar_active.setOnClickListener {
+                    menuViewModel.clickedProfiles()
+                }
         }
-        activityLayout.sidebar_notification.setOnClickListener {
+        activityView.menu_profiles_edit_profiles.setOnClickListener {
+            navigateToOption(ProfileFragment::class.simpleName!!, true)
+        }
+        activityView.menu_notification.setOnClickListener {
             navigateToOption(NotificationFragment::class.simpleName!!)
         }
-        activityLayout.sidebar_devices.setOnClickListener {
-            sidebarViewModel.clickedDevices()
+        activityView.menu_devices.setOnClickListener {
+            menuViewModel.clickedDevices()
         }
-        activityLayout.sidebar_help.setOnClickListener {
+        activityView.menu_help.setOnClickListener {
             navigateToOption(HelpFragment::class.simpleName!!)
         }
-        activityLayout.sidebar_payment.setOnClickListener {
+        activityView.menu_payment.setOnClickListener {
             navigateToOption(PaymentFragment::class.simpleName!!)
         }
-        activityLayout.sidebar_account.setOnClickListener {
+        activityView.menu_account.setOnClickListener {
             redirectToProfile()
         }
-        activityLayout.sidebar_avatar_name.text = currentProfile.name
+        activityView.menu_avatar_name?.text = currentProfile.name
+
+        val target = ContentItemTarget(resources) { stateListDrawable ->
+            activityView.menu_avatar_active.widget_avatar.setImageDrawable(stateListDrawable)
+        }
+        //Keep strong reference to target with a tag to avoid garbage collection
+        activityView.menu_avatar_active.widget_avatar.tag = target
         picasso.load(currentProfile.avatar.name)
             .config(Bitmap.Config.RGB_565)
-            .into(activityLayout.sidebar_avatar_active.widget_avatar)
-
-        //Bottom navigation bar setup
-        val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottom_navbar)
-        bottomNavigationView.setOnNavigationItemSelectedListener { menuItem ->
-            when (menuItem.itemId) {
-                R.id.navbar_serialized -> {
-                    detachFragmentByTag(HomeFragment::class.simpleName)
-                    detachFragmentByTag(MovieFragment::class.simpleName)
-                    addOrReplaceFragment(SerializedFragment(), SerializedFragment::class.simpleName, false)
-                    //Force ContentGroupedByGenreFragment to run onCreateView with SerializedFragment now as main view
-                    refreshFragmentByTag(contentGroupedByGenreFragment::class.simpleName)
-                    return@setOnNavigationItemSelectedListener true
-                }
-                R.id.navbar_home -> {
-                    detachFragmentByTag(MovieFragment::class.simpleName)
-                    detachFragmentByTag(SerializedFragment::class.simpleName)
-                    addOrReplaceFragment(HomeFragment(), HomeFragment::class.simpleName, false)
-                    //Force ContentGroupedByGenreFragment to run onCreateView with SerializedFragment now as main view
-                    refreshFragmentByTag(contentGroupedByGenreFragment::class.simpleName)
-                    return@setOnNavigationItemSelectedListener true
-                }
-                R.id.navbar_movie -> {
-                    detachFragmentByTag(HomeFragment::class.simpleName)
-                    detachFragmentByTag(SerializedFragment::class.simpleName)
-                    addOrReplaceFragment(MovieFragment(), MovieFragment::class.simpleName, false)
-                    //Force ContentGroupedByGenreFragment to run onCreateView with MovieFragment now as main view
-                    refreshFragmentByTag(contentGroupedByGenreFragment::class.simpleName)
-                    return@setOnNavigationItemSelectedListener true
-                }
-                R.id.navbar_search -> {
-                    detachFragmentByTag(HomeFragment::class.simpleName)
-                    detachFragmentByTag(SerializedFragment::class.simpleName)
-                    detachFragmentByTag(MovieFragment::class.simpleName)
-                    addOrReplaceFragment(SearchFragment(), SearchFragment::class.simpleName, false)
-                    //Force ContentGroupedByGenreFragment to run onCreateView with SearchFragment now as main view
-                    refreshFragmentByTag(contentGridFragment::class.simpleName)
-                    return@setOnNavigationItemSelectedListener true
-                }
-                else -> {
-                    return@setOnNavigationItemSelectedListener true
-                }
-            }
-        }
+            .into(target)
+        activityView.menu_avatar_active.widget_avatar.requestFocus()
     }
 
     override fun onStart() {
@@ -199,13 +182,61 @@ class BrowseActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-        fragmentManager.popBackStack()
+        if (activityView.isDrawerOpen(GravityCompat.START))
+            activityView.closeDrawer(GravityCompat.START)
+        else
+            findViewById<LinearLayoutCompat>(R.id.navbar).visibility = View.VISIBLE
+            fragmentManager.popBackStack()
+    }
+
+    //This function is indicated in the XML layout for navbar under the attr onClick: of each item
+    fun handleNavbarClick(view: View) {
+        when (view.id) {
+            R.id.navbar_serialized -> {
+                detachFragmentByTag(HomeFragment::class.simpleName)
+                detachFragmentByTag(MovieFragment::class.simpleName)
+                addOrReplaceFragment(SerializedFragment(), SerializedFragment::class.simpleName, false)
+                //Force ContentGroupedByGenreFragment to run onCreateView with SerializedFragment now as main view
+                refreshFragmentByTag(contentGroupedByGenreFragment::class.simpleName)
+            }
+            R.id.navbar_home -> {
+                detachFragmentByTag(MovieFragment::class.simpleName)
+                detachFragmentByTag(SerializedFragment::class.simpleName)
+                addOrReplaceFragment(HomeFragment(), HomeFragment::class.simpleName, false)
+                //Force ContentGroupedByGenreFragment to run onCreateView with SerializedFragment now as main view
+                refreshFragmentByTag(contentGroupedByGenreFragment::class.simpleName)
+            }
+            R.id.navbar_movie -> {
+                detachFragmentByTag(HomeFragment::class.simpleName)
+                detachFragmentByTag(SerializedFragment::class.simpleName)
+                addOrReplaceFragment(MovieFragment(), MovieFragment::class.simpleName, false)
+                //Force ContentGroupedByGenreFragment to run onCreateView with MovieFragment now as main view
+                refreshFragmentByTag(contentGroupedByGenreFragment::class.simpleName)
+            }
+            R.id.navbar_search -> {
+                detachFragmentByTag(HomeFragment::class.simpleName)
+                detachFragmentByTag(SerializedFragment::class.simpleName)
+                detachFragmentByTag(MovieFragment::class.simpleName)
+                addOrReplaceFragment(SearchFragment(), SearchFragment::class.simpleName, false)
+                //Force ContentGroupedByGenreFragment to run onCreateView with SearchFragment now as main view
+                refreshFragmentByTag(contentGridFragment::class.simpleName)
+            }
+            R.id.navbar_menu -> {
+                menuViewModel.clickedProfiles()
+                activityView.openDrawer(GravityCompat.START)
+            }
+            R.id.menu_avatar_active -> {
+                navigateToOption(ProfileFragment::class.simpleName!!, false)
+            }
+            else -> {
+            }
+        }
     }
 
     private fun getIsProfileSet(): Boolean {
         val currentProfileString = preferences.getString(BuildConfig.PREFS_PROFILE, "")
         if (currentProfileString.isNullOrEmpty()) {
-            navigateToOption(ProfileFragment::class.simpleName!!)
+            navigateToOption(ProfileFragment::class.simpleName!!, false)
             finish()
             return false
         }
@@ -213,15 +244,23 @@ class BrowseActivity : AppCompatActivity() {
     }
 
     private fun buildProfileViews() {
-        val marginItems = resources.getDimensionPixelSize(R.dimen.sidebar_avatar_margin_top)
-        var params = LinearLayoutCompat.LayoutParams(
-            ViewGroup.LayoutParams.MATCH_PARENT, resources.getDimensionPixelSize(R.dimen.sidebar_avatar_height)
+        profilesView.menu_profiles_avatars.removeAllViews()
+        profilesView.visibility = View.VISIBLE
+        val marginItems = resources.getDimensionPixelSize(R.dimen.menu_avatar_margin_top)
+        val params = LinearLayoutCompat.LayoutParams(
+            ViewGroup.LayoutParams.MATCH_PARENT,
+            resources.getDimensionPixelSize(R.dimen.menu_avatar_height)
         )
-        params.topMargin = marginItems
+        params.apply {
+            if (isTelevision) {
+                weight = 100f / 10
+            } else
+                topMargin = marginItems
+        }
         //Inflate profile views and "edit profiles" button
-        for (profile in sidebarViewModel.profiles) {
-            if (profile.id != currentProfile.id) {
-                val avatarView = layoutInflater.inflate(R.layout.widget_avatar_with_name_horizontal, null)
+        for ((index, profile) in menuViewModel.profiles.withIndex()) {
+            if (profile.id != currentProfile.id || isTelevision) {
+                val avatarView = layoutInflater.inflate(R.layout.menu_avatar_with_name, null)
                 avatarView.id = profile.id!!
                 avatarView.widget_avatar_name.text = profile.name
                 avatarView.widget_avatar.borderWidth = 0F
@@ -231,47 +270,39 @@ class BrowseActivity : AppCompatActivity() {
                     detachFragmentByTag(HomeFragment::class.simpleName)
                     detachFragmentByTag(MovieFragment::class.simpleName)
                     detachFragmentByTag(SerializedFragment::class.simpleName)
-                    val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottom_navbar)
-                    bottomNavigationView.menu.findItem(R.id.navbar_home).isChecked = true
+                    //TODO: implement select Home in navbar when profile changed
                     recreate()
                 }
                 avatarView.layoutParams = params
-                profilesView.addView(avatarView)
+                val target = ContentItemTarget(resources) { stateListDrawable ->
+                    avatarView.widget_avatar.setImageDrawable(stateListDrawable)
+                }
+                //Keep strong reference to target with a tag to avoid garbage collection
+                avatarView.widget_avatar.tag = target
                 picasso.load(profile.avatar.name)
                     .config(Bitmap.Config.RGB_565)
-                    .into(profilesView.findViewById<LinearLayoutCompat>(profile.id).widget_avatar)
+                    .into(target)
+
+                profilesView.menu_profiles_avatars.addView(avatarView)
             }
         }
-        val editProfilesView = layoutInflater.inflate(R.layout.sidebar_edit_profile, null)
-        params = LinearLayoutCompat.LayoutParams(
-            LinearLayoutCompat.LayoutParams.MATCH_PARENT, LinearLayoutCompat.LayoutParams.WRAP_CONTENT
-        )
-        params.apply {
-            topMargin = marginItems
-            bottomMargin = marginItems
-        }
-        editProfilesView.layoutParams = params
-        editProfilesView.setOnClickListener {
-            navigateToOption(ProfileFragment::class.simpleName!!)
-        }
-        profilesView.addView(editProfilesView)
     }
 
     private fun buildDevicesView() {
-        val marginItems = resources.getDimensionPixelSize(R.dimen.sidebar_avatar_margin_top)
+        val marginItems = resources.getDimensionPixelSize(R.dimen.menu_avatar_margin_top)
         val params = LinearLayoutCompat.LayoutParams(
             LinearLayoutCompat.LayoutParams.MATCH_PARENT, LinearLayoutCompat.LayoutParams.WRAP_CONTENT
         )
         params.topMargin = marginItems
-        for (device in sidebarViewModel.devices) {
-            val deviceView = layoutInflater.inflate(R.layout.sidebar_device, null)
-            deviceView.sidebar_device_name.text = device.name
-            deviceView.sidebar_device_deauth.setOnClickListener {
+        for (device in menuViewModel.devices) {
+            val deviceView = layoutInflater.inflate(R.layout.menu_device, null)
+            deviceView.menu_device_name.text = device.name
+            deviceView.menu_device_deauth.setOnClickListener {
                 //Confirmation dialog
                 AlertDialog.Builder(this, R.style.AppTheme_AlertDialog)
                     .setMessage(R.string.confirmation_delete_device)
                     .setPositiveButton("Confirmar") { _, _ ->
-                        sidebarViewModel.clickedDeauth(device)
+                        menuViewModel.clickedDeauth(device)
                     }
                     .setNegativeButton("Cancelar", null)
                     .create().show()
@@ -279,20 +310,20 @@ class BrowseActivity : AppCompatActivity() {
             deviceView.layoutParams = params
             devicesView.addView(deviceView)
         }
-        val deleteAllView = layoutInflater.inflate(R.layout.sidebar_delete_all_devices, null)
+        val deleteAllView = layoutInflater.inflate(R.layout.menu_delete_all_devices, null)
         deleteAllView.setOnClickListener {
             //Confirmation dialog
             AlertDialog.Builder(this, R.style.AppTheme_AlertDialog)
                 .setMessage(R.string.confirmation_delete_devices)
                 .setPositiveButton("Confirmar") { _, _ ->
-                    sidebarViewModel.deauthAllDevices()
+                    menuViewModel.deauthAllDevices()
                 }
                 .setNegativeButton("Cancelar", null)
                 .create().show()
         }
         devicesView.addView(deleteAllView)
         //Add separator at bottom of list of devices
-        val separatorView = layoutInflater.inflate(R.layout.sidebar_device_separator, null)
+        val separatorView = layoutInflater.inflate(R.layout.menu_device_separator, null)
         params.bottomMargin = marginItems
         separatorView.layoutParams = params
         devicesView.addView(separatorView)
@@ -332,6 +363,7 @@ class BrowseActivity : AppCompatActivity() {
     }
 
     fun navigateToPreview(contentId: Int, contentTypeId: Int) {
+        findViewById<LinearLayoutCompat>(R.id.navbar).visibility = View.GONE
         //Set contentId and ContentType for Preview
         fragmentManager.setFragmentResult(
             "preview",
@@ -407,11 +439,12 @@ class BrowseActivity : AppCompatActivity() {
         finish()
     }
 
-    private fun navigateToOption(fragmentToLoad: String) {
+    private fun navigateToOption(fragmentToLoad: String, isEdit: Boolean? = null) {
         val intent = Intent(this, OptionActivity::class.java)
         intent.putExtra("FRAGMENT", fragmentToLoad)
         //Send information about where the intent came from
         intent.putExtra("ORIGIN", this::class.simpleName)
+        isEdit?.also { intent.putExtra("IS_EDIT", isEdit) }
         startActivity(intent)
     }
 

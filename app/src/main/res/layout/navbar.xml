@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.LinearLayoutCompat
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:theme="@style/AppTheme.Navbar"
+    android:id="@+id/navbar"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_weight="100">
+    <androidx.appcompat.widget.AppCompatImageButton
+        android:onClick="handleNavbarClick"
+        android:id="@+id/navbar_home"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:src="@drawable/ic_home_24dp"
+        android:layout_weight="25"/>
+    <androidx.appcompat.widget.AppCompatImageButton
+        android:onClick="handleNavbarClick"
+        android:id="@+id/navbar_movie"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:src="@drawable/ic_movie_24dp"
+        android:layout_weight="25"/>
+    <androidx.appcompat.widget.AppCompatImageButton
+        android:onClick="handleNavbarClick"
+        android:id="@+id/navbar_serialized"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:src="@drawable/ic_serialized_24dp"
+        android:layout_weight="25"/>
+    <androidx.appcompat.widget.AppCompatImageButton
+        android:onClick="handleNavbarClick"
+        android:id="@+id/navbar_search"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:src="@drawable/ic_search_24dp"
+        android:layout_weight="25"/>
+</androidx.appcompat.widget.LinearLayoutCompat>

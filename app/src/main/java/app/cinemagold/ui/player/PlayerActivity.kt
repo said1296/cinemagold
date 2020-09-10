@@ -8,7 +8,6 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.view.Gravity
-import android.view.MotionEvent
 import android.view.View
 import android.widget.ImageButton
 import androidx.appcompat.app.AppCompatActivity
@@ -25,7 +24,7 @@ import app.cinemagold.model.generic.IdAndName
 import app.cinemagold.model.user.PlayerAuthorization
 import app.cinemagold.ui.authentication.AuthenticationActivity
 import app.cinemagold.ui.option.OptionActivity
-import app.cinemagold.ui.option.help.PaymentFragment
+import app.cinemagold.ui.option.payment.PaymentFragment
 import com.google.android.exoplayer2.C
 import com.google.android.exoplayer2.ExoPlayer
 import com.google.android.exoplayer2.Format
@@ -134,19 +133,21 @@ class PlayerActivity : AppCompatActivity() {
         val castControlView = rootView.cast_control_view
         CastButtonFactory.setUpMediaRouteButton(applicationContext, mediaRouteButton)
 
-        castContext = CastContext.getSharedInstance(this)
-        castPlayer = CastPlayer(castContext)
+        if(!resources.getBoolean(R.bool.isTelevision)){
+            castContext = CastContext.getSharedInstance(this)
+            castPlayer = CastPlayer(castContext)
 
-        if (castContext.castState != CastState.NO_DEVICES_AVAILABLE) mediaRouteButton.visibility = View.VISIBLE
-        castContext.addCastStateListener { state ->
-            if (state == CastState.NO_DEVICES_AVAILABLE) mediaRouteButton.visibility = View.GONE else {
-                if (mediaRouteButton.visibility == View.GONE) mediaRouteButton.visibility = View.VISIBLE
+            if (castContext.castState != CastState.NO_DEVICES_AVAILABLE) mediaRouteButton.visibility = View.VISIBLE
+            castContext.addCastStateListener { state ->
+                if (state == CastState.NO_DEVICES_AVAILABLE) mediaRouteButton.visibility = View.GONE else {
+                    if (mediaRouteButton.visibility == View.GONE) mediaRouteButton.visibility = View.VISIBLE
+                }
             }
-        }
 
-        //TODO: VIEW
-        /*castControlView.player = castPlayer*/
-        castControlView.visibility = View.GONE
+            //TODO: VIEW
+            /*castControlView.player = castPlayer*/
+            castControlView.visibility = View.GONE
+        }
 
         //Fullscreen
         if (Build.VERSION.SDK_INT >= 30){
@@ -447,7 +448,7 @@ class PlayerActivity : AppCompatActivity() {
         finish()
     }
 
-    fun navigateToOption(fragmentToLoad : String){
+    fun navigateToOption(fragmentToLoad : String, isEdit: Boolean? = null){
         val intent = Intent(this, OptionActivity::class.java)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
@@ -456,6 +457,7 @@ class PlayerActivity : AppCompatActivity() {
         intent.putExtra("FRAGMENT", fragmentToLoad)
         //Send information about where the intent came from
         intent.putExtra("ORIGIN", this::class.simpleName)
+        isEdit?.also { intent.putExtra("IS_EDIT", isEdit) }
         startActivity(intent)
         finish()
     }

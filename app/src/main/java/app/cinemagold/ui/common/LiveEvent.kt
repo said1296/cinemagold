@@ -10,7 +10,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package app.cinemagold.ui.common.dataholder
+package app.cinemagold.ui.common
 
 import androidx.annotation.MainThread
 import androidx.collection.ArraySet

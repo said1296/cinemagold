@@ -5,7 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:clickable="true"
-    android:focusable="true"
     tools:context=".ui.authentication.login.LoginFragment">
 
     <ImageView
@@ -32,7 +31,10 @@
         android:background="@drawable/bg_login_edit_text"
         android:textSize="@dimen/heading4"
         app:fontFamily="@font/font_semibold"
-        android:textColor="?light"/>
+        android:textColor="?light"
+        android:nextFocusDown="@id/login_password"
+        android:nextFocusLeft="@id/login_email_edit_text"
+        android:nextFocusRight="@id/login_email_edit_text"/>
     <LinearLayout
         android:id="@+id/login_password"
         android:layout_width="0dp"
@@ -43,20 +45,23 @@
         app:layout_constraintTop_toBottomOf="@id/login_email_edit_text"
         android:background="@drawable/bg_login_edit_text"
         android:orientation="horizontal"
-        android:weightSum="100"
-        android:paddingHorizontal="@dimen/login_edit_text_padding_horizontal">
+        android:weightSum="100">
         <androidx.appcompat.widget.AppCompatEditText
+            android:paddingHorizontal="@dimen/login_edit_text_padding_horizontal"
             android:id="@+id/login_password_edit_text"
             android:layout_width="0dp"
             android:layout_height="@dimen/login_edit_text_height"
             android:singleLine="true"
             android:hint="@string/password"
             android:layout_weight="90"
-            android:background="@null"
             android:textSize="@dimen/heading4"
             app:fontFamily="@font/font_semibold"
             android:textColor="?light"
-            android:inputType="text" />
+            android:inputType="text"
+            android:background="@drawable/bg_login_edit_text"
+            android:nextFocusLeft="@id/login_password_edit_text"
+            android:nextFocusRight="@id/login_password_show"
+            android:nextFocusDown="@id/login_submit"/>
         <ImageButton
             android:id="@+id/login_password_show"
             android:layout_width="0dp"
@@ -65,7 +70,10 @@
             android:src="@drawable/ic_eye_closed_24dp"
             android:scaleType="fitCenter"
             android:tint="@color/item_genre_text"
-            android:background="@null"/>
+            android:background="@drawable/bg_login_edit_text"
+            android:nextFocusDown="@id/login_submit"
+            android:nextFocusRight="@id/login_password_show"
+            android:nextFocusLeft="@id/login_password_edit_text"/>
     </LinearLayout>
 
     <Button
@@ -80,7 +88,11 @@
         android:text="@string/LOGIN"
         android:textSize="@dimen/heading5"
         android:fontFamily="@font/font_semibold"
-        android:elevation="10dp"/>
+        android:elevation="10dp"
+        android:nextFocusUp="@id/login_password_edit_text"
+        android:nextFocusDown="@id/login_submit"
+        android:nextFocusRight="@id/login_submit"
+        android:nextFocusLeft="@id/login_submit"/>
 
 
     <ImageView

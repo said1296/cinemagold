@@ -2,7 +2,6 @@ package app.cinemagold.ui.player
 
 import android.os.Handler
 import android.os.Looper
-import androidx.lifecycle.MutableLiveData
 import com.google.android.exoplayer2.Player
 
 

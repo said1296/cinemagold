@@ -4,7 +4,7 @@ import android.content.Context
 import app.cinemagold.dataaccess.remote.*
 import app.cinemagold.ui.authentication.login.LoginViewModel
 import app.cinemagold.ui.authentication.register.RegisterViewModel
-import app.cinemagold.ui.browse.SidebarViewModel
+import app.cinemagold.ui.browse.MenuViewModel
 import app.cinemagold.ui.browse.home.HomeViewModel
 import app.cinemagold.ui.browse.movie.MovieViewModel
 import app.cinemagold.ui.browse.preview.PreviewViewModel
@@ -76,8 +76,8 @@ class ViewModelModule {
 
     @Provides
     @Singleton
-    fun provideSidebarViewModel(authenticationApi: AuthenticationApi, profileApi: ProfileApi, notificationApi: NotificationApi, context: Context) : SidebarViewModel{
-        return SidebarViewModel(authenticationApi, profileApi, notificationApi, context)
+    fun provideMenuViewModel(authenticationApi: AuthenticationApi, profileApi: ProfileApi, notificationApi: NotificationApi, context: Context) : MenuViewModel{
+        return MenuViewModel(authenticationApi, profileApi, notificationApi, context)
     }
 
     @Provides

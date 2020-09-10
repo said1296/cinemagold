@@ -9,15 +9,16 @@ import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import app.cinemagold.R
 import app.cinemagold.model.content.Content
+import app.cinemagold.ui.common.ContentItemTarget
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.item_content_horizontal.view.*
 import javax.inject.Inject
 
 
 class ContentHorizontalRVA @Inject constructor(
-    private var dataset : List<Content>,
-    val context : Context,
-    private val picasso : Picasso
+    private var dataset: List<Content>,
+    val context: Context,
+    private val picasso: Picasso
 ) : RecyclerView.Adapter<ContentHorizontalRVA.ViewHolder>() {
     lateinit var sliderView : ImageView
     //Elevation value adds the same amount as padding so it's necessary to compensate
@@ -26,11 +27,11 @@ class ContentHorizontalRVA @Inject constructor(
     private val scale : Int = 30
     lateinit var clickHandler : (Int, Int) -> Unit
 
-    class ViewHolder(itemView : View) : RecyclerView.ViewHolder(itemView)
+    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.item_content_horizontal, parent,false)
+            .inflate(R.layout.item_content_horizontal, parent, false)
         return ViewHolder(view)
     }
 
@@ -47,10 +48,16 @@ class ContentHorizontalRVA @Inject constructor(
 
         //Set background
         sliderView = item.item_content_horizontal_background
+        val target = ContentItemTarget(context.resources)
+
         picasso.load(currentData.sliderSrc)
             .config(Bitmap.Config.RGB_565)
-            .resize(16*scale, 9*scale)
-            .centerCrop().into(item.item_content_horizontal_background)
+            .resize(16 * scale, 9 * scale)
+            .centerCrop().into(target)
+        //Add tag to keep strong reference to target and avoid Garbage Collection
+        sliderView.tag = target
+        sliderView.setImageDrawable(target.stateListDrawable)
+
         if(currentData.hasNewSeason)
             item.item_content_horizontal_new_season.visibility = View.VISIBLE
 
@@ -69,7 +76,7 @@ class ContentHorizontalRVA @Inject constructor(
     override fun getItemId(position: Int) = dataset[position].id.toLong()
     override fun getItemViewType(position: Int) = 1
 
-    fun setDataset(datasetNew : List<Content>){
+    fun setDataset(datasetNew: List<Content>){
         dataset = datasetNew
         notifyDataSetChanged()
     }

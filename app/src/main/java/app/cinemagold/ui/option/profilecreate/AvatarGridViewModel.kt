@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
 import app.cinemagold.dataaccess.remote.ProfileApi
 import app.cinemagold.model.generic.IdAndName
-import app.cinemagold.ui.common.dataholder.LiveEvent
+import app.cinemagold.ui.common.LiveEvent
 import com.haroldadmin.cnradapter.NetworkResponse
 import kotlinx.coroutines.Dispatchers
 

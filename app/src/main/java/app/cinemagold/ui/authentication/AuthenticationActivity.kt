@@ -109,13 +109,14 @@ class AuthenticationActivity : AppCompatActivity() {
 
 
 
-    fun navigateToOption(fragmentToLoad : String){
+    fun navigateToOption(fragmentToLoad : String, isEdit: Boolean? = null){
         val intent = Intent(this, OptionActivity::class.java)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         intent.putExtra("FRAGMENT", fragmentToLoad)
         //Send information about where the intent came from
         intent.putExtra("ORIGIN", this::class.simpleName)
+        isEdit?.also { intent.putExtra("IS_EDIT", isEdit) }
         startActivity(intent)
     }
 }

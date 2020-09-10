@@ -2,7 +2,6 @@ package app.cinemagold.ui.browse
 
 import android.content.Context
 import android.view.LayoutInflater
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -11,11 +10,11 @@ import app.cinemagold.dataaccess.remote.NotificationApi
 import app.cinemagold.dataaccess.remote.ProfileApi
 import app.cinemagold.model.generic.LongIdAndName
 import app.cinemagold.model.user.Profile
-import app.cinemagold.ui.common.dataholder.LiveEvent
+import app.cinemagold.ui.common.LiveEvent
 import com.haroldadmin.cnradapter.NetworkResponse
 import kotlinx.coroutines.launch
 
-class SidebarViewModel(val authenticationApi: AuthenticationApi, val profileApi: ProfileApi, private val notificationApi: NotificationApi, context : Context) : ViewModel() {
+class MenuViewModel(val authenticationApi: AuthenticationApi, val profileApi: ProfileApi, private val notificationApi: NotificationApi, context : Context) : ViewModel() {
     val error : LiveEvent<String> by lazy {
         LiveEvent<String>()
     }

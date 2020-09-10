@@ -6,7 +6,7 @@ import app.cinemagold.dataaccess.remote.ContentApi
 import app.cinemagold.model.content.Content
 import app.cinemagold.model.content.ContentType
 import app.cinemagold.model.network.NetworkError
-import app.cinemagold.ui.common.dataholder.LiveEvent
+import app.cinemagold.ui.common.LiveEvent
 import com.haroldadmin.cnradapter.NetworkResponse
 import kotlinx.coroutines.launch
 

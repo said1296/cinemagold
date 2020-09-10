@@ -14,7 +14,7 @@ import app.cinemagold.model.content.ContentGroupedByGenre
 import app.cinemagold.model.content.ContentType
 import app.cinemagold.model.generic.IdAndName
 import app.cinemagold.model.user.Profile
-import app.cinemagold.ui.common.dataholder.LiveEvent
+import app.cinemagold.ui.common.LiveEvent
 import com.google.gson.Gson
 import com.haroldadmin.cnradapter.NetworkResponse
 import kotlinx.coroutines.launch
@@ -159,7 +159,7 @@ class SerializedViewModel(private val contentApi : ContentApi, private val genre
             when(val data = contentTypeApi.getAll()){
                 is NetworkResponse.Success -> {
                     data.body.removeAll { contentType -> contentType.id == ContentType.MOVIE.value}
-                    data.body.add(0, IdAndName(-1, "Programas de TV"))
+                    data.body.add(0, IdAndName(-1, "Todos"))
                     //Set content type spinner items
                     for(contentType in data.body){
                         contentTypeSpinnerItems.add(contentType.name)

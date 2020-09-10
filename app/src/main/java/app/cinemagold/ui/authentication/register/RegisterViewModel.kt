@@ -1,7 +1,6 @@
 package app.cinemagold.ui.authentication.register
 
 import android.view.View
-import android.widget.Spinner
 import androidx.appcompat.widget.AppCompatEditText
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -11,7 +10,7 @@ import app.cinemagold.dataaccess.remote.AuthenticationApi
 import app.cinemagold.dataaccess.remote.CountryApi
 import app.cinemagold.model.generic.IdAndName
 import app.cinemagold.model.user.RegisterForm
-import app.cinemagold.ui.common.dataholder.LiveEvent
+import app.cinemagold.ui.common.LiveEvent
 import com.haroldadmin.cnradapter.NetworkResponse
 import kotlinx.coroutines.launch
 import java.util.stream.Collectors
@@ -38,6 +37,10 @@ class RegisterViewModel(private val authenticationApi: AuthenticationApi, privat
         val selectedCountryIndex = countrySpinnerItems.value!!.indexOf(country)
         selectedCountry = countries[selectedCountryIndex]
     }
+    fun selectedCountry(position: Int){
+        selectedCountry = countries[position]
+    }
+
     fun submit(formView : View){
         val registerForm = RegisterForm()
         registerForm.name = formView.findViewById<AppCompatEditText>(R.id.register_name).text.toString()

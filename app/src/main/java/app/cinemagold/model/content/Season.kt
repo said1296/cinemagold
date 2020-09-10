@@ -16,6 +16,10 @@ data class Season (
         if(!sliderSrc.startsWith("http")){
             this.sliderSrc = BuildConfig.SLIDER_REMOTE + sliderSrc
         }
+        if(!posterSrc.startsWith("http")){
+            this.posterSrc = BuildConfig.POSTER_REMOTE + posterSrc
+        }
+
 
         //Set length units
         this.length = "$length caps."

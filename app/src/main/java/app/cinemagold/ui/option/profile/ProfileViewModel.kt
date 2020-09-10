@@ -10,7 +10,7 @@ import app.cinemagold.R
 import app.cinemagold.dataaccess.remote.ProfileApi
 import app.cinemagold.model.generic.IdAndName
 import app.cinemagold.model.user.Profile
-import app.cinemagold.ui.common.dataholder.LiveEvent
+import app.cinemagold.ui.common.LiveEvent
 import com.google.gson.Gson
 import com.haroldadmin.cnradapter.NetworkResponse
 import kotlinx.coroutines.launch

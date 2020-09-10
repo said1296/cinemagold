@@ -73,22 +73,26 @@ class HomeFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.fragment_home, container, false)
+        val rootView = inflater.inflate(R.layout.fragment_home, container, false)
+
+        //Handle views for TV
+        if((activity as BrowseActivity).isTelevision)
+            rootView.home_header.visibility = View.GONE
 
         //Hide recent until it has values
-        view.content_recent_title.visibility = View.GONE
-        view.content_recycler_content_recent.visibility = View.GONE
+        rootView.content_recent_title.visibility = View.GONE
+        rootView.content_recycler_content_recent.visibility = View.GONE
 
         //Recycler views
-        view.content_recycler_content_premiere.apply {
+        rootView.content_recycler_content_premiere.apply {
             layoutManager = LinearLayoutManager(this@HomeFragment.context, LinearLayoutManager.HORIZONTAL, false)
             adapter = contentVerticalRVA
         }
         contentVerticalRVA.clickHandler = { contentId, contentType ->
             (activity as BrowseActivity).navigateToPreview(contentId, contentType)
         }
-        
-        return view
+
+        return rootView
     }
 
     override fun onStart() {

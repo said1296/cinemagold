@@ -50,19 +50,24 @@ class MovieFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.fragment_movie, container, false)
+        val rootView = inflater.inflate(R.layout.fragment_movie, container, false)
+        //Handle views for TV
+        if((activity as BrowseActivity).isTelevision)
+            rootView.movie_header.visibility = View.GONE
+
         //Reset selected position
         genreRVA.selectedPosition = 0
 
         //Recycler views
-        view.movie_recycler_genres.apply {
+        rootView.movie_recycler_genres.apply {
             layoutManager = LinearLayoutManager(this@MovieFragment.context, LinearLayoutManager.HORIZONTAL, false)
             adapter = genreRVA
+            addItemDecoration(genreRVA.itemDecoration)
         }
         genreRVA.clickHandler = {genre ->
             viewModel.selectedGenre(genre)
         }
-        return view
+        return rootView
     }
 
 

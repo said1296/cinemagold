@@ -5,8 +5,10 @@
     android:id="@+id/item_content_vertical"
     android:layout_width="@dimen/item_content_vertical_width"
     android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:focusable="true">
     <androidx.cardview.widget.CardView
+        android:duplicateParentState="true"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginRight="@dimen/item_content_margin_right"
@@ -17,12 +19,14 @@
         app:cardPreventCornerOverlap="false">
 
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:duplicateParentState="true"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/bg_item_content"
             >
 
             <ImageView
+                android:duplicateParentState="true"
                 android:id="@+id/item_content_vertical_background"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
@@ -55,6 +59,7 @@
     </androidx.cardview.widget.CardView>
 
     <androidx.appcompat.widget.AppCompatTextView
+        android:duplicateParentState="true"
         android:id="@+id/item_content_vertical_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -64,5 +69,5 @@
         android:maxLines="1"
         android:ellipsize="end"
         android:textSize="@dimen/text2"
-        android:textColor="?light" />
+        android:textColor="@color/light_focused_brand" />
 </LinearLayout>

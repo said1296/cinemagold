@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import app.cinemagold.R
 import app.cinemagold.model.content.ContentType
 import app.cinemagold.model.content.Recent
+import app.cinemagold.ui.common.ContentItemTarget
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.item_content_recent.view.*
 import javax.inject.Inject
@@ -53,10 +54,14 @@ class ContentRecentRVA @Inject constructor(
         }
 
         //Set background
+        val target = ContentItemTarget(context.resources)
         picasso.load(currentData.sliderSrc)
             .config(Bitmap.Config.RGB_565)
             .resize(16*scale, 9*scale)
-            .centerCrop().into(item.item_content_recent_background)
+            .centerCrop().into(target)
+        //Add tag to keep strong reference to target and avoid Garbage Collection
+        item.item_content_recent_background.tag = target
+        item.item_content_recent_background.setImageDrawable(target.stateListDrawable)
         //Set start and end padding
         val params = holder.itemView.layoutParams as RecyclerView.LayoutParams
         if(position == 0){

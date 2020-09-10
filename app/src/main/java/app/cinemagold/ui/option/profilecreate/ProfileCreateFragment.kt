@@ -10,13 +10,12 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
 import androidx.lifecycle.observe
-import app.cinemagold.BuildConfig
 import app.cinemagold.R
 import app.cinemagold.injection.ApplicationContextInjector
 import app.cinemagold.model.generic.IdAndName
-import app.cinemagold.model.user.Profile
+import app.cinemagold.ui.common.CircularImageView
+import app.cinemagold.ui.common.ContentItemTarget
 import app.cinemagold.ui.option.OptionActivity
-import com.mikhaellopez.circularimageview.CircularImageView
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_profile_create.view.*
 import kotlinx.android.synthetic.main.widget_avatar_edit.view.*
@@ -61,9 +60,9 @@ class ProfileCreateFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val rootView = inflater.inflate(R.layout.fragment_profile_create, container, false)
-        avatarView = rootView.profile_create_avatar.widget_profile_avatar_edit_avatar as CircularImageView
+        avatarView = rootView.widget_avatar_edit.widget_profile_avatar_edit_avatar as CircularImageView
 
-        rootView.profile_create_avatar.setOnClickListener {
+        rootView.widget_avatar_edit.setOnClickListener {
             childFragmentManager.beginTransaction()
                 .setCustomAnimations(R.anim.slide_in_bottom, R.anim.slide_in_bottom)
                 .add(R.id.profile_create_fragment_container, avatarGridFragment, AvatarGridFragment::class.simpleName).commit()
@@ -75,9 +74,7 @@ class ProfileCreateFragment : Fragment() {
     }
 
     fun buildEdit(){
-        picasso.load(viewModel.profile.avatar.name)
-            .config(Bitmap.Config.RGB_565)
-            .into(avatarView)
+        buildAvatar(viewModel.profile.avatar)
         view!!.profile_create_name.setText(viewModel.profile.name)
         view!!.profile_create_name.requestFocus()
         view!!.profile_delete.visibility = View.VISIBLE
@@ -88,9 +85,18 @@ class ProfileCreateFragment : Fragment() {
 
     fun selectedAvatar(avatar: IdAndName){
         viewModel.selectedAvatar(avatar)
+        buildAvatar(avatar)
+        childFragmentManager.beginTransaction().remove(avatarGridFragment).commit()
+    }
+
+    private fun buildAvatar(avatar: IdAndName){
+        val target = ContentItemTarget(resources) { stateListDrawable ->
+            avatarView.setImageDrawable(stateListDrawable)
+        }
+        //Keep strong reference to target with a tag to avoid garbage collection
+        avatarView.tag = target
         picasso.load(avatar.name)
             .config(Bitmap.Config.RGB_565)
-            .into(avatarView)
-        childFragmentManager.beginTransaction().remove(avatarGridFragment).commit()
+            .into(target)
     }
 }

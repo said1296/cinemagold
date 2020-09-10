@@ -18,18 +18,20 @@ class HelpFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val rootView = inflater.inflate(R.layout.fragment_help, container, false)
-        rootView.help_ian.setOnClickListener {
-            redirectWhatsapp("593984915871")
-        }
-        rootView.help_ryan.setOnClickListener {
-            redirectWhatsapp("593968894091")
-        }
-        rootView.help_mateo.setOnClickListener {
-            redirectWhatsapp("593969053908")
-        }
+        if(!resources.getBoolean(R.bool.isTelevision)){
+            rootView.help_ian.setOnClickListener {
+                redirectWhatsapp("593984915871")
+            }
+            rootView.help_ryan.setOnClickListener {
+                redirectWhatsapp("593968894091")
+            }
+            rootView.help_mateo.setOnClickListener {
+                redirectWhatsapp("593969053908")
+            }
 
-        rootView.help_messenger_website.setOnClickListener {
-            redirectMessenger("CinemaGoldEntretenimiento")
+            rootView.help_messenger_website.setOnClickListener {
+                redirectMessenger("CinemaGoldEntretenimiento")
+            }
         }
         return rootView
     }

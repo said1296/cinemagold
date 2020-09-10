@@ -5,10 +5,10 @@ import android.graphics.Bitmap
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.widget.LinearLayoutCompat
 import androidx.recyclerview.widget.RecyclerView
 import app.cinemagold.R
 import app.cinemagold.model.generic.IdAndName
+import app.cinemagold.ui.common.ContentItemTarget
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.item_avatar_grid.view.*
 import javax.inject.Inject
@@ -45,9 +45,14 @@ class AvatarGridRVA @Inject constructor(
         params.bottomMargin = itemMargin
 
         //Set background
+        val target = ContentItemTarget(context.resources) { stateListDrawable ->
+            item.item_avatar_grid_background.setImageDrawable(stateListDrawable)
+        }
+        //Keep strong reference to target with a tag to avoid garbage collection
+        item.item_avatar_grid_background.tag = target
         picasso.load(currentData.name)
             .config(Bitmap.Config.RGB_565)
-            .into(item.item_avatar_grid_background)
+            .into(target)
 
         item.setOnClickListener { clickHandler(currentData) }
     }

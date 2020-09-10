@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:ellipsize="marquee"
-    android:background="?dark"
+    android:background="@drawable/bg_spinner_country_item"
     android:textSize="@dimen/heading6"
     android:paddingVertical="10dp"
     android:paddingHorizontal="10dp"

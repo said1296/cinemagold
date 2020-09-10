@@ -36,7 +36,7 @@ class LoginFragment : Fragment() {
             Toast.makeText(context, data, Toast.LENGTH_LONG).show()
         }
         viewModel.isSuccessful.observe(this){
-            (activity as AuthenticationActivity).navigateToOption(ProfileFragment::class.simpleName!!)
+            (activity as AuthenticationActivity).navigateToOption(ProfileFragment::class.simpleName!!, false)
         }
     }
 

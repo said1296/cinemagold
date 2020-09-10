@@ -1,38 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/profile_create"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:clickable="true"
-    android:focusable="true"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="?dark">
-    <include
-        android:id="@+id/profile_create_logo"
-        layout="@layout/common_logo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginVertical="@dimen/header_margin_vertical"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"/>
+    android:focusable="true">
     <LinearLayout
         android:id="@+id/profile_create_form"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        app:layout_constraintTop_toBottomOf="@id/profile_create_logo"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentBottom="true"
         android:gravity="center"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:background="?dark">
         <include
-            android:id="@+id/profile_create_avatar"
+            android:id="@+id/profile_create_logo"
+            layout="@layout/common_logo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="@dimen/header_margin_vertical"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"/>
+        <LinearLayout
+            android:id="@+id/profile_create_widget_avatar_edit"
             android:layout_height="wrap_content"
             android:layout_width="@dimen/profile_create_avatar_width"
             app:layout_constraintTop_toBottomOf="@id/profile_logo"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
-            layout="@layout/widget_avatar_edit"
-            android:layout_marginTop="@dimen/header_margin_vertical"/>
-        <EditText
+            android:layout_marginTop="@dimen/header_margin_vertical"
+            android:focusable="true"
+            android:nextFocusDown="@id/profile_create_name"
+            android:nextFocusRight="@id/profile_create_widget_avatar_edit"
+            android:nextFocusLeft="@id/profile_create_widget_avatar_edit">
+            <include
+                layout="@layout/widget_avatar_edit"/>
+        </LinearLayout>
+
+        <androidx.appcompat.widget.AppCompatEditText
             android:id="@+id/profile_create_name"
             android:layout_width="@dimen/profile_create_name_width"
             android:layout_height="wrap_content"
@@ -40,8 +49,15 @@
             android:layout_marginTop="@dimen/profile_create_name_margin_top"
             android:background="@drawable/bg_profile_create_edit_text"
             android:textSize="@dimen/heading4"
+            android:inputType="text|textNoSuggestions"
             app:fontFamily="@font/font_semibold"
-            android:textColor="@color/bg_create_profile_edit_text_underline"/>
+            android:focusable="true"
+            android:textColorHint="@color/light_dark_focused_light"
+            android:textColor="@color/light_dark_focused_light"
+            android:nextFocusUp="@id/profile_create_widget_avatar_edit"
+            android:nextFocusDown="@id/profile_create_submit"
+            android:nextFocusRight="@id/profile_create_name"
+            android:nextFocusLeft="@id/profile_create_name"/>
 
         <Button
             android:id="@+id/profile_create_submit"
@@ -52,7 +68,9 @@
             android:paddingVertical="@dimen/sign_in_buttons_padding_vertical"
             android:paddingHorizontal="@dimen/sign_in_buttons_padding_horizontal"
             android:layout_marginTop="@dimen/profile_create_submit_margin_top"
-            android:textSize="@dimen/heading6"/>
+            android:textSize="@dimen/heading6"
+            android:nextFocusRight="@id/profile_create_submit"
+            android:nextFocusLeft="@id/profile_create_submit"/>
 
         <Button
             android:visibility="gone"
@@ -64,7 +82,9 @@
             android:paddingVertical="@dimen/sign_in_buttons_padding_vertical"
             android:paddingHorizontal="@dimen/sign_in_buttons_padding_horizontal"
             android:layout_marginTop="@dimen/profile_create_submit_margin_top"
-            android:textSize="@dimen/heading6"/>
+            android:textSize="@dimen/heading6"
+            android:nextFocusRight="@id/profile_delete"
+            android:nextFocusLeft="@id/profile_delete"/>
     </LinearLayout>
 
     <androidx.fragment.app.FragmentContainerView
@@ -72,4 +92,4 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</RelativeLayout>

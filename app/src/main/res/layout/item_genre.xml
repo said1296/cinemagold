@@ -5,9 +5,10 @@
     android:singleLine="true"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_marginRight="@dimen/item_genre_margin_right"
+    android:layout_marginEnd="@dimen/item_genre_margin_right"
     android:text="Acción"
     app:fontFamily="@font/font_medium"
     android:textSize="@dimen/text2"
-    android:textColor="?lightDark"
-    android:textAlignment="inherit" />
+    android:textColor="@color/light_dark_focused_brand"
+    android:textAlignment="inherit"
+    android:focusable="true"/>

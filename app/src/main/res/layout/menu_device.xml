@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.appcompat.widget.LinearLayoutCompat
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="horizontal"
     android:weightSum="100"
     android:gravity="center"
     android:background="?darkMedium">
     <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/sidebar_device_name"
+        android:id="@+id/menu_device_name"
         android:layout_height="wrap_content"
         android:layout_weight="90"
         android:layout_width="0dp"
@@ -17,11 +18,13 @@
         android:textSize="@dimen/heading6"
         app:fontFamily="@font/font_semibold"/>
     <androidx.appcompat.widget.AppCompatImageButton
-        android:id="@+id/sidebar_device_deauth"
+        android:id="@+id/menu_device_deauth"
+        android:focusable="true"
         android:layout_weight="10"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/ic_exit_24"
+        android:tint="@color/light_medium_focused_brand"
         android:background="@android:color/transparent"/>
 
 </androidx.appcompat.widget.LinearLayoutCompat>

@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <attr name="shadow" format="color" />
-    <attr name="dark" format="color" />
-    <attr name="darkAlpha80" format="color" />
-    <attr name="darkMedium" format="color" />
-    <attr name="lightDark" format="color" />
-    <attr name="lightMedium" format="color" />
-    <attr name="light" format="color" />
-    <attr name="brand" format="color" />
-    <attr name="brandGradient" format="color" />
+    <attr name="shadow" format="color|reference" />
+    <attr name="dark" format="color|reference" />
+    <attr name="darkAlpha80" format="color|reference" />
+    <attr name="darkMedium" format="color|reference" />
+    <attr name="lightDark" format="color|reference" />
+    <attr name="lightMedium" format="color|reference" />
+    <attr name="light" format="color|reference" />
+    <attr name="brand" format="color|reference" />
+    <attr name="brandGradient" format="color|reference" />
 </resources>

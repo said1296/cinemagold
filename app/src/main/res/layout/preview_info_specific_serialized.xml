@@ -4,26 +4,48 @@
     android:layout_height="fill_parent"
     android:orientation="vertical">
 
-
-    <include
+    <LinearLayout
+        android:id="@+id/widget_button_play_serialized"
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
         android:layout_marginHorizontal="@dimen/preview_info_padding_horizontal"
-        layout="@layout/widget_button_play"
-        />
+        android:gravity="center"
+        android:focusable="true"
+        android:clickable="true"
+        android:paddingHorizontal="@dimen/preview_info_padding_horizontal"
+        android:nextFocusDown="@id/preview_spinner_season"
+        android:nextFocusUp="@id/preview_go_to_top_serialized"
+        android:nextFocusLeft="@id/widget_button_play_serialized"
+        android:nextFocusRight="@id/widget_button_play_serialized">
+        <include
+            layout="@layout/widget_button_play"
+            />
+    </LinearLayout>
+
 
     <Spinner
+        android:focusable="true"
         android:id="@+id/preview_spinner_season"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingLeft="@dimen/preview_info_padding_horizontal"
         android:background="@null"
-        android:layout_marginTop="@dimen/preview_spinner_season_margin_top"/>
+        android:layout_marginTop="@dimen/preview_spinner_season_margin_top"
+        android:nextFocusUp="@id/widget_button_play_serialized"
+        android:nextFocusDown="@id/preview_recycler_episode"
+        android:nextFocusRight="@id/preview_spinner_season"
+        android:nextFocusLeft="@id/preview_spinner_season"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/preview_recycler_episode"
+        android:overScrollMode="never"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:nextFocusUp="@id/preview_spinner_season"
+        android:nextFocusDown="@id/preview_recycler_episode"
+        android:nextFocusLeft="@id/preview_recycler_episode"
+        android:nextFocusRight="@id/preview_recycler_episode"
+        android:descendantFocusability="afterDescendants" />
 
 
 </LinearLayout>

@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import app.cinemagold.R
 import app.cinemagold.model.content.Content
+import app.cinemagold.ui.common.ContentItemTarget
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.item_content_vertical.view.*
 
@@ -42,10 +43,15 @@ class ContentVerticalRVA (
         item.item_content_vertical_title.text = currentData.name
 
         //Set background
+        val target = ContentItemTarget(context.resources)
         picasso.load(currentData.posterSrc)
             .config(Bitmap.Config.RGB_565)
             .resize(2*scale, 3*scale)
-            .centerCrop().into(item.item_content_vertical_background)
+            .centerCrop().into(target)
+        //Add tag to keep strong reference to target and avoid Garbage Collection
+        item.item_content_vertical_background.tag = target
+        item.item_content_vertical_background.setImageDrawable(target.stateListDrawable)
+
         if(currentData.hasNewSeason){
             item.item_content_vertical_new_season.visibility = View.VISIBLE
         }

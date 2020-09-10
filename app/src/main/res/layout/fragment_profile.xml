@@ -74,7 +74,7 @@
                 android:layout_height="0dp" />
 
             <ViewFlipper
-                android:id="@+id/profile_avatar_second_filpper"
+                android:id="@+id/profile_avatar_second_flipper"
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content">
                 <include

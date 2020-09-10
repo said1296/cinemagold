@@ -1,4 +1,4 @@
-package app.cinemagold.ui.option.help
+package app.cinemagold.ui.option.payment
 
 import android.content.Intent
 import android.net.Uri
@@ -17,20 +17,22 @@ class PaymentFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val rootView = inflater.inflate(R.layout.fragment_payment, container, false)
-        rootView.payment_paypal.setOnClickListener {
-            val uri = Uri.parse("https://www.paypal.com/paypalme/imarkeTrading")
-            val i = Intent(Intent.ACTION_VIEW, uri)
-            startActivity(i)
-        }
-        rootView.payment_venmo.setOnClickListener {
-            val uri = Uri.parse("https://venmo.com/rafapanentertainment")
-            val i = Intent(Intent.ACTION_VIEW, uri)
-            startActivity(i)
-        }
-        rootView.payment_cashapp.setOnClickListener {
-            val uri = Uri.parse("http://cash.me/\$rafapanentertainment")
-            val i = Intent(Intent.ACTION_VIEW, uri)
-            startActivity(i)
+        if(!resources.getBoolean(R.bool.isTelevision)){
+            rootView.payment_paypal.setOnClickListener {
+                val uri = Uri.parse("https://www.paypal.com/paypalme/imarkeTrading")
+                val i = Intent(Intent.ACTION_VIEW, uri)
+                startActivity(i)
+            }
+            rootView.payment_venmo.setOnClickListener {
+                val uri = Uri.parse("https://venmo.com/rafapanentertainment")
+                val i = Intent(Intent.ACTION_VIEW, uri)
+                startActivity(i)
+            }
+            rootView.payment_cashapp.setOnClickListener {
+                val uri = Uri.parse("http://cash.me/\$rafapanentertainment")
+                val i = Intent(Intent.ACTION_VIEW, uri)
+                startActivity(i)
+            }
         }
         return rootView
     }

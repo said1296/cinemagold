@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/sidebar"
+    android:id="@+id/menu"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_gravity="start"
@@ -10,11 +10,11 @@
     android:focusable="true">
 
         <LinearLayout
-            android:id="@+id/sidebar_header"
+            android:id="@+id/menu_header"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:background="@drawable/bg_sidebar_top"
-            android:paddingHorizontal="@dimen/sidebar_padding_horizontal"
+            android:background="@drawable/bg_menu_top"
+            android:paddingHorizontal="@dimen/menu_padding_horizontal"
             android:paddingVertical="20dp"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
@@ -24,76 +24,93 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
                         <include
-                            android:id="@+id/sidebar_logo"
+                            android:id="@+id/menu_logo"
                             app:layout_constraintTop_toTopOf="parent"
                             app:layout_constraintLeft_toLeftOf="parent"
                             android:layout_height="25dp"
                             layout="@layout/common_logo"
                             android:layout_width="wrap_content" />
-                        <LinearLayout
-                            android:id="@+id/sidebar_notification"
+                        <androidx.appcompat.widget.LinearLayoutCompat
+                            android:id="@+id/menu_notification"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:gravity="end"
                             android:orientation="horizontal">
                                 <TextView
-                                    android:id="@+id/sidebar_notification_count"
+                                    android:id="@+id/menu_notification_count"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="3"/>
+                                    android:text="0"/>
                                 <androidx.appcompat.widget.AppCompatImageView
-                                    android:id="@+id/sidebar_notification_icon"
+                                    android:id="@+id/menu_notification_icon"
                                     app:layout_constraintTop_toTopOf="parent"
                                     app:layout_constraintLeft_toLeftOf="parent"
                                     android:layout_height="match_parent"
                                     android:layout_width="wrap_content"
                                     app:layout_constraintDimensionRatio="1:1"
                                     android:background="@drawable/ic_notifications_24dp"/>
-                        </LinearLayout>
+                        </androidx.appcompat.widget.LinearLayoutCompat>
                 </LinearLayout>
 
                 <androidx.appcompat.widget.LinearLayoutCompat
-                    android:id="@+id/sidebar_avatar_active"
+                    android:id="@+id/menu_avatar_active"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="horizontal"
-                    android:layout_marginTop="@dimen/sidebar_padding_horizontal">
+                    android:layout_marginTop="@dimen/menu_padding_horizontal">
 
                         <include
-                            android:layout_width="@dimen/sidebar_avatar_size"
-                            android:layout_height="@dimen/sidebar_avatar_size"
+                            android:layout_width="@dimen/menu_avatar_size"
+                            android:layout_height="@dimen/menu_avatar_size"
                             layout="@layout/widget_avatar"/>
 
-                        <TextView
-                            android:id="@+id/sidebar_avatar_name"
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:id="@+id/menu_avatar_name"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
                             android:layout_marginStart="10dp"
-                            android:layout_marginLeft="10dp"
-                            android:drawableEnd="@drawable/ic_arrow_drop_down_24dp"
-                            android:drawableRight="@drawable/ic_arrow_drop_down_24dp"
                             android:text="Nombre"
-                            android:textSize="@dimen/heading6" />
+                            android:textSize="@dimen/heading6"
+                            android:drawableEnd="@drawable/ic_arrow_drop_down_24dp" />
                 </androidx.appcompat.widget.LinearLayoutCompat>
         </LinearLayout>
 
         <View
-            android:id="@+id/sidebar_header_separator"
+            android:id="@+id/menu_header_separator"
             android:layout_width="0dp"
             android:layout_height="1dp"
             android:background="?lightDark"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/sidebar_header" />
+            app:layout_constraintTop_toBottomOf="@id/menu_header" />
 
         <androidx.appcompat.widget.LinearLayoutCompat
-            android:id="@+id/sidebar_profiles"
-            app:layout_constraintTop_toBottomOf="@id/sidebar_header_separator"
-            android:paddingHorizontal="@dimen/sidebar_padding_horizontal"
+            android:visibility="gone"
+            android:id="@+id/menu_profiles"
+            app:layout_constraintTop_toBottomOf="@id/menu_header_separator"
+            android:paddingHorizontal="@dimen/menu_padding_horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/bg_sidebar_profiles"
+            android:background="@drawable/bg_menu_profiles"
             android:orientation="vertical">
+                <androidx.appcompat.widget.LinearLayoutCompat
+                    android:id="@+id/menu_profiles_avatars"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="?dark"
+                    android:orientation="vertical">
+
+                </androidx.appcompat.widget.LinearLayoutCompat>
+                <TextView xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:id="@+id/menu_profiles_edit_profiles"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/edit_profiles"
+                    android:textColor="?lightDark"
+                    android:textSize="@dimen/heading6"
+                    android:textAlignment="center"
+                    android:gravity="center_horizontal"
+                    android:layout_marginVertical="@dimen/menu_avatar_margin_top"/>
         </androidx.appcompat.widget.LinearLayoutCompat>
 
         <ScrollView
@@ -101,7 +118,7 @@
             android:layout_height="0dp"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/sidebar_profiles"
+            app:layout_constraintTop_toBottomOf="@id/menu_profiles"
             app:layout_constraintBottom_toBottomOf="parent"
             android:fillViewport="true">
                 <LinearLayout
@@ -109,28 +126,27 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
                         <LinearLayout
-                            android:id="@+id/sidebar_options_main"
+                            android:id="@+id/menu_options_main"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:background="?darkMedium"
                             android:orientation="vertical"
-                            android:paddingHorizontal="@dimen/sidebar_padding_horizontal"
+                            android:paddingHorizontal="@dimen/menu_padding_horizontal"
                             android:paddingVertical="20dp">
 
-                                <TextView
-                                    android:id="@+id/sidebar_devices"
+                                <androidx.appcompat.widget.AppCompatTextView
+                                    android:id="@+id/menu_devices"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:drawableEnd="@drawable/ic_arrow_drop_down_24dp"
-                                    android:drawableRight="@drawable/ic_arrow_drop_down_24dp"
                                     android:drawablePadding="2dp"
-                                    android:text="Dispositivos"
+                                    android:text="@string/devices"
                                     android:textSize="@dimen/heading6" />
 
 
 
                                 <androidx.appcompat.widget.LinearLayoutCompat
-                                    android:id="@+id/sidebar_devices_container"
+                                    android:id="@+id/menu_devices_container"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:background="?darkMedium"
@@ -138,45 +154,45 @@
                                 </androidx.appcompat.widget.LinearLayoutCompat>
 
                                 <TextView
-                                    android:id="@+id/sidebar_account"
+                                    android:id="@+id/menu_account"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:layout_marginTop="@dimen/sidebar_option_spacing"
-                                    android:text="Cuenta"
+                                    android:layout_marginTop="@dimen/menu_option_spacing"
+                                    android:text="@string/account"
                                     android:textSize="@dimen/heading6" />
 
                                 <TextView
-                                    android:id="@+id/sidebar_payment"
+                                    android:id="@+id/menu_payment"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:layout_marginTop="@dimen/sidebar_option_spacing"
-                                    android:text="Pagos"
+                                    android:layout_marginTop="@dimen/menu_option_spacing"
+                                    android:text="@string/payments"
                                     android:textSize="@dimen/heading6" />
 
                                 <TextView
-                                    android:id="@+id/sidebar_help"
+                                    android:id="@+id/menu_help"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:layout_marginTop="@dimen/sidebar_option_spacing"
-                                    android:text="Ayuda"
+                                    android:layout_marginTop="@dimen/menu_option_spacing"
+                                    android:text="@string/help"
                                     android:textSize="@dimen/heading6" />
                         </LinearLayout>
 
                         <LinearLayout
-                            android:id="@+id/sidebar_options_secondary"
-                            android:background="@drawable/bg_sidebar_bottom"
+                            android:id="@+id/menu_options_secondary"
+                            android:background="@drawable/bg_menu_bottom"
                             android:orientation="vertical"
-                            android:paddingHorizontal="@dimen/sidebar_padding_horizontal"
+                            android:paddingHorizontal="@dimen/menu_padding_horizontal"
                             android:paddingVertical="20dp"
                             android:layout_width="fill_parent"
                             android:layout_height="0dp"
                             android:layout_weight="1"
                             android:gravity="bottom">
                                 <TextView
-                                    android:id="@+id/sidebar_logout"
+                                    android:id="@+id/menu_logout"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:text="Cerrar sesión"
+                                    android:text="@string/logout"
                                     android:textSize="@dimen/heading6"
                                     android:textColor="?lightMedium"/>
                         </LinearLayout>

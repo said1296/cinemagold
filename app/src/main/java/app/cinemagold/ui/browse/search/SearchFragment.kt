@@ -13,7 +13,6 @@ import androidx.lifecycle.observe
 import app.cinemagold.R
 import app.cinemagold.injection.ApplicationContextInjector
 import app.cinemagold.ui.browse.BrowseActivity
-import app.cinemagold.ui.browse.serialized.GenreRVA
 import kotlinx.android.synthetic.main.fragment_search.view.*
 import javax.inject.Inject
 
@@ -21,8 +20,6 @@ import javax.inject.Inject
 class SearchFragment : Fragment() {
     @Inject
     lateinit var viewModel: SearchViewModel
-    @Inject
-    lateinit var genreRVA : GenreRVA
 
     override fun onAttach(context: Context) {
         (this.activity?.application as ApplicationContextInjector).applicationComponent.inject(this)

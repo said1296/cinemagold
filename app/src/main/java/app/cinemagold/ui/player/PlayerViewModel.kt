@@ -2,7 +2,6 @@ package app.cinemagold.ui.player
 
 import android.content.Context
 import android.content.SharedPreferences
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.preference.PreferenceManager
@@ -12,7 +11,7 @@ import app.cinemagold.dataaccess.remote.RecentApi
 import app.cinemagold.model.content.Recent
 import app.cinemagold.model.generic.IdAndName
 import app.cinemagold.model.user.Profile
-import app.cinemagold.ui.common.dataholder.LiveEvent
+import app.cinemagold.ui.common.LiveEvent
 import com.google.gson.Gson
 import com.haroldadmin.cnradapter.NetworkResponse
 import kotlinx.coroutines.launch

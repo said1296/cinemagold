@@ -8,7 +8,7 @@
     android:textAlignment="center"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="?darkMedium"
+    android:background="@drawable/bg_spinner_country_item"
     android:text="Anime"
     android:paddingVertical="10dp"
     android:paddingHorizontal="10dp"

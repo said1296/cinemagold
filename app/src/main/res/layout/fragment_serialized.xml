@@ -18,6 +18,7 @@
             android:orientation="vertical">
 
             <androidx.appcompat.widget.LinearLayoutCompat
+                android:id="@+id/serialized_header"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
@@ -44,11 +45,20 @@
                 </androidx.appcompat.widget.LinearLayoutCompat>
             </androidx.appcompat.widget.LinearLayoutCompat>
 
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:layout_marginHorizontal="@dimen/standard_margin_horizontal"
+                android:id="@+id/serialized_content_types"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/serialized_recycler_genres"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/header_margin_vertical"/>
+                android:layout_marginVertical="@dimen/header_margin_vertical"/>
 
             <androidx.fragment.app.FragmentContainerView
                 android:id="@+id/content_container"

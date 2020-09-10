@@ -11,7 +11,9 @@
         android:layout_height="wrap_content"
         app:fontFamily="@font/font_medium"
         android:textSize="@dimen/heading6"
-        android:text="Cinema"/>
+        android:text="Cinema"
+        android:paddingLeft="0dp"
+        android:paddingRight="0dp"/>
     <TextView
         android:id="@+id/logo_gold"
         android:layout_width="wrap_content"
@@ -19,5 +21,7 @@
         android:text=" GOLD"
         app:fontFamily="@font/font_medium"
         android:textSize="@dimen/heading6"
-        android:textColor="?brand"/>
+        android:textColor="?brand"
+        android:paddingLeft="0dp"
+        android:paddingRight="0dp"/>
 </androidx.appcompat.widget.LinearLayoutCompat>
