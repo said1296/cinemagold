@@ -85,11 +85,11 @@ class RegisterViewModel(private val authenticationApi: AuthenticationApi, privat
                 is NetworkResponse.Success -> {
                     countries = response.body
                     countries.add(0, IdAndName(-1, "País"))
-                    countrySpinnerItems.postValue(
-                        countries.stream().map { item ->
-                            item.name
-                        }.collect(Collectors.toList())
-                    )
+                    val spinnerItems = mutableListOf<String>()
+                    for(country in countries){
+                        spinnerItems.add(country.name)
+                    }
+                    countrySpinnerItems.postValue(spinnerItems)
                 }
                 is NetworkResponse.ServerError -> {
                     error.postValue(response.body?.status.toString() + " " + response.body?.message)

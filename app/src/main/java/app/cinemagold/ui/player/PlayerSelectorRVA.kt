@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.appcompat.view.ContextThemeWrapper
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import app.cinemagold.R
 import app.cinemagold.model.generic.IdAndName
@@ -32,9 +33,9 @@ class PlayerSelectorRVA @Inject constructor(
         val typedValue = TypedValue()
         val theme : Resources.Theme = ContextThemeWrapper(context, R.style.AppTheme).theme
         theme.resolveAttribute(R.attr.light, typedValue, true)
-        lightColor = context.getColor(typedValue.resourceId)
+        lightColor = ContextCompat.getColor(context, typedValue.resourceId)
         theme.resolveAttribute(R.attr.lightDark, typedValue, true)
-        lightDarkColor = context.getColor(typedValue.resourceId)
+        lightDarkColor = ContextCompat.getColor(context, typedValue.resourceId)
     }
 
 

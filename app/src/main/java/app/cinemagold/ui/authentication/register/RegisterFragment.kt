@@ -13,6 +13,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.appcompat.view.ContextThemeWrapper
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.observe
 import app.cinemagold.R
@@ -120,11 +121,11 @@ class RegisterFragment : Fragment() {
                 } else {
                     theme.resolveAttribute(R.attr.light, typedValue, true)
                 }
-                (view!!.spinner_country_selected as TextView).setTextColor(context!!.getColor(typedValue.resourceId))
+                (view!!.spinner_country_selected as TextView).setTextColor(ContextCompat.getColor(requireContext(), typedValue.resourceId))
                 for (drawable in (view!!.spinner_country_selected as TextView).compoundDrawables) {
                     if (drawable != null) {
                         drawable.colorFilter =
-                            PorterDuffColorFilter(context!!.getColor(typedValue.resourceId), PorterDuff.Mode.SRC_IN)
+                            PorterDuffColorFilter(ContextCompat.getColor(requireContext(), typedValue.resourceId), PorterDuff.Mode.SRC_IN)
                     }
                 }
             }

@@ -19,11 +19,11 @@
         app:layout_constraintBottom_toBottomOf="parent"
         android:fillViewport="true">
 
-        <LinearLayout
+        <androidx.appcompat.widget.LinearLayoutCompat
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
-            <LinearLayout
+            <androidx.appcompat.widget.LinearLayoutCompat
                 android:id="@+id/menu_header"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -49,7 +49,7 @@
                     android:focusable="true"
                     android:nextFocusDown="@id/menu_profiles_edit_profiles">
 
-                    <TextView
+                    <androidx.appcompat.widget.AppCompatTextView
                         android:id="@+id/menu_notification_count"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -68,7 +68,7 @@
                         android:duplicateParentState="true"
                         android:tint="@color/light_focused_brand"/>
                 </androidx.appcompat.widget.LinearLayoutCompat>
-            </LinearLayout>
+            </androidx.appcompat.widget.LinearLayoutCompat>
             <androidx.appcompat.widget.LinearLayoutCompat
                 android:id="@+id/menu_profiles"
                 android:layout_width="match_parent"
@@ -101,7 +101,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:background="?lightDark" />
-            <LinearLayout
+            <androidx.appcompat.widget.LinearLayoutCompat
                 android:id="@+id/menu_options_main"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -165,9 +165,9 @@
                     android:layout_marginTop="@dimen/menu_option_spacing"
                     android:text="@string/help"
                     android:textSize="@dimen/heading6"/>
-            </LinearLayout>
+            </androidx.appcompat.widget.LinearLayoutCompat>
 
-            <LinearLayout
+            <androidx.appcompat.widget.LinearLayoutCompat
                 android:id="@+id/menu_options_secondary"
                 android:background="@drawable/bg_menu_bottom"
                 android:orientation="vertical"
@@ -187,8 +187,8 @@
                     android:text="@string/logout"
                     android:textSize="@dimen/heading6"
                     android:gravity="center"/>
-            </LinearLayout>
-        </LinearLayout>
+            </androidx.appcompat.widget.LinearLayoutCompat>
+        </androidx.appcompat.widget.LinearLayoutCompat>
     </ScrollView>
 
 

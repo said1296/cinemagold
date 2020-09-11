@@ -66,7 +66,7 @@ class PlayerActivity : AppCompatActivity() {
     private lateinit var sources : MediaSource
     private var mediaTracks = mutableListOf<MediaTrack>()
     private lateinit var dataSourceFactory  : DefaultHttpDataSourceFactory
-    private lateinit var subtitleItems : List<IdAndName>
+    private val subtitleItems = mutableListOf<IdAndName>()
     private var audioTrackItems : ArrayList<IdAndName> = arrayListOf()
     private lateinit var rootView : ConstraintLayout
     private lateinit var selectorView : LinearLayoutCompat
@@ -248,7 +248,7 @@ class PlayerActivity : AppCompatActivity() {
             findViewById<ImageButton>(R.id.exo_custom_subtitles).visibility = View.GONE
         }else{
             //Add disable option at beginning of selector list
-            subtitleItems = listOf(IdAndName(-1, getString(R.string.disable))) + subtitleItems
+            subtitleItems.add(0, IdAndName(-1, getString(R.string.disable)))
         }
         if(audioTrackItems.size <= 1){
             findViewById<ImageButton>(R.id.exo_custom_audio_track).visibility = View.GONE
@@ -405,14 +405,15 @@ class PlayerActivity : AppCompatActivity() {
 
         //Create list for subtitle selector
         var index = -1
-        this.subtitleItems =  subtitles.stream().map { subtitle ->
-                index += 1
+        for((index, subtitle) in subtitles.withIndex()){
+            subtitleItems.apply {
                 if(SubtitleType.from(subtitle.subtitleType.id) == SubtitleType.NORMAL){
-                    IdAndName(index, subtitle.language.name)
+                    add(IdAndName(index, subtitle.language.name))
                 }else{
-                    IdAndName(index, subtitle.language.name + "[" + getString(R.string.forced) + "]")
+                    add(IdAndName(index, subtitle.language.name + "[" + getString(R.string.forced) + "]"))
                 }
-            }.collect(Collectors.toList())
+            }
+        }
 
         //Add subtitles to player sources
         for(subtitle in subtitles){

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
-    android:theme="@style/AppTheme.Navbar"
     android:id="@+id/navbar"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:paddingVertical="@dimen/navbar_button_padding_vertical">
     <include
         android:id="@+id/navbar_logo"
         layout="@layout/common_logo"
@@ -16,25 +16,33 @@
         android:id="@+id/navbar_home"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/home"/>
+        android:text="@string/home"
+        android:paddingLeft="@dimen/navbar_button_padding_horizontal"
+        android:paddingRight="@dimen/navbar_button_padding_horizontal"
+        android:textColor="@color/light_focused_brand"/>
     <androidx.appcompat.widget.AppCompatTextView
         android:onClick="handleNavbarClick"
         android:focusable="true"
         android:id="@+id/navbar_movie"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/movies"/>
+        android:text="@string/movies"
+        android:paddingLeft="@dimen/navbar_button_padding_horizontal"
+        android:paddingRight="@dimen/navbar_button_padding_horizontal"
+        android:textColor="@color/light_focused_brand"/>
     <androidx.appcompat.widget.AppCompatTextView
         android:onClick="handleNavbarClick"
         android:focusable="true"
         android:id="@+id/navbar_serialized"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/tv_shows"/>
+        android:text="@string/tv_shows"
+        android:paddingLeft="@dimen/navbar_button_padding_horizontal"
+        android:paddingRight="@dimen/navbar_button_padding_horizontal"
+        android:textColor="@color/light_focused_brand"/>
 
 
     <androidx.appcompat.widget.LinearLayoutCompat
-        android:theme="@style/AppTheme.Navbar"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="end">
@@ -46,7 +54,11 @@
             android:layout_height="match_parent"
             android:src="@drawable/ic_search_24dp"
             android:scaleType="fitCenter"
-            android:nextFocusRight="@id/menu_avatar_active"/>
+            android:nextFocusRight="@id/menu_avatar_active"
+            android:paddingLeft="@dimen/navbar_image_button_padding_horizontal"
+            android:paddingRight="@dimen/navbar_image_button_padding_horizontal"
+            android:tint="@color/light_focused_brand"
+            android:background="@android:color/transparent"/>
         <androidx.appcompat.widget.LinearLayoutCompat
             android:id="@+id/menu_avatar_active"
             android:focusable="true"
@@ -66,6 +78,10 @@
             android:layout_height="match_parent"
             android:src="@drawable/ic_more_24dp"
             android:scaleType="fitCenter"
-            android:nextFocusLeft="@id/menu_avatar_active"/>
+            android:nextFocusLeft="@id/menu_avatar_active"
+            android:paddingLeft="@dimen/navbar_image_button_padding_horizontal"
+            android:paddingRight="@dimen/navbar_image_button_padding_horizontal"
+            android:tint="@color/light_focused_brand"
+            android:background="@android:color/transparent"/>
     </androidx.appcompat.widget.LinearLayoutCompat>
 </androidx.appcompat.widget.LinearLayoutCompat>

@@ -150,7 +150,10 @@ class PreviewFragment : Fragment() {
         episodeRVA.setDataset(content.seasons[currentSeasonIndex].episodes)
 
         //Season selector
-        val seasonSpinnerItems = content.seasons.stream().map{ item -> "Temporada " + item.number.toString() }.collect(Collectors.toList())
+        val seasonSpinnerItems = mutableListOf<String>()
+        for(season in content.seasons){
+            seasonSpinnerItems.add("Temporada ${season.number}")
+        }
         val adapter = ArrayAdapter<String>(context!!.applicationContext, R.layout.spinner_season, seasonSpinnerItems)
         adapter.setDropDownViewResource(R.layout.spinner_season_item)
         infoSpecificView.preview_spinner_season.adapter = adapter

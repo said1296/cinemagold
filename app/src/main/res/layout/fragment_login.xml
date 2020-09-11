@@ -32,7 +32,7 @@
         android:textSize="@dimen/heading4"
         app:fontFamily="@font/font_semibold"
         android:textColor="?light"
-        android:nextFocusDown="@id/login_password"
+        android:nextFocusDown="@id/login_password_edit_text"
         android:nextFocusLeft="@id/login_email_edit_text"
         android:nextFocusRight="@id/login_email_edit_text"/>
     <LinearLayout
@@ -61,7 +61,8 @@
             android:background="@drawable/bg_login_edit_text"
             android:nextFocusLeft="@id/login_password_edit_text"
             android:nextFocusRight="@id/login_password_show"
-            android:nextFocusDown="@id/login_submit"/>
+            android:nextFocusDown="@id/login_submit"
+            android:nextFocusUp="@id/login_email_edit_text"/>
         <ImageButton
             android:id="@+id/login_password_show"
             android:layout_width="0dp"

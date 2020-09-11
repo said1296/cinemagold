@@ -11,6 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.view.ContextThemeWrapper
+import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResult
@@ -139,7 +140,7 @@ class ProfileFragment : Fragment() {
             if(index>=profilesSize){
                 avatarView.widget_avatar_name.text = ""
                 avatarView.widget_avatar.setImageResource(R.drawable.bg_profile_empty)
-                avatarView.widget_avatar.borderColor = context!!.getColor(typedValue.resourceId)
+                avatarView.widget_avatar.borderColor = ContextCompat.getColor(requireContext(), typedValue.resourceId)
                 avatarView.setOnClickListener {
                     setFragmentResult(ProfileCreateFragment::class.simpleName!!, bundleOf("IS_EDIT" to false))
                     (activity as OptionActivity).addOrReplaceFragment(ProfileCreateFragment(), ProfileCreateFragment::class.simpleName)

@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.appcompat.view.ContextThemeWrapper
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ItemDecoration
 import app.cinemagold.R
@@ -34,9 +35,9 @@ class GenreRVA @Inject constructor(
         val typedValue = TypedValue()
         val theme : Resources.Theme = ContextThemeWrapper(context, R.style.AppTheme).theme
         theme.resolveAttribute(R.attr.light, typedValue, true)
-        lightColor = context.getColor(typedValue.resourceId)
+        lightColor = ContextCompat.getColor(context, typedValue.resourceId)
         theme.resolveAttribute(R.attr.lightDark, typedValue, true)
-        lightDarkColor = context.getColor(typedValue.resourceId)
+        lightDarkColor = ContextCompat.getColor(context, typedValue.resourceId)
     }
 
 
@@ -60,19 +61,9 @@ class GenreRVA @Inject constructor(
 
         //Highlight selected
         if(selectedPosition==position){
-            item.setTextColor(
-                context.resources.getColorStateList(
-                    R.color.light_focused_brand,
-                    context.applicationContext.theme
-                )
-            )
+            item.setTextColor(ContextCompat.getColorStateList(context, R.color.light_focused_brand))
         }else{
-            item.setTextColor(
-                context.resources.getColorStateList(
-                    R.color.light_dark_focused_brand,
-                    context.applicationContext.theme
-                )
-            )
+            item.setTextColor(ContextCompat.getColorStateList(context, R.color.light_dark_focused_brand))
         }
 
         //Show or hide "All genres" button

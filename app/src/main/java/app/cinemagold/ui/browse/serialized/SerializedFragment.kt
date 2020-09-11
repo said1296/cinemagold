@@ -10,6 +10,7 @@ import android.widget.ArrayAdapter
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.widget.LinearLayoutCompat
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.observe
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -111,13 +112,19 @@ class SerializedFragment : Fragment() {
             val contentTypeButton = layoutInflater.inflate(R.layout.item_content_type, contentTypesContainer, false) as TextView
             contentTypeButton.text = contentType
             if(index == 0){
-                contentTypeButton.setTextColor(context!!.resources.getColorStateList(R.color.light_focused_brand, context!!.applicationContext.theme))
+                contentTypeButton.setTextColor(
+                    ContextCompat.getColorStateList(requireContext(), R.color.light_focused_brand)
+                )
             }
             contentTypeButton.setOnClickListener {
                 for(viewIndex in 0 until contentTypesContainer.childCount)
                     (contentTypesContainer.getChildAt(viewIndex) as TextView).
-                        setTextColor(context!!.resources.getColorStateList(R.color.light_dark_focused_brand, context!!.applicationContext.theme))
-                contentTypeButton.setTextColor(context!!.resources.getColorStateList(R.color.light_focused_brand, context!!.applicationContext.theme))
+                        setTextColor(
+                            ContextCompat.getColorStateList(requireContext(), R.color.light_dark_focused_brand)
+                        )
+                contentTypeButton.setTextColor(
+                    ContextCompat.getColorStateList(requireContext(), R.color.light_focused_brand)
+                )
                 viewModel.selectedContentType(index)
             }
             contentTypesContainer?.addView(contentTypeButton)

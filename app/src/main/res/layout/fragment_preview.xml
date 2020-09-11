@@ -93,7 +93,7 @@
                     android:textSize="@dimen/text1"
                     app:fontFamily="@font/font_regular" />
 
-                <RatingBar
+                <androidx.appcompat.widget.AppCompatRatingBar
                     android:id="@+id/preview_info_score"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
