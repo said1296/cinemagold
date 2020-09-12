@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.view.Gravity
+import android.view.KeyEvent
 import android.view.View
 import android.widget.ImageButton
 import androidx.appcompat.app.AppCompatActivity
@@ -51,7 +52,6 @@ import com.google.gson.Gson
 import kotlinx.android.synthetic.main.activity_player.view.*
 import kotlinx.android.synthetic.main.player_control_movie.view.*
 import kotlinx.android.synthetic.main.player_selector.view.*
-import java.util.stream.Collectors
 import javax.inject.Inject
 
 
@@ -261,6 +261,12 @@ class PlayerActivity : AppCompatActivity() {
     override fun onStop() {
         player.release()
         super.onStop()
+    }
+
+    override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
+        if(resources.getBoolean(R.bool.isTelevision))
+            playerView.showController()
+        return super.onKeyDown(keyCode, event)
     }
 
     private fun showSelector(title : String, items : List<IdAndName>, trackType : Int){

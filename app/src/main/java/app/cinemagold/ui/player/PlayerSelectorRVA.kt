@@ -58,9 +58,9 @@ class PlayerSelectorRVA @Inject constructor(
 
         //Highlight selected
         if(selectedId==getItemId(position).toInt()){
-            item.setTextColor(lightColor)
+            item.setTextColor(ContextCompat.getColorStateList(context, R.color.light_focused_brand))
         }else{
-            item.setTextColor(lightDarkColor)
+            item.setTextColor(ContextCompat.getColorStateList(context, R.color.light_dark_focused_brand))
         }
 
         //Set params programmatically since XML values are ignored

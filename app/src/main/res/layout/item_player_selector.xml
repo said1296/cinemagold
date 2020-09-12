@@ -6,4 +6,6 @@
     android:layout_height="wrap_content"
     android:text="ITEM"
     android:textSize="@dimen/heading4"
-    android:layout_marginVertical="@dimen/item_player_selector_margin_vertical"/>
+    android:layout_marginVertical="@dimen/item_player_selector_margin_vertical"
+    android:focusable="true"
+    android:clickable="true"/>
