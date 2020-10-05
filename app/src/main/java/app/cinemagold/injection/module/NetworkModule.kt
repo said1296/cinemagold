@@ -11,6 +11,7 @@ import com.fasterxml.jackson.annotation.JsonSetter
 import com.fasterxml.jackson.annotation.Nulls
 import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.module.kotlin.KotlinModule
 import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 import com.haroldadmin.cnradapter.NetworkResponseAdapterFactory
 import dagger.Module
@@ -110,7 +111,7 @@ class NetworkModule {
 
     @Provides
     fun giveObjectMapper() : ObjectMapper {
-        return ObjectMapper().registerKotlinModule()
+        return ObjectMapper().registerModule(KotlinModule(nullIsSameAsDefault = true))
             .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
             .setDefaultSetterInfo(JsonSetter.Value.forValueNulls(Nulls.SKIP))
     }
