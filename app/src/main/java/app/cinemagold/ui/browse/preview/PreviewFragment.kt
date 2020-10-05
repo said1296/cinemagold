@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
@@ -21,7 +22,6 @@ import kotlinx.android.synthetic.main.fragment_preview.view.*
 import kotlinx.android.synthetic.main.preview_info_specific_movie.view.*
 import kotlinx.android.synthetic.main.preview_info_specific_serialized.view.*
 import kotlinx.android.synthetic.main.widget_button_play.view.*
-import java.util.stream.Collectors
 import javax.inject.Inject
 
 class PreviewFragment : Fragment() {
@@ -102,6 +102,10 @@ class PreviewFragment : Fragment() {
                             (activity as BrowseActivity).navigateToPlayer(content)
                         }
                     }
+            else
+                requireView().widget_button_play.setOnClickListener {
+                    (activity as BrowseActivity).navigateToPlayer(content)
+                }
         }
     }
 
@@ -117,6 +121,10 @@ class PreviewFragment : Fragment() {
         descriptionShortView = view.preview_info_description_short
         sliderView = view.preview_slider
         scoreView = view.preview_info_score
+
+        //Hide keyboard
+        val inputManager = requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        inputManager.hideSoftInputFromWindow(requireActivity().currentFocus?.windowToken, InputMethodManager.HIDE_NOT_ALWAYS)
 
         return view
     }
@@ -180,7 +188,6 @@ class PreviewFragment : Fragment() {
                     currentSeasonIndex = p2
                     previewImageSrc =
                         if (resources.getBoolean(R.bool.isTelevision)) content.seasons[currentSeasonIndex].posterSrc else content.seasons[currentSeasonIndex].sliderSrc
-                    println(previewImageSrc)
                     episodeRVA.setDataset(content.seasons[currentSeasonIndex].episodes)
                     picasso.load(previewImageSrc).apply {
                         placeholder(R.drawable.bg_dark)

@@ -68,7 +68,7 @@
             <include
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                layout="@layout/widget_avatar" />
+                layout="@layout/widget_avatar_no_border" />
         </androidx.appcompat.widget.LinearLayoutCompat>
         <androidx.appcompat.widget.AppCompatImageButton
             android:onClick="handleNavbarClick"

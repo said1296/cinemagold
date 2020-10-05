@@ -5,7 +5,7 @@ import android.os.Looper
 import com.google.android.exoplayer2.Player
 
 
-class PlayerListener(val onLoadedCallback : () -> Unit, val updateElapsed : () -> Unit, val onPlayChanged : (isOnPlay: Boolean) -> Unit) : Player.EventListener {
+class PlayerListener(val onLoadedCallback : () -> Unit, val updateElapsed : () -> Unit, val onPlayChanged : (isOnPlay: Boolean) -> Unit, val onEnd : () -> Unit) : Player.EventListener {
     private var isFirstTimePlaying = true
     private val updateElapsedDelay = 5000L
     private val handler = Handler(Looper.getMainLooper())
@@ -46,6 +46,10 @@ class PlayerListener(val onLoadedCallback : () -> Unit, val updateElapsed : () -
                 onPlayChanged(isOnPlay)
             }
             if(isElapsedUpdating) stopUpdatingElapsed()
+        }
+
+        if(playbackState==Player.STATE_ENDED){
+            onEnd()
         }
     }
 

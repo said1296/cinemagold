@@ -26,6 +26,7 @@ class ContentHorizontalRVA @Inject constructor(
             context.resources.getDimensionPixelSize(R.dimen.item_content_horizontal_elevation)
     private val scale : Int = 30
     lateinit var clickHandler : (Int, Int) -> Unit
+    var idPrefix : Int = -1
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
 
@@ -42,6 +43,7 @@ class ContentHorizontalRVA @Inject constructor(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val currentData = dataset[position]
         val item = holder.itemView
+        item.id = idPrefix + position
         item.item_content_horizontal_title.text = currentData.name
         item.item_content_horizontal_metadata.text =
             "${currentData.length} · ${currentData.genreMain.name} · ${currentData.genreSecondary.name}"
@@ -65,8 +67,13 @@ class ContentHorizontalRVA @Inject constructor(
         val params = holder.itemView.layoutParams as RecyclerView.LayoutParams
         if(position == 0){
             params.leftMargin = sideMargin
+            item.nextFocusLeftId = item.id
         } else if (position == dataset.lastIndex){
             params.rightMargin = sideMargin
+            item.nextFocusRightId = item.id
+        }else{
+            item.nextFocusLeftId = item.id - 1
+            item.nextFocusRightId = item.id + 1
         }
 
         item.setOnClickListener { clickHandler(currentData.id, currentData.mediaType.id) }

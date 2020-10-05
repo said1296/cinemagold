@@ -54,11 +54,14 @@ class ContentGroupedByGenreFragment : Fragment() {
     private fun inflateContentGroupedByGenres(){
         containerView.removeAllViews()
         System.gc()
-        for(item in contentGroupedByGenres){
+        for((index, item) in contentGroupedByGenres.withIndex()){
             val contentOfGenreRVAInstance = contentHorizontalRVAProvider.get()
-            //Set callback for navigation to Preview on click of an item
-            contentOfGenreRVAInstance.clickHandler = {contentId, contentType ->
-                (activity as BrowseActivity).navigateToPreview(contentId, contentType)
+            //Set callback for navigation to Preview on click of an item and prefix for id to keep track of navigation
+            contentOfGenreRVAInstance.apply {
+                clickHandler = {contentId, contentType ->
+                    (activity as BrowseActivity).navigateToPreview(contentId, contentType)
+                }
+                idPrefix = index*1000
             }
             val contentGroupedByGenreView = layoutInflater.inflate(R.layout.widget_content_grouped_by_genre, null)
             contentGroupedByGenreView.widget_content_grouped_by_genre_title.text = item.name

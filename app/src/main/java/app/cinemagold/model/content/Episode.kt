@@ -9,7 +9,7 @@ data class Episode (
     val name : String = "",
     val number : String = "",
     val src : String = "",
-    var thumbnailSrc : String = "",
+    var thumbnailSrc : String = BuildConfig.LOGO_URL,
     val subtitles : List<Subtitle> = emptyList()
 ){
     init {

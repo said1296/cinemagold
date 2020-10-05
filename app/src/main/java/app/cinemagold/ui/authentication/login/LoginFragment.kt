@@ -16,7 +16,6 @@ import app.cinemagold.injection.ApplicationContextInjector
 import app.cinemagold.ui.authentication.AuthenticationActivity
 import app.cinemagold.ui.option.profile.ProfileFragment
 import kotlinx.android.synthetic.main.fragment_login.view.*
-import kotlinx.android.synthetic.main.fragment_register.view.*
 import javax.inject.Inject
 
 class LoginFragment : Fragment() {

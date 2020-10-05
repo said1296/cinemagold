@@ -15,7 +15,7 @@ interface ContentApi {
     suspend fun getGroupedByGenre(@Query("isKids") isKids : Boolean) : NetworkResponse<MutableList<ContentGroupedByGenre>, NetworkError>
 
     @GET("content/genre/group/contentType")
-    suspend fun getByContentTypeIdAndGroupedByGenre(@Query("contentTypeId") contentTypeId : Int, @Query("isKids") isKids : Boolean) : NetworkResponse<MutableList<ContentGroupedByGenre>, NetworkError>
+    suspend fun getByContentTypeIdAndGroupedByGenre(@Query("contentTypeId") contentTypeId : Int, @Query("isKids") isKids : Boolean, @Query("minItems") minItems : Int? = null) : NetworkResponse<MutableList<ContentGroupedByGenre>, NetworkError>
 
     @GET("content/serialized/genre/group/")
     suspend fun getSerializedGroupedByGenre(@Query("isKids") isKids : Boolean) : NetworkResponse<MutableList<ContentGroupedByGenre>, NetworkError>

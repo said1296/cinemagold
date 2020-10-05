@@ -61,13 +61,26 @@ class EpisodeRVA @Inject constructor(
         //Set start and end padding for mobile, and focuses for TV
         val params = holder.itemView.layoutParams as RecyclerView.LayoutParams
         if(position == 0){
-            if(!isTelevision) params.leftMargin = sideMargin else item.nextFocusUpId = R.id.preview_spinner_season
+            if(!isTelevision) params.leftMargin = sideMargin
+            else{
+                item.nextFocusUpId = R.id.preview_spinner_season
+                item.nextFocusDownId = dataset[position+1].id
+            }
         } else if (position == dataset.lastIndex){
-            if(!isTelevision) params.rightMargin = sideMargin else item.nextFocusDownId = item.id
+            if(!isTelevision) params.rightMargin = sideMargin
+            else{
+                item.nextFocusDownId = item.id
+                item.nextFocusUpId = dataset[position-1].id
+            }
+        } else {
+            if(isTelevision){
+                item.nextFocusUpId = dataset[position-1].id
+                item.nextFocusDownId = dataset[position+1].id
+            }
         }
         if(isTelevision){
             item.nextFocusLeftId = item.id
-            item.nextFocusLeftId = item.id
+            item.nextFocusRightId = item.id
         }
         holder.itemView.layoutParams = params
 

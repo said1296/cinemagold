@@ -7,8 +7,8 @@ data class Season (
     val number : Int = -1,
     val year : Int = -1,
     var length : String = "",
-    var sliderSrc : String = "",
-    var posterSrc : String = "",
+    var sliderSrc : String = BuildConfig.LOGO_URL,
+    var posterSrc : String = BuildConfig.LOGO_URL,
     val episodes : List<Episode> = emptyList()
 ){
     init {

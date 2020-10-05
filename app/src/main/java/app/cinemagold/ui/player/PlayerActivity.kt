@@ -18,12 +18,13 @@ import androidx.lifecycle.observe
 import androidx.recyclerview.widget.LinearLayoutManager
 import app.cinemagold.R
 import app.cinemagold.injection.ApplicationContextInjector
-import app.cinemagold.model.content.Content
 import app.cinemagold.model.content.ContentType
 import app.cinemagold.model.content.SubtitleType
 import app.cinemagold.model.generic.IdAndName
 import app.cinemagold.model.user.PlayerAuthorization
 import app.cinemagold.ui.authentication.AuthenticationActivity
+import app.cinemagold.ui.browse.BrowseActivity
+import app.cinemagold.ui.browse.preview.PreviewFragment
 import app.cinemagold.ui.option.OptionActivity
 import app.cinemagold.ui.option.payment.PaymentFragment
 import com.google.android.exoplayer2.C
@@ -47,8 +48,6 @@ import com.google.android.gms.cast.MediaMetadata
 import com.google.android.gms.cast.MediaTrack
 import com.google.android.gms.cast.framework.CastButtonFactory
 import com.google.android.gms.cast.framework.CastContext
-import com.google.android.gms.cast.framework.CastState
-import com.google.gson.Gson
 import kotlinx.android.synthetic.main.activity_player.view.*
 import kotlinx.android.synthetic.main.player_control_movie.view.*
 import kotlinx.android.synthetic.main.player_selector.view.*
@@ -58,7 +57,6 @@ import javax.inject.Inject
 class PlayerActivity : AppCompatActivity() {
     private lateinit var player : ExoPlayer
     private lateinit var playerView : PlayerView
-    private lateinit var content : Content
     private var seasonIndex : Int = 0
     private var episodeIndex : Int = 0
     private lateinit var trackSelector: DefaultTrackSelector
@@ -74,18 +72,20 @@ class PlayerActivity : AppCompatActivity() {
         { onLoaded() },
         {
             val elapsedPercent = (player.currentPosition.toFloat() / player.duration)
-            if(content.mediaType.id== ContentType.MOVIE.value){
-                playerViewModel.triggeredUpdateElapsed(content.id, player.currentPosition.toInt(), elapsedPercent)
-            }else{
-                playerViewModel.triggeredUpdateElapsed(content.id,
-                    content.seasons[seasonIndex].episodes[episodeIndex].id, player.currentPosition.toInt(), elapsedPercent)
-            }
+            viewModel.triggeredUpdateElapsed(player.currentPosition.toInt(), elapsedPercent)
         },
         {isOnPlay ->
             if(isOnPlay)
-                playerViewModel.videoPlaying(player.duration - player.currentPosition, content.mediaType.id)
+                viewModel.videoPlaying(player.duration - player.currentPosition)
             else
-                playerViewModel.videoPaused()
+                viewModel.videoPaused()
+        },
+        {
+            if(viewModel.content.mediaType.id != ContentType.MOVIE.value){
+                viewModel.videoEnded()
+                preparePlayer()
+                onLoaded()
+            }
         }
     )
     private var audioTrackSelected = 0
@@ -93,10 +93,9 @@ class PlayerActivity : AppCompatActivity() {
     @Inject
     lateinit var playerSelectorRVA : PlayerSelectorRVA
     @Inject
-    lateinit var playerViewModel: PlayerViewModel
+    lateinit var viewModel: PlayerViewModel
     lateinit var castPlayer: CastPlayer
     lateinit var castContext: CastContext
-    var elapsed = -1L
 
     override fun onCreate(savedInstanceState: Bundle?) {
         (applicationContext as ApplicationContextInjector).applicationComponent.inject(this)
@@ -105,7 +104,7 @@ class PlayerActivity : AppCompatActivity() {
         rootView = findViewById(R.id.player)
 
         //Observers
-        playerViewModel.authorizationError.observe(this){authorizationError ->
+        viewModel.authorizationError.observe(this){ authorizationError ->
             player.playWhenReady = false
             AlertDialog.Builder(this, R.style.AppTheme_AlertDialog)
                 .setMessage(authorizationError.name)
@@ -137,12 +136,13 @@ class PlayerActivity : AppCompatActivity() {
             castContext = CastContext.getSharedInstance(this)
             castPlayer = CastPlayer(castContext)
 
-            if (castContext.castState != CastState.NO_DEVICES_AVAILABLE) mediaRouteButton.visibility = View.VISIBLE
+            /*if (castContext.castState != CastState.NO_DEVICES_AVAILABLE) mediaRouteButton.visibility = View.VISIBLE
             castContext.addCastStateListener { state ->
                 if (state == CastState.NO_DEVICES_AVAILABLE) mediaRouteButton.visibility = View.GONE else {
                     if (mediaRouteButton.visibility == View.GONE) mediaRouteButton.visibility = View.VISIBLE
                 }
             }
+             */
 
             //TODO: VIEW
             /*castControlView.player = castPlayer*/
@@ -177,18 +177,7 @@ class PlayerActivity : AppCompatActivity() {
         }
 
         //Retrieve data sent from previous activity
-        val extras = intent.extras
-        if(extras != null){
-            content = Gson().fromJson(extras.get("content") as String, Content::class.java)
-            if(content.mediaType.id != ContentType.MOVIE.value){
-                episodeIndex = extras.getInt("episodeIndex")
-                seasonIndex = extras.getInt("seasonIndex")
-            }
-            //Get elapsed time if a Recently Played content was clicked
-            if(extras.getInt("elapsed") != -1){
-                elapsed = extras.getInt("elapsed").toLong()
-            }
-        }
+        viewModel.receivedExtras(intent.extras)
 
         //Set-up player
         trackSelector = DefaultTrackSelector(this)
@@ -197,8 +186,6 @@ class PlayerActivity : AppCompatActivity() {
         player.addListener(playerListener)
 
         playerView = findViewById(R.id.player_playerView)
-        //Hide controls until video is loaded
-        playerView.player_control.visibility = View.GONE
         playerView.exo_custom_subtitles.setOnClickListener {
             showSelector(resources.getString(R.string.subtitles), subtitleItems, C.TRACK_TYPE_TEXT)
         }
@@ -213,7 +200,24 @@ class PlayerActivity : AppCompatActivity() {
     override fun onPause() {
         super.onPause()
         playerListener.stopUpdatingElapsed()
-        playerViewModel.videoPaused()
+        viewModel.videoPaused()
+    }
+
+    override fun onBackPressed() {
+        player.release()
+        navigateToPreview(viewModel.content.id, viewModel.content.mediaType.id)
+    }
+
+    private fun navigateToPreview(contentId: Int, contentTypeId: Int) {
+        val intent = Intent(this, BrowseActivity::class.java)
+        intent.putExtra("FRAGMENT", PreviewFragment::class.simpleName)
+        //Send information about where the intent came from
+        intent.putExtra("CONTENT_ID", contentId)
+        intent.putExtra("CONTENT_TYPE", contentTypeId)
+        intent.putExtra("ORIGIN", this::class.simpleName)
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        startActivity(intent)
     }
 
     private fun onLoaded(){
@@ -354,27 +358,29 @@ class PlayerActivity : AppCompatActivity() {
 
 
     private fun preparePlayer(){
+        //Hide controls until video is loaded
+        playerView.player_control.visibility = View.GONE
         val userAgent =
             Util.getUserAgent(playerView.context, playerView.context.getString(R.string.app_name))
         val contentSource =
-            if(content.mediaType.id == ContentType.MOVIE.value){
-                content.movie.src
+            if(viewModel.content.mediaType.id == ContentType.MOVIE.value){
+                viewModel.content.movie.src
             }else{
-                content.seasons[seasonIndex].episodes[episodeIndex].src
+                viewModel.content.seasons[seasonIndex].episodes[episodeIndex].src
             }
         dataSourceFactory = DefaultHttpDataSourceFactory(userAgent)
         prepareVideo(contentSource)
         prepareSubtitles()
         prepareCast(contentSource)
         player.prepare(sources, false, false)
-        if(elapsed != -1L){
-            player.seekTo(elapsed)
+        if(viewModel.elapsed != -1L){
+            player.seekTo(viewModel.elapsed)
         }
     }
 
     private fun prepareCast(contentSource : String){
         val movieMetadata = MediaMetadata(MediaMetadata.MEDIA_TYPE_MOVIE)
-        movieMetadata.putString(MediaMetadata.KEY_TITLE, content.name)
+        movieMetadata.putString(MediaMetadata.KEY_TITLE, viewModel.content.name)
         mediaInfo = MediaInfo.Builder(contentSource).apply {
             setStreamType(MediaInfo.STREAM_TYPE_BUFFERED)
             setContentType(MimeTypes.APPLICATION_M3U8)
@@ -403,14 +409,13 @@ class PlayerActivity : AppCompatActivity() {
         var subtitleFormat : Format
 
         val subtitles =
-            if(content.mediaType.id == ContentType.MOVIE.value){
-                content.movie.subtitles
+            if(viewModel.content.mediaType.id == ContentType.MOVIE.value){
+                viewModel.content.movie.subtitles
             }else{
-                content.seasons[seasonIndex].episodes[episodeIndex].subtitles
+                viewModel.content.seasons[seasonIndex].episodes[episodeIndex].subtitles
             }
 
         //Create list for subtitle selector
-        var index = -1
         for((index, subtitle) in subtitles.withIndex()){
             subtitleItems.apply {
                 if(SubtitleType.from(subtitle.subtitleType.id) == SubtitleType.NORMAL){
@@ -445,7 +450,7 @@ class PlayerActivity : AppCompatActivity() {
     }
 
     //Navigation
-    fun navigateToAuthentication() {
+    private fun navigateToAuthentication() {
         val intent = Intent(applicationContext, AuthenticationActivity::class.java)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
@@ -455,7 +460,7 @@ class PlayerActivity : AppCompatActivity() {
         finish()
     }
 
-    fun navigateToOption(fragmentToLoad : String, isEdit: Boolean? = null){
+    private fun navigateToOption(fragmentToLoad : String, isEdit: Boolean? = null){
         val intent = Intent(this, OptionActivity::class.java)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)

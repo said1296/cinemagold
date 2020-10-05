@@ -9,24 +9,22 @@ android {
     signingConfigs {
         release {
             storeFile file('C:\\Users\\kirim\\Desktop\\cinemagold.jks')
-            storePassword 'cinemagold'
+            storePassword '_S7]2U[_:_q3vdm^'
             keyAlias = 'cinemagold'
-            keyPassword 'cinemagold'
+            keyPassword 't:!9:%t2.[ZNmv}u'
         }
     }
-    //TODO: change to 30
     compileSdkVersion 30
     buildToolsVersion "30.0.1"
 
     defaultConfig {
         applicationId "app.cinemagold"
         minSdkVersion 17
-        //TODO: change to 30
         targetSdkVersion 30
-        versionCode 1
-        versionName "1.0"
+        versionCode 3
+        versionName "1.2"
 
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "androidx.test.runner.AndrotidJUnitRunner"
 
         //Core
         multiDexEnabled true
@@ -35,7 +33,7 @@ android {
         buildConfigField "String", "SLIDER_REMOTE", '"https://cinemagold.online/app/slider/"'
         buildConfigField "String", "POSTER_REMOTE", '"https://cinemagold.online/app/poster/"'
         buildConfigField "String", "THUMBNAIL_REMOTE", '"https://cinemagold.online/app/miniaturas/"'
-
+        buildConfigField "String", "LOGO_URL", '"https://cinemagold.online/app/images/logo_cinemagold.png"'
         buildConfigField "String", "PREFS_COOKIES", '"PREFS_COOKIES"'
         buildConfigField "String", "PREFS_PROFILE", '"PREFS_PROFILE"'
     }
@@ -46,8 +44,8 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
 
             //Constants
-            buildConfigField "String", "BASE_URL_LOCAL", '"https://192.168.0.104:8080/"'
-            buildConfigField "String", "BASE_URL", '"https://api.cinemagold.online/"'
+            buildConfigField "String", "BASE_URL", '"https://192.168.0.108:8080/"'
+            buildConfigField "String", "BASE_URL_REMOTE", '"https://api.cinemagold.online/"'
         }
         release {
             minifyEnabled false

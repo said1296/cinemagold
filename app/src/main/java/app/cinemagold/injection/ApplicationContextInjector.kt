@@ -1,7 +1,6 @@
 package app.cinemagold.injection
 
 import android.app.Application
-import android.widget.Toast
 import app.cinemagold.injection.component.ApplicationComponent
 import app.cinemagold.injection.component.DaggerApplicationComponent
 import app.cinemagold.injection.module.ApplicationModule

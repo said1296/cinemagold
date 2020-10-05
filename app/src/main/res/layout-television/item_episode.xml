@@ -55,7 +55,9 @@
         app:fontFamily="@font/font_medium"
         app:layout_constraintLeft_toRightOf="@id/item_episode_info_margin"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:textColor="@color/light_focused_brand"
+        android:duplicateParentState="true"/>
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/item_episode_number_pre"

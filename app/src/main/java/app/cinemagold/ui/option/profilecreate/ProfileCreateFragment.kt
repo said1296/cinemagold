@@ -62,7 +62,7 @@ class ProfileCreateFragment : Fragment() {
         val rootView = inflater.inflate(R.layout.fragment_profile_create, container, false)
         avatarView = rootView.widget_avatar_edit.widget_profile_avatar_edit_avatar as CircularImageView
 
-        rootView.widget_avatar_edit.setOnClickListener {
+        rootView.profile_create_widget_avatar_edit.setOnClickListener {
             childFragmentManager.beginTransaction()
                 .setCustomAnimations(R.anim.slide_in_bottom, R.anim.slide_in_bottom)
                 .add(R.id.profile_create_fragment_container, avatarGridFragment, AvatarGridFragment::class.simpleName).commit()
@@ -70,13 +70,13 @@ class ProfileCreateFragment : Fragment() {
         rootView.profile_create_submit.setOnClickListener {
             viewModel.submit(rootView.profile_create_form)
         }
+        rootView.profile_create_name.requestFocus()
         return rootView
     }
 
     fun buildEdit(){
         buildAvatar(viewModel.profile.avatar)
         view!!.profile_create_name.setText(viewModel.profile.name)
-        view!!.profile_create_name.requestFocus()
         view!!.profile_delete.visibility = View.VISIBLE
         view!!.profile_delete.setOnClickListener {
             viewModel.deleteProfile()
@@ -87,6 +87,7 @@ class ProfileCreateFragment : Fragment() {
         viewModel.selectedAvatar(avatar)
         buildAvatar(avatar)
         childFragmentManager.beginTransaction().remove(avatarGridFragment).commit()
+        requireView().profile_create_name.requestFocus()
     }
 
     private fun buildAvatar(avatar: IdAndName){

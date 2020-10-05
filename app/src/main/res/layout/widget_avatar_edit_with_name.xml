@@ -23,6 +23,7 @@
             app:layout_constraintDimensionRatio="1:1"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
+            android:focusable="true"
             android:src="@drawable/bg_profile_empty"
             app:civ_border_color="?brand"
             app:civ_circle_color="?dark"
