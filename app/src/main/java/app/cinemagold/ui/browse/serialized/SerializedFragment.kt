@@ -76,6 +76,7 @@ class SerializedFragment : Fragment() {
         rootView.serialized_recycler_genres.apply {
             layoutManager = LinearLayoutManager(this@SerializedFragment.context, LinearLayoutManager.HORIZONTAL, false)
             adapter = genreRVA
+            addItemDecoration(genreRVA.itemDecoration)
         }
         genreRVA.clickHandler = {genre ->
             viewModel.selectedGenre(genre)

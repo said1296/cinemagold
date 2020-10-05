@@ -13,7 +13,6 @@ import app.cinemagold.model.user.RegisterForm
 import app.cinemagold.ui.common.LiveEvent
 import com.haroldadmin.cnradapter.NetworkResponse
 import kotlinx.coroutines.launch
-import java.util.stream.Collectors
 
 class RegisterViewModel(private val authenticationApi: AuthenticationApi, private val countryApi: CountryApi) : ViewModel() {
     val error : LiveEvent<String> by lazy {

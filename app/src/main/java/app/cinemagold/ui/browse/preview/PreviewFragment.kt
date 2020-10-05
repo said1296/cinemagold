@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
@@ -21,33 +22,34 @@ import kotlinx.android.synthetic.main.fragment_preview.view.*
 import kotlinx.android.synthetic.main.preview_info_specific_movie.view.*
 import kotlinx.android.synthetic.main.preview_info_specific_serialized.view.*
 import kotlinx.android.synthetic.main.widget_button_play.view.*
-import java.util.stream.Collectors
 import javax.inject.Inject
 
 class PreviewFragment : Fragment() {
     @Inject
     lateinit var viewModel: PreviewViewModel
-    @Inject
-    lateinit var picasso : Picasso
-    @Inject
-    lateinit var episodeRVA : EpisodeRVA
-    var contentId : Int = -1
-    lateinit var contentType : ContentType
-    lateinit var content : Content
-    private val scale : Int = 30
-    private var currentSeasonIndex : Int = 0
 
-    var isTelevision : Boolean = false
+    @Inject
+    lateinit var picasso: Picasso
+
+    @Inject
+    lateinit var episodeRVA: EpisodeRVA
+    var contentId: Int = -1
+    lateinit var contentType: ContentType
+    lateinit var content: Content
+    private val scale: Int = 30
+    private var currentSeasonIndex: Int = 0
+
+    var isTelevision: Boolean = false
 
     //Views
-    lateinit var infoSpecificContainerView : LinearLayout
-    lateinit var titleView : TextView
-    lateinit var genreMainView : TextView
-    lateinit var genreSecondaryView : TextView
+    lateinit var infoSpecificContainerView: LinearLayout
+    lateinit var titleView: TextView
+    lateinit var genreMainView: TextView
+    lateinit var genreSecondaryView: TextView
     lateinit var descriptionShortView: TextView
-    lateinit var sliderView : ImageView
-    lateinit var scoreView : RatingBar
-    lateinit var infoSpecificView : View
+    lateinit var sliderView: ImageView
+    lateinit var scoreView: RatingBar
+    lateinit var infoSpecificView: View
 
     override fun onAttach(context: Context) {
         (this.activity?.application as ApplicationContextInjector).applicationComponent.inject(this)
@@ -67,32 +69,43 @@ class PreviewFragment : Fragment() {
         }
 
         //Observers
-        viewModel.error.observe(this) {data ->
+        viewModel.error.observe(this) { data ->
             Toast.makeText(context, data, Toast.LENGTH_LONG).show()
         }
-        viewModel.content.observe(this) {data ->
+        viewModel.content.observe(this) { data ->
             content = data
             updateCommonView()
 
-            if(viewModel.currentContentType == ContentType.MOVIE){
+            if (viewModel.currentContentType == ContentType.MOVIE) {
                 updateInfoSpecificMovieView()
             } else {
                 updateInfoSpecificSerializedView()
             }
-            infoSpecificView.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT)
+            infoSpecificView.layoutParams = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.MATCH_PARENT
+            )
             infoSpecificContainerView.addView(infoSpecificView)
 
-            if(isTelevision)
-                if(viewModel.currentContentType == ContentType.MOVIE){
-                    requireView().widget_button_play_movie.requestFocus()
-                }
+            if (isTelevision)
+                if (viewModel.currentContentType == ContentType.MOVIE)
+                    requireView().widget_button_play_movie.apply {
+                        requestFocus()
+                        setOnClickListener {
+                            (activity as BrowseActivity).navigateToPlayer(content)
+                        }
+                    }
                 else
-                    requireView().widget_button_play_serialized.requestFocus()
-
-            //Set onClickListener for Play button that is added in any of the two specific views
-            requireView().widget_button_play.setOnClickListener {
-                (activity as BrowseActivity).navigateToPlayer(content)
-            }
+                    requireView().widget_button_play_serialized.apply {
+                        requestFocus()
+                        setOnClickListener {
+                            (activity as BrowseActivity).navigateToPlayer(content)
+                        }
+                    }
+            else
+                requireView().widget_button_play.setOnClickListener {
+                    (activity as BrowseActivity).navigateToPlayer(content)
+                }
         }
     }
 
@@ -109,19 +122,24 @@ class PreviewFragment : Fragment() {
         sliderView = view.preview_slider
         scoreView = view.preview_info_score
 
+        //Hide keyboard
+        val inputManager = requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        inputManager.hideSoftInputFromWindow(requireActivity().currentFocus?.windowToken, InputMethodManager.HIDE_NOT_ALWAYS)
+
         return view
     }
 
-    private fun updateCommonView(){
+    private fun updateCommonView() {
         titleView.text = content.name
         genreMainView.text = content.genreMain.name
         genreSecondaryView.text = content.genreSecondary.name
         descriptionShortView.text = content.descriptionShort
         scoreView.rating = content.score
     }
+
     //Add information specific to movies
-    private fun updateInfoSpecificMovieView(){
-        val previewImageSrc = if(resources.getBoolean(R.bool.isTelevision)) content.posterSrc else content.sliderSrc
+    private fun updateInfoSpecificMovieView() {
+        val previewImageSrc = if (resources.getBoolean(R.bool.isTelevision)) content.posterSrc else content.sliderSrc
         picasso.load(previewImageSrc).apply {
             placeholder(R.drawable.bg_dark)
             config(Bitmap.Config.RGB_565)
@@ -135,7 +153,7 @@ class PreviewFragment : Fragment() {
     }
 
     //Add information specific to serialized content
-    private fun updateInfoSpecificSerializedView(){
+    private fun updateInfoSpecificSerializedView() {
         infoSpecificView = layoutInflater.inflate(R.layout.preview_info_specific_serialized, null)
 
         //Episodes generic_recycler view
@@ -144,20 +162,20 @@ class PreviewFragment : Fragment() {
             adapter = episodeRVA
             layoutManager = LinearLayoutManager(context, recyclerViewOrientation, false)
         }
-        episodeRVA.clickHandler = {data ->
+        episodeRVA.clickHandler = { data ->
             (activity as BrowseActivity).navigateToPlayer(content, currentSeasonIndex, data)
         }
         episodeRVA.setDataset(content.seasons[currentSeasonIndex].episodes)
 
         //Season selector
         val seasonSpinnerItems = mutableListOf<String>()
-        for(season in content.seasons){
+        for (season in content.seasons) {
             seasonSpinnerItems.add("Temporada ${season.number}")
         }
         val adapter = ArrayAdapter<String>(context!!.applicationContext, R.layout.spinner_season, seasonSpinnerItems)
         adapter.setDropDownViewResource(R.layout.spinner_season_item)
         infoSpecificView.preview_spinner_season.adapter = adapter
-        var previewImageSrc : String
+        var previewImageSrc: String
         var firstSelection = true
         infoSpecificView.preview_spinner_season.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onNothingSelected(p0: AdapterView<*>?) {
@@ -165,13 +183,13 @@ class PreviewFragment : Fragment() {
 
             override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
                 //onItemSelected is called on first run, even if nothing was manually selected
-                if(currentSeasonIndex!=p2 || firstSelection){
+                if (currentSeasonIndex != p2 || firstSelection) {
                     firstSelection = false
                     currentSeasonIndex = p2
-                    previewImageSrc = if(resources.getBoolean(R.bool.isTelevision)) content.seasons[currentSeasonIndex].posterSrc else content.seasons[currentSeasonIndex].sliderSrc
-                    println(previewImageSrc)
+                    previewImageSrc =
+                        if (resources.getBoolean(R.bool.isTelevision)) content.seasons[currentSeasonIndex].posterSrc else content.seasons[currentSeasonIndex].sliderSrc
                     episodeRVA.setDataset(content.seasons[currentSeasonIndex].episodes)
-                    picasso.load(previewImageSrc).apply{
+                    picasso.load(previewImageSrc).apply {
                         placeholder(R.drawable.bg_dark)
                         config(Bitmap.Config.RGB_565)
                         fit()

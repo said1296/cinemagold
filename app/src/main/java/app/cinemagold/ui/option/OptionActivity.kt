@@ -20,9 +20,12 @@ class OptionActivity : AppCompatActivity() {
 
 
     override fun onCreate(savedInstanceState: Bundle?){
-        if (resources.getBoolean(R.bool.isTelevision)) {
-            requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
-        }
+        requestedOrientation =
+            if (resources.getBoolean(R.bool.isTelevision)) {
+                ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
+            }else{
+                ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+            }
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_option)
         fragment = when(intent.getStringExtra("FRAGMENT")){

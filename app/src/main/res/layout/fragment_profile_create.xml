@@ -35,6 +35,7 @@
             android:layout_marginTop="@dimen/header_margin_vertical"
             android:focusable="true"
             android:nextFocusDown="@id/profile_create_name"
+            android:nextFocusUp="@id/profile_create_widget_avatar_edit"
             android:nextFocusRight="@id/profile_create_widget_avatar_edit"
             android:nextFocusLeft="@id/profile_create_widget_avatar_edit">
             <include
@@ -70,7 +71,9 @@
             android:layout_marginTop="@dimen/profile_create_submit_margin_top"
             android:textSize="@dimen/heading6"
             android:nextFocusRight="@id/profile_create_submit"
-            android:nextFocusLeft="@id/profile_create_submit"/>
+            android:nextFocusLeft="@id/profile_create_submit"
+            android:nextFocusUp="@id/profile_create_name"
+            android:nextFocusDown="@id/profile_delete"/>
 
         <Button
             android:visibility="gone"
@@ -83,6 +86,7 @@
             android:paddingHorizontal="@dimen/sign_in_buttons_padding_horizontal"
             android:layout_marginTop="@dimen/profile_create_submit_margin_top"
             android:textSize="@dimen/heading6"
+            android:nextFocusUp="@id/profile_create_submit"
             android:nextFocusRight="@id/profile_delete"
             android:nextFocusLeft="@id/profile_delete"/>
     </LinearLayout>

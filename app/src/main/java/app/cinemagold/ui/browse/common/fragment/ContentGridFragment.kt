@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import android.widget.LinearLayout
 import android.widget.RelativeLayout
 import androidx.core.view.updatePadding
@@ -25,6 +26,7 @@ class ContentGridFragment : Fragment() {
     lateinit var contentGridRVA: ContentGridRVA
     lateinit var contents : List<Content>
     lateinit var activityFragmentManager : FragmentManager
+    lateinit var imm: InputMethodManager
 
     override fun onAttach(context: Context) {
         (this.activity?.application as ApplicationContextInjector).applicationComponent.inject(this)
@@ -33,6 +35,7 @@ class ContentGridFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        imm = requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         activityFragmentManager = (this.activity as BrowseActivity).supportFragmentManager
     }
 

@@ -87,7 +87,7 @@ class SerializedViewModel(private val contentApi : ContentApi, private val genre
                 if(currentContentType.id == -1){
                     contentApi.getSerializedGroupedByGenre(isKids)
                 } else{
-                    contentApi.getByContentTypeIdAndGroupedByGenre(currentContentType.id, isKids)
+                    contentApi.getByContentTypeIdAndGroupedByGenre(currentContentType.id, isKids, 1)
                 }
             when(response){
                 is NetworkResponse.Success -> {

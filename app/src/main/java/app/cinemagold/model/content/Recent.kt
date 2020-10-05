@@ -12,7 +12,7 @@ data class Recent (
     val mediaType : IdAndName = IdAndName(),
     val length : Int = -1,
     val name: String = "",
-    var sliderSrc: String = "",
+    var sliderSrc: String = BuildConfig.LOGO_URL,
     val genreMain: IdAndName = IdAndName(),
     val genreSecondary: IdAndName = IdAndName(),
     val seasonNumber : Int? = null,

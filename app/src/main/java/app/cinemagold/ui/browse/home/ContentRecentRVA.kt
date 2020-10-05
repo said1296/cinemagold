@@ -42,14 +42,15 @@ class ContentRecentRVA @Inject constructor(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val currentData = dataset[position]
         val item = holder.itemView
+        item.id = position
         item.item_content_recent_title.text = currentData.name
         item.item_content_recent_metadata.text =
-            "${currentData.length} · ${currentData.genreMain.name} · ${currentData.genreSecondary.name}"
+            "${currentData.length}m · ${currentData.genreMain.name} · ${currentData.genreSecondary.name}"
 
         val elapsedBarParams = item.item_content_recent_elapsed.layoutParams as ConstraintLayout.LayoutParams
         elapsedBarParams.matchConstraintPercentWidth = currentData.elapsedPercent
 
-        if(currentData.mediaType.id!= ContentType.MOVIE.value){
+        if(currentData.mediaType.id != ContentType.MOVIE.value){
             item.item_content_recent_info.text = "T${currentData.seasonNumber} · Cap.${currentData.episode!!.number}"
         }
 
@@ -66,8 +67,13 @@ class ContentRecentRVA @Inject constructor(
         val params = holder.itemView.layoutParams as RecyclerView.LayoutParams
         if(position == 0){
             params.leftMargin = sideMargin
+            item.nextFocusLeftId = item.id
         } else if (position == dataset.lastIndex){
             params.rightMargin = sideMargin
+            item.nextFocusRightId = item.id
+        } else {
+            item.nextFocusLeftId = position-1
+            item.nextFocusRightId = position+1
         }
 
         item.setOnClickListener {

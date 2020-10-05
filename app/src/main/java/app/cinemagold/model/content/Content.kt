@@ -6,8 +6,8 @@ import app.cinemagold.model.generic.IdAndName
 data class Content(
     val id : Int = -1,
     val name: String = "",
-    var sliderSrc : String = "",
-    var posterSrc : String = "",
+    var sliderSrc : String = BuildConfig.LOGO_URL,
+    var posterSrc : String = BuildConfig.LOGO_URL,
     var length : String = "-1",
     val description: String = "",
     val descriptionShort: String = "",

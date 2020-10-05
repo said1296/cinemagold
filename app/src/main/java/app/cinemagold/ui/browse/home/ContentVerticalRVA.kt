@@ -39,6 +39,7 @@ class ContentVerticalRVA (
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val currentData = dataset[position]
         val item = holder.itemView
+        item.id = dataset[position].id
         item.background
         item.item_content_vertical_title.text = currentData.name
 
@@ -54,14 +55,21 @@ class ContentVerticalRVA (
 
         if(currentData.hasNewSeason){
             item.item_content_vertical_new_season.visibility = View.VISIBLE
+        }else{
+            item.item_content_vertical_new_season.visibility = View.GONE
         }
 
         //Set start and end padding
         val params = item.layoutParams as RecyclerView.LayoutParams
         if(position == 0){
             params.leftMargin = sideMargin
+            item.nextFocusLeftId = item.id
         } else if (position == dataset.lastIndex){
             params.rightMargin = sideMargin
+            item.nextFocusRightId = item.id
+        } else {
+            item.nextFocusLeftId = dataset[position-1].id
+            item.nextFocusRightId = dataset[position+1].id
         }
         item.setOnClickListener { clickHandler(currentData.id, currentData.mediaType.id) }
     }

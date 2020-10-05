@@ -2,12 +2,15 @@ package app.cinemagold.ui.player
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.os.Bundle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.preference.PreferenceManager
 import app.cinemagold.BuildConfig
 import app.cinemagold.dataaccess.remote.PlayerApi
 import app.cinemagold.dataaccess.remote.RecentApi
+import app.cinemagold.model.content.Content
+import app.cinemagold.model.content.ContentType
 import app.cinemagold.model.content.Recent
 import app.cinemagold.model.generic.IdAndName
 import app.cinemagold.model.user.Profile
@@ -25,6 +28,10 @@ class PlayerViewModel(private val recentApi: RecentApi, private val playerApi: P
         LiveEvent<IdAndName>()
     }
     val preferences: SharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
+    lateinit var content : Content
+    private var seasonIndex : Int = 0
+    private var episodeIndex : Int = 0
+    var elapsed = -1L
     private var currentProfile: Profile
 
     init {
@@ -37,13 +44,45 @@ class PlayerViewModel(private val recentApi: RecentApi, private val playerApi: P
         updateElapsed(recent)
     }
 
-    fun triggeredUpdateElapsed(contentId: Int, elapsed: Int, elapsedPercent: Float) {
-        val recent = Recent(contentId, elapsed, elapsedPercent, profileId = currentProfile.id)
+    fun receivedExtras(extras : Bundle?){
+        if(extras != null){
+            content = Gson().fromJson(extras.get("content") as String, Content::class.java)
+            if(content.mediaType.id != ContentType.MOVIE.value){
+                episodeIndex = extras.getInt("episodeIndex")
+                seasonIndex = extras.getInt("seasonIndex")
+            }
+            //Get elapsed time if a Recently Played content was clicked
+            if(extras.getInt("elapsed") != -1){
+                elapsed = extras.getInt("elapsed").toLong()
+            }
+        }
+    }
+
+    fun videoEnded(){
+        if(content.mediaType.id != ContentType.MOVIE.value){
+            val currentSeasonLength = content.seasons[seasonIndex].episodes.size
+            if(episodeIndex < (currentSeasonLength-1)) episodeIndex++
+            else{
+                val contentLength = content.seasons.size
+                if(seasonIndex < contentLength-1) seasonIndex++
+                else seasonIndex = 0
+
+                episodeIndex=0
+            }
+        }
+    }
+
+    fun triggeredUpdateElapsed(elapsed: Int, elapsedPercent: Float) {
+        val recent =
+            if(content.mediaType.id == ContentType.MOVIE.value)
+                Recent(content.id, elapsed, elapsedPercent, profileId = currentProfile.id)
+            else
+                Recent(content.id, elapsed, elapsedPercent, episodeId = content.seasons[seasonIndex].episodes[episodeIndex].id, profileId = currentProfile.id)
         updateElapsed(recent)
     }
 
-    fun videoPlaying(remaining: Long, contentTypeId: Int) {
-        requestUserState(remaining, contentTypeId)
+    fun videoPlaying(remaining: Long) {
+        requestUserState(remaining, content.mediaType.id)
     }
 
     fun videoPaused(){

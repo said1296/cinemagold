@@ -37,6 +37,7 @@ class AvatarGridRVA @Inject constructor(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val currentData = dataset[position]
         val item = holder.itemView
+        item.id = currentData.id
 
         val params = item.layoutParams as RecyclerView.LayoutParams
         params.rightMargin = itemMargin

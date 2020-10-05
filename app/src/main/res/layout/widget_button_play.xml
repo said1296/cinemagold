@@ -3,7 +3,7 @@
     android:id="@+id/widget_button_play"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:clickable="true"
+    android:clickable="false"
     android:focusable="true"
     android:duplicateParentState="true"
     android:background="@drawable/bg_button_call"

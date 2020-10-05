@@ -2,8 +2,7 @@ package app.cinemagold.injection.module;
 
 
 import app.cinemagold.dataaccess.remote.*
-import com.google.android.exoplayer2.Player
-import dagger.Module;
+import dagger.Module
 import dagger.Provides
 import retrofit2.Retrofit
 import javax.inject.Singleton

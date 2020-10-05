@@ -17,7 +17,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.LinearLayoutCompat
 import androidx.core.os.bundleOf
 import androidx.core.view.GravityCompat
-import androidx.core.widget.TextViewCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.observe
@@ -77,12 +76,14 @@ class BrowseActivity : AppCompatActivity() {
     lateinit var devicesView: LinearLayoutCompat
     lateinit var activityView: DrawerLayout
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         isTelevision = resources.getBoolean(R.bool.isTelevision)
-        if (isTelevision) {
-            requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
-        }
+        requestedOrientation =
+            if (isTelevision) {
+                ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
+            }else{
+                ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+            }
         super.onCreate(savedInstanceState)
         //Get Shared Preferences values
         preferences = PreferenceManager.getDefaultSharedPreferences(this)
@@ -92,7 +93,24 @@ class BrowseActivity : AppCompatActivity() {
 
         (applicationContext as ApplicationContextInjector).applicationComponent.inject(this)
         setContentView(R.layout.activity_browse)
+        val fragment: Fragment? = when(intent.getStringExtra("FRAGMENT")){
+            PreviewFragment::class.simpleName -> {
+                //Set contentId and ContentType for Preview
+                fragmentManager.setFragmentResult(
+                    "preview",
+                    bundleOf("contentId" to intent.getIntExtra("CONTENT_ID", 0),
+                        "contentType" to ContentType.from(intent.getIntExtra("CONTENT_TYPE", 0)))
+                )
+                findViewById<LinearLayoutCompat>(R.id.navbar).visibility = View.GONE
+                PreviewFragment()
+            }
+            else -> {
+                null
+            }
+        }
+        println("FRAGMENT -> " + fragment)
         addOrReplaceFragment(HomeFragment(), HomeFragment::class.simpleName, false)
+        if(fragment != null) addOrReplaceFragment(fragment, fragment::class.simpleName)
 
         //Find needed views
         profilesView = findViewById(R.id.menu_profiles)
@@ -118,7 +136,6 @@ class BrowseActivity : AppCompatActivity() {
             }
         }
         menuViewModel.notificationsCount.observe(this) { count ->
-            val count = 1
             if(count > 0){
                 val menuNotificationView = findViewById<LinearLayoutCompat>(R.id.menu_notification)
                 menuNotificationView.menu_notification_count.text = count.toString()
@@ -185,9 +202,10 @@ class BrowseActivity : AppCompatActivity() {
     override fun onBackPressed() {
         if (activityView.isDrawerOpen(GravityCompat.START))
             activityView.closeDrawer(GravityCompat.START)
-        else
+        else{
             findViewById<LinearLayoutCompat>(R.id.navbar).visibility = View.VISIBLE
             fragmentManager.popBackStack()
+        }
     }
 
     //This function is indicated in the XML layout for navbar under the attr onClick: of each item

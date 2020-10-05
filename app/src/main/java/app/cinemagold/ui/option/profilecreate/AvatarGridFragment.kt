@@ -4,9 +4,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.observe
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import app.cinemagold.R
 import app.cinemagold.injection.ApplicationContextInjector
 import app.cinemagold.ui.option.OptionActivity
@@ -45,8 +47,21 @@ class AvatarGridFragment : Fragment() {
             (screenWidth / resources.getDimensionPixelSize(R.dimen.item_avatar_grid_width)).toDouble().roundToInt()
         rootView.avatar_grid_recycler.apply {
             adapter = avatarGridRVA
-            layoutManager = GridLayoutManager(context, numberOfColumns)
+            layoutManager = object: GridLayoutManager(context, numberOfColumns){
+                var firstTriggerFlag = true
+                override fun onLayoutCompleted(state: RecyclerView.State?) {
+                    if(state?.itemCount != 0 && firstTriggerFlag){
+                        firstTriggerFlag = false
+                        if(viewModel.avatars.value != null){
+                            view?.findViewById<ConstraintLayout>(viewModel.avatars.value!![0].id)?.requestFocus()
+                        }
+                    }
+                    super.onLayoutCompleted(state)
+                }
+            }
         }
+
+        rootView.requestFocus()
 
         return rootView
     }
