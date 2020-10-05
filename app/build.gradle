@@ -44,8 +44,8 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
 
             //Constants
-            buildConfigField "String", "BASE_URL", '"https://192.168.0.108:8080/"'
-            buildConfigField "String", "BASE_URL_REMOTE", '"https://api.cinemagold.online/"'
+            buildConfigField "String", "BASE_URL_LOCAL", '"https://192.168.0.108:8080/"'
+            buildConfigField "String", "BASE_URL", '"https://api.cinemagold.online/"'
         }
         release {
             minifyEnabled false
