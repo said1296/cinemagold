@@ -9,6 +9,7 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.widget.AppCompatImageButton
 import androidx.appcompat.widget.LinearLayoutCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -17,15 +18,21 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import app.cinemagold.R
 import app.cinemagold.injection.ApplicationContextInjector
 import app.cinemagold.ui.browse.BrowseActivity
+import kotlinx.android.synthetic.main.fragment_movie.view.*
 import kotlinx.android.synthetic.main.fragment_serialized.view.*
 import javax.inject.Inject
+import javax.inject.Named
 
 
 class SerializedFragment : Fragment() {
     @Inject
     lateinit var viewModel: SerializedViewModel
     @Inject
-    lateinit var genreRVA : GenreRVA
+    @Named("genre")
+    lateinit var genreFilterCarrouselRVA : FilterCarrouselRVA
+    @Inject
+    @Named("year")
+    lateinit var yearFilterCarrouselRVA: FilterCarrouselRVA
     lateinit var serializedFragmentLayout: LinearLayoutCompat
 
     override fun onAttach(context: Context) {
@@ -44,7 +51,8 @@ class SerializedFragment : Fragment() {
             (activity as BrowseActivity).changeContentGroupedByGenre(data)
         }
         viewModel.genres.observe(this){data ->
-            genreRVA.setDataset(data)
+            genreFilterCarrouselRVA.setDataset(data)
+            genreFilterCarrouselRVA.selectedPosition = 0
         }
         viewModel.contentTypes.observe(this){
             if((activity as BrowseActivity).isTelevision)
@@ -55,6 +63,10 @@ class SerializedFragment : Fragment() {
         viewModel.contentGenre.observe(this){data ->
             (activity as BrowseActivity).changeContentGrid(data)
         }
+        viewModel.years.observe(this){years ->
+            yearFilterCarrouselRVA.setDataset(years)
+            yearFilterCarrouselRVA.selectedPosition = 0
+        }
     }
 
     override fun onCreateView(
@@ -64,22 +76,35 @@ class SerializedFragment : Fragment() {
         val rootView = inflater.inflate(R.layout.fragment_serialized, container, false)
 
         //Handle views for TV
-        if((activity as BrowseActivity).isTelevision)
+        if((activity as BrowseActivity).isTelevision){
             rootView.serialized_header.visibility = View.GONE
-
-        //Reset selected position
-        genreRVA.selectedPosition = 0
+            requireActivity().findViewById<AppCompatImageButton>(R.id.navbar_filter).setOnClickListener {
+                handleFilterClick()
+            }
+        }
+        else
+            rootView.serialized_header_filter.setOnClickListener {
+                handleFilterClick()
+            }
 
         serializedFragmentLayout = rootView.serialized
 
         //Recycler views
         rootView.serialized_recycler_genres.apply {
             layoutManager = LinearLayoutManager(this@SerializedFragment.context, LinearLayoutManager.HORIZONTAL, false)
-            adapter = genreRVA
-            addItemDecoration(genreRVA.itemDecoration)
+            adapter = genreFilterCarrouselRVA
+            addItemDecoration(genreFilterCarrouselRVA.itemDecoration)
         }
-        genreRVA.clickHandler = {genre ->
+        rootView.serialized_recycler_years.apply {
+            layoutManager = LinearLayoutManager(this@SerializedFragment.context, LinearLayoutManager.HORIZONTAL, false)
+            adapter = yearFilterCarrouselRVA
+            addItemDecoration(genreFilterCarrouselRVA.itemDecoration)
+        }
+        genreFilterCarrouselRVA.clickHandler = { genre ->
             viewModel.selectedGenre(genre)
+        }
+        yearFilterCarrouselRVA.clickHandler = { year ->
+            viewModel.selectedYear(year)
         }
 
         return rootView
@@ -89,6 +114,8 @@ class SerializedFragment : Fragment() {
         viewModel.stoppedFragment()
         super.onStop()
     }
+
+    // UI
 
     private fun buildContentTypesSpinner(){
         val contentTypeSpinnerItems = viewModel.contentTypeSpinnerItems
@@ -130,5 +157,13 @@ class SerializedFragment : Fragment() {
             }
             contentTypesContainer?.addView(contentTypeButton)
         }
+    }
+
+    fun handleFilterClick(){
+        if(view!!.serialized_recycler_years.visibility == View.VISIBLE) {
+            view!!.serialized_recycler_years.visibility = View.GONE
+            yearFilterCarrouselRVA.selectedPosition = 0
+        }
+        else view!!.serialized_recycler_years.visibility = View.VISIBLE
     }
 }

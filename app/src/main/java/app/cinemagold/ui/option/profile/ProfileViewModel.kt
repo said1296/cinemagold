@@ -15,8 +15,8 @@ import com.google.gson.Gson
 import com.haroldadmin.cnradapter.NetworkResponse
 import kotlinx.coroutines.launch
 
-class ProfileViewModel(private val profileApi: ProfileApi, private val context: Context)  : ViewModel() {
-    val error : LiveEvent<String> by lazy {
+class ProfileViewModel(private val profileApi: ProfileApi, private val context: Context) : ViewModel() {
+    val error: LiveEvent<String> by lazy {
         LiveEvent<String>()
     }
     val profiles: MutableLiveData<MutableList<Profile>> by lazy {
@@ -26,34 +26,38 @@ class ProfileViewModel(private val profileApi: ProfileApi, private val context: 
         LiveEvent<Boolean>()
     }
     var isEdit = false
+    lateinit var selectedProfile: Profile
 
     //Events
-    fun startedFragment(){
+    fun startedFragment() {
         requestProfiles()
     }
 
-    fun selectedProfile(profilePosition: Int){
-        val selectedProfile = profiles.value!![profilePosition]
-        savePrefsProfile(selectedProfile)
+    fun selectedProfile(profilePosition: Int) {
+        selectedProfile = profiles.value!![profilePosition]
+        if (!isEdit) {
+            savePrefsProfile()
+        } else {
+            isSuccessful.value = true
+        }
     }
 
-    fun selectedKids(){
-        savePrefsProfile(
-            Profile(-1,
-                IdAndName(1, "https://www.ibbymexico.org.mx/dos/wp-content/uploads/revslider/splash-creative-light-01-animated/Slider-CL01-Background-1024x709.png"),
-                    context.resources.getString(R.string.KIDS)
-                )
-        )
+    fun selectedKids() {
+        selectedProfile = Profile(-1, IdAndName(
+                1,
+                "https://www.ibbymexico.org.mx/dos/wp-content/uploads/revslider/splash-creative-light-01-animated/Slider-CL01-Background-1024x709.png"
+            ), context.resources.getString(R.string.KIDS))
+        savePrefsProfile()
     }
 
-    fun receivedIsEdit(isEdit : Boolean){
+    fun receivedIsEdit(isEdit: Boolean) {
         this.isEdit = isEdit
     }
 
     //Requests
-    private fun requestProfiles(){
+    private fun requestProfiles() {
         viewModelScope.launch {
-            when(val response = profileApi.getProfiles()){
+            when (val response = profileApi.getProfiles()) {
                 is NetworkResponse.Success -> {
                     profiles.postValue(response.body)
                 }
@@ -70,13 +74,17 @@ class ProfileViewModel(private val profileApi: ProfileApi, private val context: 
     }
 
     //Actions
-    private fun savePrefsProfile(profile : Profile){
+    private fun savePrefsProfile() {
         val preferences = PreferenceManager.getDefaultSharedPreferences(context).edit()
-        preferences.putString(BuildConfig.PREFS_PROFILE, Gson().toJson(profile)).apply()
-        if(preferences.commit()){
+        preferences.putString(BuildConfig.PREFS_PROFILE, getSelectedProfileSerialized()).apply()
+        if (preferences.commit()) {
             isSuccessful.value = true
-        }else{
+        } else {
             error.value = "No se pudo seleccionar"
         }
+    }
+
+    fun getSelectedProfileSerialized(): String {
+        return Gson().toJson(selectedProfile)
     }
 }

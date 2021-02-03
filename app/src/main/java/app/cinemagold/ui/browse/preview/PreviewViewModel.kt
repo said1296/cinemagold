@@ -30,7 +30,6 @@ class PreviewViewModel(val contentApi : ContentApi) : ViewModel() {
     //Request
     private fun requestContent(){
         viewModelScope.launch {
-
             val response : NetworkResponse<Content, NetworkError> =
                 if(currentContentType== ContentType.MOVIE){
                     contentApi.getMovie(currentContentId)

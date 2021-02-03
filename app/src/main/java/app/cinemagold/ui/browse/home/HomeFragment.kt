@@ -14,9 +14,11 @@ import app.cinemagold.R
 import app.cinemagold.injection.ApplicationContextInjector
 import app.cinemagold.model.content.ContentType
 import app.cinemagold.ui.browse.BrowseActivity
+import app.cinemagold.ui.browse.common.listener.ProgressOnScrollListener
 import app.cinemagold.ui.browse.common.recycleradapter.ContentHorizontalRVA
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_home.view.*
+import kotlinx.android.synthetic.main.widget_progress_indicators.view.*
 import javax.inject.Inject
 import javax.inject.Provider
 
@@ -49,16 +51,22 @@ class HomeFragment : Fragment() {
             (activity as BrowseActivity).changeContentGroupedByGenre(data)
         }
         viewModel.contentPremiere.observe(this){data ->
-            contentVerticalRVA.setDataset(data)
+            contentVerticalRVA.dataset = data
+            requireView().content_recycler_content_premiere.apply {
+                scrollToPosition((adapter as ContentVerticalRVA).startPosition)
+            }
         }
         viewModel.contentRecent.observe(this){data ->
-            contentRecentRVA.setDataset(data)
+            contentRecentRVA.dataset = data
             if(data.size==0){
                 requireView().content_recent_title.visibility = View.GONE
                 requireView().content_recycler_content_recent.visibility = View.GONE
                 return@observe
             }
             buildRecent()
+            requireView().content_recycler_content_recent.apply {
+                scrollToPosition((adapter as ContentRecentRVA).startPosition)
+            }
         }
         viewModel.contentRecentSelected.observe(this){data ->
             if(viewModel.recentSelected.mediaType.id== ContentType.MOVIE.value){
@@ -84,13 +92,24 @@ class HomeFragment : Fragment() {
         rootView.content_recycler_content_recent.visibility = View.GONE
 
         //Recycler views
+        val progressIndicators : MutableList<View> = mutableListOf()
+        for(i in 0 until rootView.content_premiere_header.progress_indicators.childCount){
+            progressIndicators.add(rootView.content_premiere_header.progress_indicators.getChildAt(i))
+        }
         rootView.content_recycler_content_premiere.apply {
             layoutManager = LinearLayoutManager(this@HomeFragment.context, LinearLayoutManager.HORIZONTAL, false)
             adapter = contentVerticalRVA
+            if(!(activity as BrowseActivity).isTelevision)
+                addOnScrollListener(ProgressOnScrollListener(progressIndicators, layoutManager as LinearLayoutManager, adapter as ContentVerticalRVA))
         }
-        contentVerticalRVA.clickHandler = { contentId, contentType ->
-            (activity as BrowseActivity).navigateToPreview(contentId, contentType)
+        contentVerticalRVA.apply {
+            clickHandler = { contentId, contentType ->
+                (activity as BrowseActivity).navigateToPreview(contentId, contentType)
+            }
+            this.progressIndicators = progressIndicators
         }
+
+
 
         return rootView
     }
@@ -101,14 +120,23 @@ class HomeFragment : Fragment() {
     }
 
     private fun buildRecent(){
+        val progressIndicators : MutableList<View> = mutableListOf()
+        for(i in 0 until view!!.content_recent_header.progress_indicators.childCount){
+            progressIndicators.add(view!!.content_recent_header.progress_indicators.getChildAt(i))
+        }
         view!!.content_recent_title.visibility = View.VISIBLE
         view!!.content_recycler_content_recent.visibility = View.VISIBLE
         view!!.content_recycler_content_recent.apply {
             layoutManager = LinearLayoutManager(this@HomeFragment.context, LinearLayoutManager.HORIZONTAL, false)
             adapter = contentRecentRVA
+            if(!(activity as BrowseActivity).isTelevision)
+                addOnScrollListener(ProgressOnScrollListener(progressIndicators, layoutManager as LinearLayoutManager, adapter as ContentRecentRVA))
         }
-        contentRecentRVA.clickHandler = {data ->
-            viewModel.clickedRecent(data)
+        contentRecentRVA.apply {
+            clickHandler = {data ->
+                viewModel.clickedRecent(data)
+            }
+            this.progressIndicators = progressIndicators
         }
     }
 }

@@ -14,6 +14,7 @@ import android.view.animation.AnimationUtils
 import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.AppCompatImageButton
 import androidx.appcompat.widget.LinearLayoutCompat
 import androidx.core.os.bundleOf
 import androidx.core.view.GravityCompat
@@ -81,7 +82,7 @@ class BrowseActivity : AppCompatActivity() {
         requestedOrientation =
             if (isTelevision) {
                 ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
-            }else{
+            } else {
                 ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
             }
         super.onCreate(savedInstanceState)
@@ -93,13 +94,16 @@ class BrowseActivity : AppCompatActivity() {
 
         (applicationContext as ApplicationContextInjector).applicationComponent.inject(this)
         setContentView(R.layout.activity_browse)
-        val fragment: Fragment? = when(intent.getStringExtra("FRAGMENT")){
+        val fragment: Fragment? = when (intent.getStringExtra("FRAGMENT")) {
             PreviewFragment::class.simpleName -> {
                 //Set contentId and ContentType for Preview
                 fragmentManager.setFragmentResult(
                     "preview",
-                    bundleOf("contentId" to intent.getIntExtra("CONTENT_ID", 0),
-                        "contentType" to ContentType.from(intent.getIntExtra("CONTENT_TYPE", 0)))
+                    bundleOf(
+                        PreviewFragment.EXTRA_CONTENT_ID to intent.getIntExtra(PreviewFragment.EXTRA_CONTENT_ID, -1),
+                        PreviewFragment.EXTRA_CONTENT_TYPE to ContentType.from(intent.getIntExtra(PreviewFragment.EXTRA_CONTENT_TYPE, ContentType.NONE.value)),
+                        PreviewFragment.EXTRA_SEASON_INDEX to intent.getIntExtra(PreviewFragment.EXTRA_SEASON_INDEX, -1)
+                    )
                 )
                 findViewById<LinearLayoutCompat>(R.id.navbar).visibility = View.GONE
                 PreviewFragment()
@@ -108,9 +112,8 @@ class BrowseActivity : AppCompatActivity() {
                 null
             }
         }
-        println("FRAGMENT -> " + fragment)
         addOrReplaceFragment(HomeFragment(), HomeFragment::class.simpleName, false)
-        if(fragment != null) addOrReplaceFragment(fragment, fragment::class.simpleName)
+        if (fragment != null) addOrReplaceFragment(fragment, fragment::class.simpleName)
 
         //Find needed views
         profilesView = findViewById(R.id.menu_profiles)
@@ -124,7 +127,7 @@ class BrowseActivity : AppCompatActivity() {
             if (data) {
                 buildProfileViews()
             } else {
-                if(!isTelevision)
+                if (!isTelevision)
                     profilesView.visibility = View.GONE
             }
         }
@@ -136,16 +139,26 @@ class BrowseActivity : AppCompatActivity() {
             }
         }
         menuViewModel.notificationsCount.observe(this) { count ->
-            if(count > 0){
+            if (count > 0) {
                 val menuNotificationView = findViewById<LinearLayoutCompat>(R.id.menu_notification)
                 menuNotificationView.menu_notification_count.text = count.toString()
-                menuNotificationView.menu_notification_icon.startAnimation(AnimationUtils.loadAnimation(this, R.anim.shake))
+                menuNotificationView.menu_notification_icon.startAnimation(
+                    AnimationUtils.loadAnimation(
+                        this,
+                        R.anim.shake
+                    )
+                )
             }
         }
 
         //Menu setup
         activityView = findViewById(R.id.activity_browse)
-        val toggle = object: ActionBarDrawerToggle(this, activityView, R.string.navigation_drawer_open, R.string.navigation_drawer_close){
+        val toggle = object : ActionBarDrawerToggle(
+            this,
+            activityView,
+            R.string.navigation_drawer_open,
+            R.string.navigation_drawer_close
+        ) {
             override fun onDrawerOpened(drawerView: View) {
                 super.onDrawerOpened(drawerView)
                 activityView.menu_devices.requestFocus()
@@ -158,7 +171,7 @@ class BrowseActivity : AppCompatActivity() {
             logout()
         }
         if (currentProfile.id != -1) {
-            if(!isTelevision)
+            if (!isTelevision)
                 activityView.menu_avatar_active.setOnClickListener {
                     menuViewModel.clickedProfiles()
                 }
@@ -202,7 +215,7 @@ class BrowseActivity : AppCompatActivity() {
     override fun onBackPressed() {
         if (activityView.isDrawerOpen(GravityCompat.START))
             activityView.closeDrawer(GravityCompat.START)
-        else{
+        else {
             findViewById<LinearLayoutCompat>(R.id.navbar).visibility = View.VISIBLE
             fragmentManager.popBackStack()
         }
@@ -353,8 +366,26 @@ class BrowseActivity : AppCompatActivity() {
         navigateToAuthentication()
     }
 
+    fun toggleFilterButton(show: Boolean){
+        findViewById<AppCompatImageButton>(R.id.navbar_filter).apply {
+            visibility = if(show) View.VISIBLE
+            else View.GONE
+        }
+        findViewById<AppCompatImageButton>(R.id.navbar_search).apply {
+            nextFocusRightId = if(show) R.id.navbar_filter
+            else R.id.menu_avatar_active
+        }
+    }
+
     //Fragment transactions
     private fun addOrReplaceFragment(fragment: Fragment, tag: String?, addToBackStack: Boolean = true) {
+        // Show filter button in MovieFragment and SerializedFragment if its a TV
+        if(isTelevision) {
+            if(tag == MovieFragment::class.simpleName || tag == SerializedFragment::class.simpleName)
+                toggleFilterButton(true)
+            else toggleFilterButton(false)
+        }
+
         val fragmentInFragmentManager = fragmentManager.findFragmentByTag(tag)
         if (fragmentInFragmentManager == null) {
             fragmentManager.beginTransaction().apply {
@@ -386,7 +417,7 @@ class BrowseActivity : AppCompatActivity() {
         //Set contentId and ContentType for Preview
         fragmentManager.setFragmentResult(
             "preview",
-            bundleOf("contentId" to contentId, "contentType" to ContentType.from(contentTypeId))
+            bundleOf(PreviewFragment.EXTRA_CONTENT_ID to contentId, PreviewFragment.EXTRA_CONTENT_TYPE to ContentType.from(contentTypeId))
         )
         addOrReplaceFragment(PreviewFragment(), PreviewFragment::class.simpleName)
     }
@@ -431,20 +462,20 @@ class BrowseActivity : AppCompatActivity() {
     fun navigateToPlayer(content: Content, elapsed: Int = -1) {
         val intent = Intent(this, PlayerActivity::class.java)
         if (elapsed != -1) {
-            intent.putExtra("elapsed", elapsed)
+            intent.putExtra(PlayerActivity.EXTRAS_ELAPSED, elapsed)
         }
-        intent.putExtra("content", Gson().toJson(content))
+        intent.putExtra(PlayerActivity.EXTRAS_CONTENT, Gson().toJson(content))
         startActivity(intent)
     }
 
     fun navigateToPlayer(content: Content, seasonIndex: Int, episodeIndex: Int, elapsed: Int = -1) {
         val intent = Intent(this, PlayerActivity::class.java)
         if (elapsed != -1) {
-            intent.putExtra("elapsed", elapsed)
+            intent.putExtra(PlayerActivity.EXTRAS_ELAPSED, elapsed)
         }
-        intent.putExtra("content", Gson().toJson(content))
-        intent.putExtra("episodeIndex", episodeIndex)
-        intent.putExtra("seasonIndex", seasonIndex)
+        intent.putExtra(PlayerActivity.EXTRAS_CONTENT, Gson().toJson(content))
+        intent.putExtra(PlayerActivity.EXTRAS_EPISODE_INDEX, episodeIndex)
+        intent.putExtra(PlayerActivity.EXTRAS_SEASON_INDEX, seasonIndex)
         startActivity(intent)
     }
 
@@ -458,7 +489,7 @@ class BrowseActivity : AppCompatActivity() {
         finish()
     }
 
-    private fun navigateToOption(fragmentToLoad: String, isEdit: Boolean? = null) {
+    fun navigateToOption(fragmentToLoad: String, isEdit: Boolean? = null) {
         val intent = Intent(this, OptionActivity::class.java)
         intent.putExtra("FRAGMENT", fragmentToLoad)
         //Send information about where the intent came from

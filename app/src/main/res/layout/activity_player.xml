@@ -6,15 +6,6 @@
     android:background="@android:color/black"
     android:id="@+id/player"
     android:keepScreenOn="true">
-    <LinearLayout
-        android:id="@+id/player_selector"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-    </LinearLayout>
     <com.google.android.exoplayer2.ui.PlayerView
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -22,23 +13,4 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:controller_layout_id="@layout/player_control_movie"/>
-
-    <com.google.android.exoplayer2.ui.PlayerControlView
-        android:visibility="gone"
-        android:id="@+id/cast_control_view"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:repeat_toggle_modes="all|one"
-        app:show_timeout="-1"/>
-
-    <androidx.mediarouter.app.MediaRouteButton
-        android:visibility="gone"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        android:id="@+id/media_route_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:mediaRouteTypes="user"
-        android:background="?light"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

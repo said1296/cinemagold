@@ -31,15 +31,23 @@
                 android:layout_gravity="center"
                 android:layout_marginVertical="@dimen/header_margin_vertical" />
 
-            <TextView
-                android:id="@+id/content_premiere_title"
+            <LinearLayout
+                android:id="@+id/content_premiere_header"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginStart="@dimen/standard_margin_horizontal"
-                android:layout_marginLeft="@dimen/standard_margin_horizontal"
-                android:layout_marginBottom="@dimen/item_content_grouped_by_genre_title_margin_bottom"
-                android:text="@string/premieres"
-                android:textSize="@dimen/heading6" />
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <TextView
+                    android:id="@+id/content_premiere_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="@dimen/standard_margin_horizontal"
+                    android:layout_marginLeft="@dimen/standard_margin_horizontal"
+                    android:layout_marginBottom="@dimen/item_content_grouped_by_genre_title_margin_bottom"
+                    android:text="@string/premieres"
+                    android:textSize="@dimen/heading6" />
+                <include
+                    layout="@layout/widget_progress_indicators" />
+            </LinearLayout>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/content_recycler_content_premiere"
@@ -47,16 +55,23 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/item_content_grouped_by_genre_margin_bottom"
                 android:orientation="vertical" />
-
+        <LinearLayout
+            android:id="@+id/content_recent_header"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
             <TextView
                 android:id="@+id/content_recent_title"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_marginStart="@dimen/standard_margin_horizontal"
                 android:layout_marginLeft="@dimen/standard_margin_horizontal"
                 android:layout_marginBottom="@dimen/item_content_grouped_by_genre_title_margin_bottom"
                 android:text="@string/recent"
                 android:textSize="@dimen/heading6" />
+            <include
+                layout="@layout/widget_progress_indicators" />
+        </LinearLayout>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/content_recycler_content_recent"

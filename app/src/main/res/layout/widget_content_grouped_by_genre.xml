@@ -3,20 +3,27 @@
     android:id="@+id/widget_content_grouped_by_genre"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
     tools:context=".ui.browse.home.HomeFragment"
     android:orientation="vertical"
     android:layout_marginBottom="@dimen/item_content_grouped_by_genre_margin_bottom">
 
-    <TextView
-        android:id="@+id/widget_content_grouped_by_genre_title"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Hello"
-        android:layout_marginBottom="@dimen/item_content_grouped_by_genre_title_margin_bottom"
-        android:layout_marginLeft="@dimen/standard_margin_horizontal"
-        android:textSize="@dimen/heading6"/>
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <TextView
+            android:id="@+id/widget_content_grouped_by_genre_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Hello"
+            android:layout_marginBottom="@dimen/item_content_grouped_by_genre_title_margin_bottom"
+            android:layout_marginLeft="@dimen/standard_margin_horizontal"
+            android:textSize="@dimen/heading6"/>
+        <include
+            layout="@layout/widget_progress_indicators" />
+    </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/content_grouped_by_genre_recycler_content_of_genre"

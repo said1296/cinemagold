@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/progress_indicators"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="end|bottom"
+    android:orientation="horizontal">
+    <View
+        android:id="@+id/content_grouped_by_genre_progress_1"
+        android:layout_width="@dimen/widget_content_grouped_by_genre_progress_width"
+        android:layout_height="@dimen/widget_content_grouped_by_genre_progress_height"
+        android:background="@drawable/bg_content_grouped_by_genre_progress"
+        android:layout_marginHorizontal="@dimen/widget_content_grouped_by_genre_progress_margin_horizontal"
+        android:visibility="gone"/>
+    <View
+        android:id="@+id/content_grouped_by_genre_progress_2"
+        android:layout_width="@dimen/widget_content_grouped_by_genre_progress_width"
+        android:layout_height="@dimen/widget_content_grouped_by_genre_progress_height"
+        android:background="@drawable/bg_content_grouped_by_genre_progress"
+        android:layout_marginHorizontal="@dimen/widget_content_grouped_by_genre_progress_margin_horizontal"
+        android:visibility="gone"/>
+    <View
+        android:id="@+id/content_grouped_by_genre_progress_3"
+        android:layout_width="@dimen/widget_content_grouped_by_genre_progress_width"
+        android:layout_height="@dimen/widget_content_grouped_by_genre_progress_height"
+        android:background="@drawable/bg_content_grouped_by_genre_progress"
+        android:layout_marginHorizontal="@dimen/widget_content_grouped_by_genre_progress_margin_horizontal"
+        android:visibility="gone"/>
+    <View
+        android:id="@+id/content_grouped_by_genre_progress_4"
+        android:layout_width="@dimen/widget_content_grouped_by_genre_progress_width"
+        android:layout_height="@dimen/widget_content_grouped_by_genre_progress_height"
+        android:background="@drawable/bg_content_grouped_by_genre_progress"
+        android:layout_marginStart="@dimen/widget_content_grouped_by_genre_progress_margin_horizontal"
+        android:layout_marginEnd="@dimen/standard_margin_horizontal"
+        android:visibility="gone"/>
+</LinearLayout>

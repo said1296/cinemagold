@@ -19,7 +19,7 @@ import javax.inject.Inject
 class PlayerSelectorRVA @Inject constructor(
     private var dataset : List<IdAndName>,
     val context : Context
-) : RecyclerView.Adapter<PlayerSelectorRVA.ViewHolder>() {
+) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private val sideMargin = context.resources.getDimensionPixelSize(R.dimen.standard_margin_horizontal)
     lateinit var clickHandler : (IdAndName) -> Unit
     var selectedId : Int = -1
@@ -51,7 +51,7 @@ class PlayerSelectorRVA @Inject constructor(
         return dataset.size
     }
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val currentData = dataset[position]
         val item = holder.itemView as TextView
         item.text = currentData.name

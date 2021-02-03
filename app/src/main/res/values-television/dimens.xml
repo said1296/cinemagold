@@ -5,4 +5,8 @@
     <dimen name="menu_avatar_height">100dp</dimen>
     <dimen name="profile_kids_margin_top">20dp</dimen>
     <item name="help_button_width_percent" format="float" type="dimen">0.49</item>
+
+    <dimen name="widget_content_grouped_by_genre_progress_margin_horizontal">2dp</dimen>
+    <dimen name="widget_content_grouped_by_genre_progress_height">8dp</dimen>
+    <dimen name="widget_content_grouped_by_genre_progress_width">25dp</dimen>
 </resources>

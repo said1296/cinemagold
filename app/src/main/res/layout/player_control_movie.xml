@@ -1,92 +1,108 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (C) 2016 The Android Open Source Project
-     Licensed under the Apache License, Version 2.0 (the "License");
-     you may not use this file except in compliance with the License.
-     You may obtain a copy of the License at
-          http://www.apache.org/licenses/LICENSE-2.0
-     Unless required by applicable law or agreed to in writing, software
-     distributed under the License is distributed on an "AS IS" BASIS,
-     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-     See the License for the specific language governing permissions and
-     limitations under the License.
--->
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
     android:id="@+id/player_control"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_height="match_parent"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_gravity="bottom"
-    android:layoutDirection="ltr"
-    android:background="#CC000000"
-    android:orientation="vertical"
-    tools:targetApi="28"
-    android:paddingBottom="20dp">
+    android:background="@android:color/transparent">
 
-    <LinearLayout
+    <app.cinemagold.ui.browse.common.view.TextViewUnescapedHTML
+        android:id="@+id/player_control_title"
+        app:layout_constraintTop_toTopOf="parent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:paddingTop="4dp"
-        android:orientation="horizontal">
-
-        <androidx.appcompat.widget.AppCompatImageButton android:id="@id/exo_rew"
-            style="@style/ExoMediaButton.Rewind"
-            android:tint="@color/light_focused_brand"/>
-
-        <androidx.appcompat.widget.AppCompatImageButton android:id="@id/exo_play"
-            style="@style/ExoMediaButton.Play"
-            android:tint="@color/light_focused_brand"/>
-
-        <androidx.appcompat.widget.AppCompatImageButton android:id="@id/exo_pause"
-            style="@style/ExoMediaButton.Pause"
-            android:tint="@color/light_focused_brand"/>
-
-        <androidx.appcompat.widget.AppCompatImageButton android:id="@id/exo_ffwd"
-            style="@style/ExoMediaButton.FastForward"
-            android:tint="@color/light_focused_brand"/>
-
-        <androidx.appcompat.widget.AppCompatImageButton android:id="@+id/exo_custom_subtitles"
-            style="@style/ExoMediaButton.Subtitles"
-            android:tint="@color/light_focused_brand"/>
-
-        <androidx.appcompat.widget.AppCompatImageButton android:id="@+id/exo_custom_audio_track"
-            style="@style/ExoMediaButton.AudioTrack"
-            android:tint="@color/light_focused_brand"/>
-
-    </LinearLayout>
-
+        android:text="HOLA"
+        android:textSize="@dimen/text1"
+        android:textColor="?attr/lightMedium"
+        android:layout_marginTop="10dp"
+        android:layout_marginHorizontal="20dp"/>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:gravity="center_vertical"
-        android:orientation="horizontal">
+        android:layout_gravity="bottom"
+        android:layoutDirection="ltr"
+        android:background="#CC000000"
+        android:orientation="vertical"
+        tools:targetApi="28"
+        android:paddingBottom="20dp"
+        app:layout_constraintBottom_toBottomOf="parent">
 
-        <TextView android:id="@id/exo_position"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="14sp"
-            android:textStyle="bold"
-            android:paddingLeft="4dp"
-            android:paddingRight="4dp"
-            android:includeFontPadding="false"
-            android:textColor="#FFBEBEBE"/>
+            android:gravity="center"
+            android:paddingTop="4dp"
+            android:orientation="horizontal">
 
-        <View android:id="@id/exo_progress_placeholder"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="26dp"/>
+            <androidx.appcompat.widget.AppCompatImageButton android:id="@id/exo_rew"
+                style="@style/ExoMediaButton.Rewind"
+                android:tint="@color/light_focused_brand"/>
 
-        <TextView android:id="@id/exo_duration"
-            android:layout_width="wrap_content"
+            <androidx.appcompat.widget.AppCompatImageButton android:id="@id/exo_play"
+                style="@style/ExoMediaButton.Play"
+                android:tint="@color/light_focused_brand"/>
+
+            <androidx.appcompat.widget.AppCompatImageButton android:id="@id/exo_pause"
+                style="@style/ExoMediaButton.Pause"
+                android:tint="@color/light_focused_brand"/>
+
+            <androidx.appcompat.widget.AppCompatImageButton android:id="@id/exo_ffwd"
+                style="@style/ExoMediaButton.FastForward"
+                android:tint="@color/light_focused_brand"/>
+
+            <androidx.appcompat.widget.AppCompatImageButton android:id="@+id/exo_custom_subtitles"
+                style="@style/ExoMediaButton.Subtitles"
+                android:tint="@color/light_focused_brand"/>
+
+            <androidx.appcompat.widget.AppCompatImageButton
+                android:id="@+id/exo_custom_audio_track"
+                style="@style/ExoMediaButton.AudioTrack"
+                android:tint="@color/light_focused_brand"/>
+
+            <androidx.appcompat.widget.AppCompatImageButton
+                android:id="@+id/exo_custom_chapter"
+                style="@style/ExoMediaButton.Chapter"
+                android:tint="@color/light_focused_brand"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="14sp"
-            android:textStyle="bold"
-            android:paddingLeft="4dp"
-            android:paddingRight="4dp"
-            android:includeFontPadding="false"
-            android:textColor="#FFBEBEBE"/>
+            android:layout_marginTop="4dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView android:id="@id/exo_position"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:paddingLeft="4dp"
+                android:paddingRight="4dp"
+                android:includeFontPadding="false"
+                android:textColor="#FFBEBEBE"/>
+
+            <View android:id="@id/exo_progress_placeholder"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="26dp"/>
+
+            <TextView android:id="@id/exo_duration"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:paddingLeft="4dp"
+                android:paddingRight="4dp"
+                android:includeFontPadding="false"
+                android:textColor="#FFBEBEBE"/>
+
+        </LinearLayout>
 
     </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
 
-</LinearLayout>

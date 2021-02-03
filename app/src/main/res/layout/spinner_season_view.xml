@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Spinner
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:focusable="true"
+    android:id="@+id/spinner_season"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:paddingLeft="@dimen/preview_info_padding_horizontal"
+    android:background="@null"
+    android:layout_marginTop="@dimen/preview_spinner_season_margin_top"
+    android:layout_marginBottom="@dimen/preview_spinner_season_margin_top"
+    android:nextFocusUp="@id/widget_button_play_serialized"
+    android:nextFocusDown="@id/preview_recycler_episode"
+    android:nextFocusRight="@id/spinner_season"
+    android:nextFocusLeft="@id/spinner_season"/>

@@ -3,6 +3,7 @@ package app.cinemagold.ui.player
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.preference.PreferenceManager
@@ -29,9 +30,12 @@ class PlayerViewModel(private val recentApi: RecentApi, private val playerApi: P
     }
     val preferences: SharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
     lateinit var content : Content
-    private var seasonIndex : Int = 0
-    private var episodeIndex : Int = 0
+    var seasonIndex : Int = -1
+    var episodeIndex : Int = 0
     var elapsed = -1L
+    val title: MutableLiveData<String> by lazy {
+        MutableLiveData("")
+    }
     private var currentProfile: Profile
 
     init {
@@ -39,23 +43,27 @@ class PlayerViewModel(private val recentApi: RecentApi, private val playerApi: P
     }
 
     //Events
-    fun triggeredUpdateElapsed(contentId: Int, episodeId: Int, elapsed: Int, elapsedPercent: Float) {
-        val recent = Recent(contentId, elapsed, elapsedPercent, episodeId = episodeId, profileId = currentProfile.id)
-        updateElapsed(recent)
-    }
 
     fun receivedExtras(extras : Bundle?){
         if(extras != null){
-            content = Gson().fromJson(extras.get("content") as String, Content::class.java)
-            if(content.mediaType.id != ContentType.MOVIE.value){
-                episodeIndex = extras.getInt("episodeIndex")
-                seasonIndex = extras.getInt("seasonIndex")
+            content = Gson().fromJson(extras.get(PlayerActivity.EXTRAS_CONTENT) as String, Content::class.java)
+            if(content.mediaType.id != ContentType.MOVIE.value) {
+                episodeIndex = extras.getInt(PlayerActivity.EXTRAS_EPISODE_INDEX)
+                seasonIndex = extras.getInt(PlayerActivity.EXTRAS_SEASON_INDEX)
             }
+
+            setTitle()
+
             //Get elapsed time if a Recently Played content was clicked
-            if(extras.getInt("elapsed") != -1){
-                elapsed = extras.getInt("elapsed").toLong()
+            if(extras.getInt(PlayerActivity.EXTRAS_ELAPSED) != -1){
+                elapsed = extras.getInt(PlayerActivity.EXTRAS_ELAPSED).toLong()
             }
         }
+    }
+
+    fun changedEpisode(episodeIndexNew: Int){
+        episodeIndex = episodeIndexNew
+        setTitle()
     }
 
     fun videoEnded(){
@@ -69,6 +77,7 @@ class PlayerViewModel(private val recentApi: RecentApi, private val playerApi: P
 
                 episodeIndex=0
             }
+            setTitle()
         }
     }
 
@@ -85,7 +94,7 @@ class PlayerViewModel(private val recentApi: RecentApi, private val playerApi: P
         requestUserState(remaining, content.mediaType.id)
     }
 
-    fun videoPaused(){
+    fun videoIdle(){
         requestDeleteAuthorization()
     }
 
@@ -142,6 +151,17 @@ class PlayerViewModel(private val recentApi: RecentApi, private val playerApi: P
                 }
                 else -> error.postValue("Unknown error")
             }
+        }
+    }
+
+
+    // Actions
+
+    fun setTitle(){
+        title.value = if(content.mediaType.id == ContentType.MOVIE.value) {
+            content.name
+        } else {
+            "T${content.seasons[seasonIndex].number} · Cap.${content.seasons[seasonIndex].episodes[episodeIndex].number}: ${content.seasons[seasonIndex].episodes[episodeIndex].name}"
         }
     }
 }

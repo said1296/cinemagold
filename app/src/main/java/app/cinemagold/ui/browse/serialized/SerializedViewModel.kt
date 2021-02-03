@@ -19,101 +19,103 @@ import com.google.gson.Gson
 import com.haroldadmin.cnradapter.NetworkResponse
 import kotlinx.coroutines.launch
 
-class SerializedViewModel(private val contentApi : ContentApi, private val genreApi : GenreApi, private val contentTypeApi: ContentTypeApi, val context : Context)  : ViewModel() {
-    val error : LiveEvent<String> by lazy {
+class SerializedViewModel(
+    private val contentApi: ContentApi,
+    private val genreApi: GenreApi,
+    private val contentTypeApi: ContentTypeApi,
+    val context: Context
+) : ViewModel() {
+    val error: LiveEvent<String> by lazy {
         LiveEvent<String>()
     }
-    val contentGroupedByGenre : MutableLiveData<MutableList<ContentGroupedByGenre>> by lazy {
+    val contentGroupedByGenre: MutableLiveData<MutableList<ContentGroupedByGenre>> by lazy {
         MutableLiveData<MutableList<ContentGroupedByGenre>>()
     }
-    val genres : MutableLiveData<MutableList<IdAndName>> by lazy {
+    val years: MutableLiveData<MutableList<IdAndName>> by lazy {
         MutableLiveData<MutableList<IdAndName>>()
     }
-    val contentGenre : LiveEvent<MutableList<Content>> by lazy {
+    val genres: MutableLiveData<MutableList<IdAndName>> by lazy {
+        MutableLiveData<MutableList<IdAndName>>()
+    }
+    val contentGenre: LiveEvent<MutableList<Content>> by lazy {
         LiveEvent<MutableList<Content>>()
     }
-    val contentTypes : MutableLiveData<MutableList<IdAndName>> by lazy {
+    val contentTypes: MutableLiveData<MutableList<IdAndName>> by lazy {
         MutableLiveData<MutableList<IdAndName>>()
     }
     var currentGenre = IdAndName()
+    var currentYear = IdAndName()
     var contentTypeSpinnerItems = mutableListOf<String>()
     var currentContentType = IdAndName()
     var isKids = false
 
-    fun initialize(){
+    fun initialize() {
         setIsKids()
         requestContentTypesAndContentTypeSpinnerItems()
-        requestContentGroupedByGenre()
         requestGenres()
+        requestYears()
+        handleRequestContent()
     }
 
     //Events
-    fun selectedContentType(contentTypeIndex : Int){
-        if(currentContentType != contentTypes.value!![contentTypeIndex]){
+    fun selectedContentType(contentTypeIndex: Int) {
+        if (currentContentType != contentTypes.value!![contentTypeIndex]) {
             currentContentType = contentTypes.value!![contentTypeIndex]
             requestGenres()
-            if(currentGenre.id == -1){
-                requestContentGroupedByGenre()
-                requestContentGroupedByGenre()
-                return
-            }else{
-                requestContentByGenreAndContentType()
-            }
+            requestYears()
+            handleRequestContent()
         }
     }
 
-    fun selectedGenre(genre : IdAndName){
-        if(currentGenre!=genre){
-            currentGenre=genre
-            //If "All genres" selected
-            if(currentGenre.id==-1){
-                requestContentGroupedByGenre()
-                return
-            }
+    fun selectedGenre(genre: IdAndName) {
+        if (currentGenre != genre) {
+            currentGenre = genre
+            currentYear = IdAndName(-1, "Todos")
+            requestYears()
+            handleRequestContent()
+        }
+    }
+
+    fun selectedYear(year: IdAndName) {
+        if (currentYear != year) {
+            currentYear = year
+            handleRequestContent()
+        }
+    }
+
+    fun handleRequestContent() {
+        // id of -1 means "All" in filters
+        if (currentGenre.id == -1 && currentYear.id == -1) {
+            requestContentGroupedByGenre()
+        } else if (currentYear.id == -1 && currentGenre.id != -1) {
             requestContentByGenreAndContentType()
+        } else if (currentYear.id != -1) {
+            requestContentByYear()
         }
     }
 
-    fun stoppedFragment(){
+    fun stoppedFragment() {
         //Reinitialize genre value
         currentGenre = IdAndName()
     }
 
 
     //Requests
-    private fun requestContentGroupedByGenre(){
+    private fun requestContentByYear() {
         viewModelScope.launch {
-            val response =
-                if(currentContentType.id == -1){
-                    contentApi.getSerializedGroupedByGenre(isKids)
-                } else{
-                    contentApi.getByContentTypeIdAndGroupedByGenre(currentContentType.id, isKids, 1)
-                }
-            when(response){
-                is NetworkResponse.Success -> {
-                    contentGroupedByGenre.postValue(response.body)
-                }
-                is NetworkResponse.ServerError -> {
-                    error.postValue(response.body?.status.toString() + " " + response.body?.message)
-                }
-                is NetworkResponse.NetworkError -> {
-                    error.postValue(response.error.toString())
-                    println(response.error.toString())
-                }
-                else -> error.postValue("Unknown error")
-            }
-        }
-    }
-
-    private fun requestContentByGenreAndContentType(){
-        viewModelScope.launch {
-            val response =
-                if(currentContentType.id==-1){
-                    contentApi.getSerializedByGenre(currentGenre.id, 21, isKids)
-                }else{
-                    contentApi.getByGenreIdAndOptionalContentTypeId(currentGenre.id, currentContentType.id, 60, isKids)
-                }
-            when(response){
+            val response = if (currentContentType.id != ContentType.NONE.value)
+                contentApi.getByContentTypeIdAndYear(
+                    currentYear.id,
+                    currentContentType.id,
+                    if (currentGenre.id == -1) null else currentGenre.id,
+                    60
+                )
+            else contentApi.getSerializedByYear(
+                currentYear.id,
+                if (currentGenre.id == -1) null else currentGenre.id,
+                60
+            )
+            when (response) {
                 is NetworkResponse.Success -> {
                     contentGenre.postValue(response.body)
                 }
@@ -129,15 +131,63 @@ class SerializedViewModel(private val contentApi : ContentApi, private val genre
         }
     }
 
-    private fun requestGenres(){
+    private fun requestContentGroupedByGenre() {
         viewModelScope.launch {
             val response =
-                if(currentContentType.id == -1){
+                if (currentContentType.id == -1) {
+                    contentApi.getSerializedGroupedByGenre(isKids)
+                } else {
+                    contentApi.getByContentTypeIdAndGroupedByGenre(currentContentType.id, isKids, 1)
+                }
+            when (response) {
+                is NetworkResponse.Success -> {
+                    contentGroupedByGenre.postValue(response.body)
+                }
+                is NetworkResponse.ServerError -> {
+                    error.postValue(response.body?.status.toString() + " " + response.body?.message)
+                }
+                is NetworkResponse.NetworkError -> {
+                    error.postValue(response.error.toString())
+                    println(response.error.toString())
+                }
+                else -> error.postValue("Unknown error")
+            }
+        }
+    }
+
+    private fun requestContentByGenreAndContentType() {
+        viewModelScope.launch {
+            val response =
+                if (currentContentType.id == -1) {
+                    contentApi.getSerializedByGenre(currentGenre.id, 21, isKids)
+                } else {
+                    contentApi.getByGenreIdAndOptionalContentTypeId(currentGenre.id, currentContentType.id, 60, isKids)
+                }
+            when (response) {
+                is NetworkResponse.Success -> {
+                    contentGenre.postValue(response.body)
+                }
+                is NetworkResponse.ServerError -> {
+                    error.postValue(response.body?.status.toString() + " " + response.body?.message)
+                }
+                is NetworkResponse.NetworkError -> {
+                    error.postValue(response.error.toString())
+                    println(response.error.toString())
+                }
+                else -> error.postValue("Unknown error")
+            }
+        }
+    }
+
+    private fun requestGenres() {
+        viewModelScope.launch {
+            val response =
+                if (currentContentType.id == -1) {
                     genreApi.getSerialized()
-                }else{
+                } else {
                     genreApi.getByContentTypeId(currentContentType.id)
                 }
-            when(response){
+            when (response) {
                 is NetworkResponse.Success -> {
                     response.body.add(0, IdAndName(-1, "Todos"))
                     genres.postValue(response.body)
@@ -154,14 +204,14 @@ class SerializedViewModel(private val contentApi : ContentApi, private val genre
         }
     }
 
-    private fun requestContentTypesAndContentTypeSpinnerItems(){
+    private fun requestContentTypesAndContentTypeSpinnerItems() {
         viewModelScope.launch {
-            when(val data = contentTypeApi.getAll()){
+            when (val data = contentTypeApi.getAll()) {
                 is NetworkResponse.Success -> {
-                    data.body.removeAll { contentType -> contentType.id == ContentType.MOVIE.value}
+                    data.body.removeAll { contentType -> contentType.id == ContentType.MOVIE.value }
                     data.body.add(0, IdAndName(-1, "Todos"))
                     //Set content type spinner items
-                    for(contentType in data.body){
+                    for (contentType in data.body) {
                         contentTypeSpinnerItems.add(contentType.name)
                     }
                     contentTypes.postValue(data.body)
@@ -178,8 +228,38 @@ class SerializedViewModel(private val contentApi : ContentApi, private val genre
         }
     }
 
+    private fun requestYears() {
+        viewModelScope.launch {
+            val response = if (currentContentType.id != ContentType.NONE.value)
+                contentApi.getYearsByContentTypeIdAndOptionalGenreId(
+                    currentContentType.id,
+                    if (currentGenre.id == -1) null else currentGenre.id
+                )
+                else contentApi.getSerializedYearsByOptionalGenreId(if (currentGenre.id == -1) null else currentGenre.id)
+            when (response) {
+                is NetworkResponse.Success -> {
+                    // Put years in IdAndName objects so it can be used by FilterCarrouselRVA
+                    val yearsUpdated: MutableList<IdAndName> = mutableListOf()
+                    yearsUpdated.add(0, IdAndName(-1, "Todos"))
+                    for (year in response.body) {
+                        yearsUpdated.add(IdAndName(year, year.toString()))
+                    }
+                    years.postValue(yearsUpdated)
+                }
+                is NetworkResponse.ServerError -> {
+                    error.postValue(response.body?.status.toString() + " " + response.body?.message)
+                }
+                is NetworkResponse.NetworkError -> {
+                    error.postValue(response.error.toString())
+                    println(response.error.toString())
+                }
+                else -> error.postValue("Unknown error")
+            }
+        }
+    }
+
     //Actions
-    private fun setIsKids(){
+    private fun setIsKids() {
         val preferences = PreferenceManager.getDefaultSharedPreferences(context)
         val currentProfile = Gson().fromJson(preferences.getString(BuildConfig.PREFS_PROFILE, ""), Profile::class.java)
         isKids = currentProfile.id == -1

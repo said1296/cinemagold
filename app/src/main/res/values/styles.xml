@@ -101,6 +101,10 @@
         <item name="android:src">@drawable/ic_headset_white_24dp</item>
         <item name="android:contentDescription">@string/language</item>
     </style>
+    <style name="ExoMediaButton.Chapter">
+        <item name="android:src">@drawable/ic_chapter_white_24</item>
+        <item name="android:contentDescription">@string/language</item>
+    </style>
 
     <style name="AppTheme.NoActionBar" parent="AppTheme">
         <item name="windowActionBar">false</item>

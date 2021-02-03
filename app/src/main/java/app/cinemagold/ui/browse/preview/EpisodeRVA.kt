@@ -18,7 +18,7 @@ class EpisodeRVA @Inject constructor(
     private var dataset : List<Episode>,
     val context : Context,
     private val picasso : Picasso
-) : RecyclerView.Adapter<EpisodeRVA.ViewHolder>() {
+) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     //Elevation value adds the same amount as padding so it's necessary to compensate
     private val sideMargin = context.resources.getDimensionPixelSize(R.dimen.standard_margin_horizontal) -
             context.resources.getDimensionPixelSize(R.dimen.item_content_horizontal_elevation)
@@ -38,7 +38,7 @@ class EpisodeRVA @Inject constructor(
         return dataset.size
     }
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val currentData = dataset[position]
         val item = holder.itemView
         item.item_episode_description.text = currentData.description
@@ -63,7 +63,7 @@ class EpisodeRVA @Inject constructor(
         if(position == 0){
             if(!isTelevision) params.leftMargin = sideMargin
             else{
-                item.nextFocusUpId = R.id.preview_spinner_season
+                item.nextFocusUpId = R.id.spinner_season
                 item.nextFocusDownId = dataset[position+1].id
             }
         } else if (position == dataset.lastIndex){

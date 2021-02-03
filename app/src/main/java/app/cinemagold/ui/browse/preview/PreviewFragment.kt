@@ -34,9 +34,9 @@ class PreviewFragment : Fragment() {
     @Inject
     lateinit var episodeRVA: EpisodeRVA
     var contentId: Int = -1
+    var seasonIndex: Int = -1
     lateinit var contentType: ContentType
     lateinit var content: Content
-    private val scale: Int = 30
     private var currentSeasonIndex: Int = 0
 
     var isTelevision: Boolean = false
@@ -63,8 +63,9 @@ class PreviewFragment : Fragment() {
 
         //Listen for contentId set on Home fragment
         setFragmentResultListener("preview") { _, bundle ->
-            contentId = bundle.getInt("contentId")
-            contentType = bundle.get("contentType") as ContentType
+            contentId = bundle.getInt(EXTRA_CONTENT_ID)
+            contentType = bundle.get(EXTRA_CONTENT_TYPE) as ContentType
+            seasonIndex = bundle.getInt(EXTRA_SEASON_INDEX)
             viewModel.receivedContentIdAndContentType(contentId, contentType)
         }
 
@@ -174,10 +175,10 @@ class PreviewFragment : Fragment() {
         }
         val adapter = ArrayAdapter<String>(context!!.applicationContext, R.layout.spinner_season, seasonSpinnerItems)
         adapter.setDropDownViewResource(R.layout.spinner_season_item)
-        infoSpecificView.preview_spinner_season.adapter = adapter
+        infoSpecificView.spinner_season.adapter = adapter
         var previewImageSrc: String
         var firstSelection = true
-        infoSpecificView.preview_spinner_season.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+        infoSpecificView.spinner_season.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onNothingSelected(p0: AdapterView<*>?) {
             }
 
@@ -199,5 +200,14 @@ class PreviewFragment : Fragment() {
                 }
             }
         }
+        if(seasonIndex != -1) infoSpecificView.spinner_season.setSelection(seasonIndex)
+    }
+
+    companion object {
+        // Extras that can be passed to this fragment
+        val EXTRA_CONTENT_ID = "CONTENT_ID"
+        val EXTRA_CONTENT_TYPE = "CONTENT_TYPE"
+        // This extra represents the season to be selected at first
+        val EXTRA_SEASON_INDEX = "SEASON_INDEX"
     }
 }

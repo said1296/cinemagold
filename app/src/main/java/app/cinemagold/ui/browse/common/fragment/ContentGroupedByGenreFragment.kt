@@ -13,8 +13,10 @@ import app.cinemagold.R
 import app.cinemagold.injection.ApplicationContextInjector
 import app.cinemagold.model.content.ContentGroupedByGenre
 import app.cinemagold.ui.browse.BrowseActivity
+import app.cinemagold.ui.browse.common.listener.ProgressOnScrollListener
 import app.cinemagold.ui.browse.common.recycleradapter.ContentHorizontalRVA
 import kotlinx.android.synthetic.main.widget_content_grouped_by_genre.view.*
+import kotlinx.android.synthetic.main.widget_progress_indicators.view.*
 import javax.inject.Inject
 import javax.inject.Provider
 
@@ -55,21 +57,31 @@ class ContentGroupedByGenreFragment : Fragment() {
         containerView.removeAllViews()
         System.gc()
         for((index, item) in contentGroupedByGenres.withIndex()){
+            val contentGroupedByGenreView = layoutInflater.inflate(R.layout.widget_content_grouped_by_genre, null)
+            val progressIndicators : MutableList<View> = mutableListOf()
+            for(i in 0 until contentGroupedByGenreView.progress_indicators.childCount){
+                progressIndicators.add(contentGroupedByGenreView.progress_indicators.getChildAt(i))
+            }
             val contentOfGenreRVAInstance = contentHorizontalRVAProvider.get()
             //Set callback for navigation to Preview on click of an item and prefix for id to keep track of navigation
             contentOfGenreRVAInstance.apply {
                 clickHandler = {contentId, contentType ->
                     (activity as BrowseActivity).navigateToPreview(contentId, contentType)
                 }
+                this.progressIndicators = progressIndicators
                 idPrefix = index*1000
             }
-            val contentGroupedByGenreView = layoutInflater.inflate(R.layout.widget_content_grouped_by_genre, null)
             contentGroupedByGenreView.widget_content_grouped_by_genre_title.text = item.name
             contentGroupedByGenreView.content_grouped_by_genre_recycler_content_of_genre.apply {
                 adapter = contentOfGenreRVAInstance
                 layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+                if(!(activity as BrowseActivity).isTelevision)
+                    addOnScrollListener(ProgressOnScrollListener(progressIndicators, layoutManager as LinearLayoutManager, adapter as ContentHorizontalRVA))
             }
-            contentOfGenreRVAInstance.setDataset(item.contents)
+            contentOfGenreRVAInstance.dataset = item.contents
+            contentGroupedByGenreView.content_grouped_by_genre_recycler_content_of_genre.apply {
+                scrollToPosition((adapter as ContentHorizontalRVA).startPosition)
+            }
             containerView.addView(contentGroupedByGenreView)
         }
     }

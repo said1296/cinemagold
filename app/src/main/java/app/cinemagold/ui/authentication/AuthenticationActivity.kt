@@ -84,7 +84,6 @@ class AuthenticationActivity : AppCompatActivity() {
     //Fragment transactions
     fun addOrReplaceFragment(fragment : Fragment, tag : String?){
         if(fragmentManager.findFragmentByTag(tag)==null){
-            println("ADDING $tag")
             fragmentManager.beginTransaction().add(fragmentContainer, fragment, tag).addToBackStack(tag).commit()
             return
         }
@@ -93,7 +92,6 @@ class AuthenticationActivity : AppCompatActivity() {
         if(backStackEntryCount>0){
             val currentFragmentTag = fragmentManager.getBackStackEntryAt(backStackEntryCount-1).name
             if(currentFragmentTag != tag){
-                println("REPLACING $tag")
                 fragmentManager.beginTransaction().replace(fragmentContainer, fragment, tag).addToBackStack(tag).commit()
             }
         }

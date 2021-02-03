@@ -6,7 +6,7 @@ import com.google.android.exoplayer2.Player
 
 
 class PlayerListener(val onLoadedCallback : () -> Unit, val updateElapsed : () -> Unit, val onPlayChanged : (isOnPlay: Boolean) -> Unit, val onEnd : () -> Unit) : Player.EventListener {
-    private var isFirstTimePlaying = true
+    var isFirstTimePlaying = true
     private val updateElapsedDelay = 5000L
     private val handler = Handler(Looper.getMainLooper())
     private val runnable = object: Runnable {

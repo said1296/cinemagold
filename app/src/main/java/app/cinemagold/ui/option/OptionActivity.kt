@@ -28,15 +28,7 @@ class OptionActivity : AppCompatActivity() {
             }
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_option)
-        fragment = when(intent.getStringExtra("FRAGMENT")){
-            HelpFragment::class.simpleName -> HelpFragment()
-            PaymentFragment::class.simpleName -> PaymentFragment()
-            NotificationFragment::class.simpleName -> NotificationFragment()
-            else -> {
-                ProfileFragment()
-            }
-        }
-        supportFragmentManager.beginTransaction().add(fragmentContainer, fragment, fragment::class.simpleName).commit()
+        loadFragment()
     }
 
     //Fragment transactions
@@ -55,11 +47,20 @@ class OptionActivity : AppCompatActivity() {
         }
     }
 
-    fun detachFragmentByTag(tag: String?) {
-        val fragment = fragmentManager.findFragmentByTag(tag)
-        if (fragment != null) {
-            fragmentManager.beginTransaction().detach(fragment).commit()
+    private fun getFragmentByTag(tag: String?): Fragment {
+        return when(tag){
+            HelpFragment::class.simpleName -> HelpFragment()
+            PaymentFragment::class.simpleName -> PaymentFragment()
+            NotificationFragment::class.simpleName -> NotificationFragment()
+            else -> {
+                ProfileFragment()
+            }
         }
+    }
+
+    fun loadFragment() {
+        fragment = getFragmentByTag(intent.getStringExtra("FRAGMENT"))
+        addOrReplaceFragment(fragment, fragment::class.simpleName)
     }
 
     fun navigateToBrowse(){

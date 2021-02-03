@@ -59,6 +59,16 @@ class ProfileCreateViewModel(private val profileApi: ProfileApi, private val con
         }
     }
 
+    fun receivedProfileString(profileString: String?, isEditCallback : () -> Unit) {
+        if(profileString == null){
+            isEdit = false
+        }else {
+            isEdit = true
+            profile = Gson().fromJson(profileString, Profile::class.java)
+            isEditCallback()
+        }
+    }
+
     //Requests
     private fun requestCreateOrUpdateProfile(){
         viewModelScope.launch {

@@ -22,6 +22,10 @@
     <!--Affected by elevation-->
     <dimen name="item_content_margin_right">-10dp</dimen>
 
+    <dimen name="widget_content_grouped_by_genre_progress_margin_horizontal">2dp</dimen>
+    <dimen name="widget_content_grouped_by_genre_progress_height">5dp</dimen>
+    <dimen name="widget_content_grouped_by_genre_progress_width">5dp</dimen>
+
     <dimen name="preview_info_padding_top">20dp</dimen>
     <dimen name="preview_info_padding_horizontal">20dp</dimen>
     <dimen name="preview_info_genres_margin_top">5dp</dimen>
@@ -58,6 +62,7 @@
     <!-- PLAYER -->
     <dimen name="player_selector_title_margin_bottom">15dp</dimen>
     <dimen name="player_selector_padding">50dp</dimen>
+    <dimen name="player_selector_header_margin_vertical">10dp</dimen>
     <dimen name="item_player_selector_margin_vertical">15dp</dimen>
 
     <dimen name="login_edit_text_height">55dp</dimen>
@@ -82,13 +87,14 @@
     <dimen name="confirm_email_continue_padding_horizontal">30dp</dimen>
 
     <dimen name="profile_avatar_width">150dp</dimen>
-    <dimen name="profile_avatar_top_row_separation">10dp</dimen>
+    <dimen name="profile_avatar_separation">10dp</dimen>
     <dimen name="profile_separator_margin_top">10dp</dimen>
-    <dimen name="profile_avatar_margin_top">30dp</dimen>
+    <dimen name="profile_avatar_margin_top">60dp</dimen>
     <dimen name="profile_kids_padding_horizontal">80dp</dimen>
     <dimen name="profile_kids_padding_vertical">10dp</dimen>
     <dimen name="profile_kids_margin_top">50dp</dimen>
     <dimen name="profile_title_margin_top">50dp</dimen>
+    <dimen name="profile_container_padding_horizontal">25dp</dimen>
 
     <dimen name="profile_create_avatar_width">200dp</dimen>
     <dimen name="profile_create_name_margin_top">20dp</dimen>

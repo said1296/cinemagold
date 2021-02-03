@@ -91,7 +91,7 @@ class RegisterFragment : Fragment() {
         autoCompleteView = view!!.register_country
         autoCompleteView.setAdapter(arrayAdapter)
         autoCompleteView.setOnClickListener { autoCompleteView.showDropDown() }
-        autoCompleteView.setOnItemClickListener { adapterView, view, i, l ->
+        autoCompleteView.setOnItemClickListener { adapterView, _, i, _ ->
             viewModel.selectedCountry(adapterView.getItemAtPosition(i) as String)
         }
         autoCompleteView.setOnFocusChangeListener { _, hasFocus ->

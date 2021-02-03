@@ -2,14 +2,14 @@ package app.cinemagold.ui.browse.home;
 
 import android.content.Context
 import android.graphics.Bitmap
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import app.cinemagold.R
 import app.cinemagold.model.content.ContentType
 import app.cinemagold.model.content.Recent
+import app.cinemagold.ui.browse.common.listener.ProgressOnFocusListener
+import app.cinemagold.ui.browse.common.recycleradapter.BaseInfiniteScrollRVA
 import app.cinemagold.ui.common.ContentItemTarget
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.item_content_recent.view.*
@@ -17,29 +17,23 @@ import javax.inject.Inject
 
 
 class ContentRecentRVA @Inject constructor(
-    private var dataset : List<Recent>,
     val context : Context,
     private val picasso : Picasso
-) : RecyclerView.Adapter<ContentRecentRVA.ViewHolder>() {
+) : BaseInfiniteScrollRVA<Recent>() {
     //Elevation value adds the same amount as padding so it's necessary to compensate
     private val sideMargin = context.resources.getDimensionPixelSize(R.dimen.standard_margin_horizontal) -
             context.resources.getDimensionPixelSize(R.dimen.item_content_horizontal_elevation)
     private val scale : Int = 30
     lateinit var clickHandler : (Recent) -> Unit
+    lateinit var progressIndicators : MutableList<View>
+    val isTelevision = context.resources.getBoolean(R.bool.isTelevision)
 
-    class ViewHolder(itemView : View) : RecyclerView.ViewHolder(itemView)
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.item_content_recent, parent,false)
-        return ViewHolder(view)
-    }
-
-    override fun getItemCount(): Int {
-        return dataset.size
+    init {
+        layout = R.layout.item_content_recent
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        val position = getRealPosition(position)
         val currentData = dataset[position]
         val item = holder.itemView
         item.id = position
@@ -50,9 +44,9 @@ class ContentRecentRVA @Inject constructor(
         val elapsedBarParams = item.item_content_recent_elapsed.layoutParams as ConstraintLayout.LayoutParams
         elapsedBarParams.matchConstraintPercentWidth = currentData.elapsedPercent
 
-        if(currentData.mediaType.id != ContentType.MOVIE.value){
-            item.item_content_recent_info.text = "T${currentData.seasonNumber} · Cap.${currentData.episode!!.number}"
-        }
+        item.item_content_recent_info.text =
+            if(currentData.mediaType.id != ContentType.MOVIE.value) "T${currentData.seasonNumber} · Cap.${currentData.episode!!.number}"
+            else ""
 
         //Set background
         val target = ContentItemTarget(context.resources)
@@ -67,10 +61,12 @@ class ContentRecentRVA @Inject constructor(
         val params = holder.itemView.layoutParams as RecyclerView.LayoutParams
         if(position == 0){
             params.leftMargin = sideMargin
-            item.nextFocusLeftId = item.id
+            item.nextFocusLeftId = realItemCount - 1
+            item.nextFocusRightId = position+1
         } else if (position == dataset.lastIndex){
             params.rightMargin = sideMargin
-            item.nextFocusRightId = item.id
+            item.nextFocusLeftId = position-1
+            item.nextFocusRightId = 0
         } else {
             item.nextFocusLeftId = position-1
             item.nextFocusRightId = position+1
@@ -79,13 +75,8 @@ class ContentRecentRVA @Inject constructor(
         item.setOnClickListener {
             clickHandler(currentData)
         }
+        if(isTelevision)
+            item.onFocusChangeListener = ProgressOnFocusListener(progressIndicators, position+1, realItemCount)
         holder.itemView.layoutParams = params
     }
-    override fun getItemViewType(position: Int) = 1
-
-    fun setDataset(datasetNew : List<Recent>){
-        dataset = datasetNew
-        notifyDataSetChanged()
-    }
-
 }

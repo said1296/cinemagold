@@ -43,8 +43,7 @@ class AvatarGridFragment : Fragment() {
         rootView.avatar_grid_recycler
 
         val screenWidth = (this.activity as OptionActivity).windowManager.defaultDisplay.width
-        val numberOfColumns =
-            (screenWidth / resources.getDimensionPixelSize(R.dimen.item_avatar_grid_width)).toDouble().roundToInt()
+        val numberOfColumns = (screenWidth / resources.getDimensionPixelSize(R.dimen.item_avatar_grid_width)).toDouble().roundToInt()
         rootView.avatar_grid_recycler.apply {
             adapter = avatarGridRVA
             layoutManager = object: GridLayoutManager(context, numberOfColumns){

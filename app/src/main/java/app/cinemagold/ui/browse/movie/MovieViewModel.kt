@@ -29,17 +29,22 @@ class MovieViewModel(private val contentApi : ContentApi, private val genreApi :
     val genres : MutableLiveData<MutableList<IdAndName>> by lazy {
         MutableLiveData<MutableList<IdAndName>>()
     }
+    val years : MutableLiveData<MutableList<IdAndName>> by lazy {
+        MutableLiveData<MutableList<IdAndName>>()
+    }
     val contentGenre : LiveEvent<MutableList<Content>> by lazy {
         LiveEvent<MutableList<Content>>()
     }
     var currentGenre = IdAndName()
+    var currentYear = IdAndName()
     private val contentTypeId = ContentType.MOVIE.value
     var isKids = false
 
     fun initialize(){
         setIsKids()
-        requestContentGroupedByGenre()
         requestGenres()
+        requestYears()
+        handleRequestContent()
     }
 
 
@@ -47,12 +52,28 @@ class MovieViewModel(private val contentApi : ContentApi, private val genreApi :
     fun selectedGenre(genre : IdAndName){
         if(currentGenre!=genre){
             currentGenre=genre
-            //If "All genres" selected
-            if(currentGenre.id==-1){
-                requestContentGroupedByGenre()
-                return
-            }
+            currentYear=IdAndName(-1, "Todos")
+            requestYears()
+            handleRequestContent()
+        }
+    }
+
+    fun selectedYear(year : IdAndName){
+        if(currentYear!=year){
+            currentYear = year
+            handleRequestContent()
+        }
+    }
+
+    fun handleRequestContent(){
+
+        // id of -1 means "All" in filters
+        if(currentGenre.id == -1 && currentYear.id == -1){
+            requestContentGroupedByGenre()
+        } else if(currentYear.id == -1 && currentGenre.id != -1) {
             requestContentByGenre()
+        } else if(currentYear.id != -1){
+            requestContentByYear()
         }
     }
 
@@ -69,6 +90,30 @@ class MovieViewModel(private val contentApi : ContentApi, private val genreApi :
             when(val response = contentApi.getByContentTypeIdAndGroupedByGenre(contentTypeId, isKids)){
                 is NetworkResponse.Success -> {
                     contentGroupedByGenre.postValue(response.body)
+                }
+                is NetworkResponse.ServerError -> {
+                    error.postValue(response.body?.status.toString() + " " + response.body?.message)
+                }
+                is NetworkResponse.NetworkError -> {
+                    error.postValue(response.error.toString())
+                    println(response.error.toString())
+                }
+                else -> error.postValue("Unknown error")
+            }
+        }
+    }
+
+    private fun requestContentByYear(){
+        viewModelScope.launch {
+            val response = contentApi.getByContentTypeIdAndYear(
+                currentYear.id,
+                contentTypeId,
+                if(currentGenre.id == -1) null else currentGenre.id,
+                60
+            )
+            when(response){
+                is NetworkResponse.Success -> {
+                    contentGenre.postValue(response.body)
                 }
                 is NetworkResponse.ServerError -> {
                     error.postValue(response.body?.status.toString() + " " + response.body?.message)
@@ -107,6 +152,33 @@ class MovieViewModel(private val contentApi : ContentApi, private val genreApi :
                 is NetworkResponse.Success -> {
                     response.body.add(0, IdAndName(-1, "Todos"))
                     genres.postValue(response.body)
+                }
+                is NetworkResponse.ServerError -> {
+                    error.postValue(response.body?.status.toString() + " " + response.body?.message)
+                }
+                is NetworkResponse.NetworkError -> {
+                    error.postValue(response.error.toString())
+                    println(response.error.toString())
+                }
+                else -> error.postValue("Unknown error")
+            }
+        }
+    }
+
+    private fun requestYears(){
+        viewModelScope.launch {
+            when(val response = contentApi.getYearsByContentTypeIdAndOptionalGenreId(
+                contentTypeId,
+                if(currentGenre.id == -1) null else currentGenre.id)
+            ){
+                is NetworkResponse.Success -> {
+                    // Put years in IdAndName objects so it can be used by FilterCarrouselRVA
+                    val yearsUpdated: MutableList<IdAndName> = mutableListOf()
+                    yearsUpdated.add(0, IdAndName(-1, "Todos"))
+                    for(year in response.body){
+                        yearsUpdated.add(IdAndName(year, year.toString()))
+                    }
+                    years.postValue(yearsUpdated)
                 }
                 is NetworkResponse.ServerError -> {
                     error.postValue(response.body?.status.toString() + " " + response.body?.message)

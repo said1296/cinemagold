@@ -82,8 +82,8 @@ class HomeViewModel(val contentApi : ContentApi, private val recentApi: RecentAp
     fun clickedRecent(recent : Recent){
         val ids = mutableListOf<Int>()
         ids.add(recent.contentId)
-        if(recent.seasonNumber!=null){
-            ids.add(recent.seasonNumber)
+        if(recent.seasonId!=null){
+            ids.add(recent.seasonId)
             ids.add(recent.episode!!.id)
         }
         recentSelected = recent

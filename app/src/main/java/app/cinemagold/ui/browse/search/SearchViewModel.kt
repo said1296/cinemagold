@@ -1,6 +1,7 @@
 package app.cinemagold.ui.browse.search
 
 import android.content.Context
+import android.net.Uri
 import android.os.Handler
 import android.os.Looper
 import androidx.lifecycle.MutableLiveData
@@ -50,7 +51,6 @@ class SearchViewModel(private val contentApi : ContentApi, val context : Context
             handler.removeCallbacks(searchRunnable)
         }
     }
-
 
     //Requests
     private fun requestSearchContentByName(){
