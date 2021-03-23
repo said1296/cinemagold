@@ -118,7 +118,8 @@
                     android:id="@+id/register_password"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/register_edit_text_margin_top"            android:background="@drawable/bg_login_edit_text"
+                    android:layout_marginTop="@dimen/register_edit_text_margin_top"
+                    android:background="@drawable/bg_login_edit_text"
                     android:orientation="horizontal"
                     android:weightSum="100">
                     <androidx.appcompat.widget.AppCompatEditText
@@ -137,6 +138,12 @@
                         android:tint="@color/item_genre_text"
                         android:background="@null"/>
                 </LinearLayout>
+                <androidx.appcompat.widget.AppCompatEditText
+                    android:id="@+id/register_seller"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/seller_code"
+                    android:layout_marginTop="@dimen/register_edit_text_margin_top"/>
                 <Button
                     android:id="@+id/register_submit"
                     android:layout_width="@dimen/login_submit_width"

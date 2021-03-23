@@ -10,7 +10,10 @@ import android.os.Handler
 import android.os.Looper
 import android.view.KeyEvent
 import android.view.View
-import android.widget.*
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
+import android.widget.ImageButton
+import android.widget.Spinner
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.LinearLayoutCompat
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -135,6 +138,10 @@ class PlayerActivity : AppCompatActivity() {
                     }
                 }
                 .create().show()
+        }
+
+        viewModel.finish.observe(this) {
+            if(it) navigateToBrowse()
         }
 
         // Fullscreen
@@ -358,11 +365,13 @@ class PlayerActivity : AppCompatActivity() {
     }
 
     private fun showChapterSelector() {
+        var spinnerSeasonIndex = viewModel.seasonIndex
         episodeRVA.clickHandler = { position ->
-            viewModel.changedEpisode(position)
+            viewModel.changedEpisode(spinnerSeasonIndex, position)
             hideSelector()
             preparePlayer()
         }
+        episodeRVA.isPlayerActivity = true
         episodeRVA.setDataset(viewModel.content.seasons[viewModel.seasonIndex].episodes)
 
 
@@ -381,7 +390,8 @@ class PlayerActivity : AppCompatActivity() {
                 }
 
                 override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
-                    episodeRVA.setDataset(viewModel.content.seasons[p2].episodes)
+                    spinnerSeasonIndex = p2
+                    episodeRVA.setDataset(viewModel.content.seasons[spinnerSeasonIndex].episodes)
                 }
             }
             setSelection(viewModel.seasonIndex)
@@ -570,6 +580,14 @@ class PlayerActivity : AppCompatActivity() {
         //Send information about where the intent came from
         intent.putExtra("ORIGIN", this::class.simpleName)
         isEdit?.also { intent.putExtra("IS_EDIT", isEdit) }
+        startActivity(intent)
+        finish()
+    }
+
+    fun navigateToBrowse(){
+        val intent = Intent(applicationContext, BrowseActivity::class.java)
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         startActivity(intent)
         finish()
     }

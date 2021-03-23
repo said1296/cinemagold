@@ -4,6 +4,7 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.view.View
 import android.widget.ImageView
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import app.cinemagold.R
 import app.cinemagold.model.content.Content
@@ -17,20 +18,18 @@ import javax.inject.Inject
 class ContentHorizontalRVA @Inject constructor(
     val context: Context,
     private val picasso: Picasso
-) : BaseInfiniteScrollRVA<Content>() {
-    lateinit var sliderView : ImageView
-    //Elevation value adds the same amount as padding so it's necessary to compensate
-    private val sideMargin = context.resources.getDimensionPixelSize(R.dimen.standard_margin_horizontal) -
-            context.resources.getDimensionPixelSize(R.dimen.item_content_horizontal_elevation)
-    private val scale : Int = 30
-    lateinit var clickHandler : (Int, Int) -> Unit
+) : BaseInfiniteAutoScrollRVA<Content>(
+    R.layout.item_content_horizontal,
+    context.resources.getDimensionPixelSize(R.dimen.item_content_horizontal_width) + context.resources.getDimensionPixelSize(
+        R.dimen.item_content_margin_right
+    )
+) {
+    lateinit var sliderView: ImageView
+    private val scale: Int = 30
+    lateinit var clickHandler: (Int, Int) -> Unit
     lateinit var progressIndicators: MutableList<View>
-    var idPrefix : Int = -1
+    var idPrefix: Int = -1
     val isTelevision = context.resources.getBoolean(R.bool.isTelevision)
-
-    init {
-        layout = R.layout.item_content_horizontal
-    }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val position = getRealPosition(position)
@@ -54,27 +53,33 @@ class ContentHorizontalRVA @Inject constructor(
         sliderView.setImageDrawable(target.stateListDrawable)
 
         item.item_content_horizontal_new_season.visibility =
-            if(currentData.hasNewSeason) View.VISIBLE
+            if (currentData.hasNewSeason) View.VISIBLE
             else View.GONE
 
         //Set start and end padding
         val params = holder.itemView.layoutParams as RecyclerView.LayoutParams
-        if(position == 0){
-            params.leftMargin = sideMargin
-            item.nextFocusLeftId = idPrefix + (realItemCount - 1)
+        if (position == 0) {
+            item.nextFocusLeftId = item.id + 3
             item.nextFocusRightId = item.id + 1
-        } else if (position == dataset.lastIndex){
-            params.rightMargin = sideMargin
+        } else if (position == dataset.lastIndex) {
             item.nextFocusLeftId = item.id - 1
-            item.nextFocusRightId = idPrefix + 0
-        }else{
+            item.nextFocusRightId = idPrefix
+        } else {
             item.nextFocusLeftId = item.id - 1
             item.nextFocusRightId = item.id + 1
         }
 
+
         item.setOnClickListener { clickHandler(currentData.id, currentData.mediaType.id) }
-        if(isTelevision)
-            item.onFocusChangeListener = ProgressOnFocusListener(progressIndicators, position+1, realItemCount)
+        if (isTelevision)
+            item.onFocusChangeListener =
+                ProgressOnFocusListener(progressIndicators, position + 1, realItemCount) { hasFocus ->
+
+                    changedFocus(hasFocus)
+                }
+        else
+            item.setOnFocusChangeListener { _, hasFocus -> changedFocus(hasFocus) }
         holder.itemView.layoutParams = params
     }
+
 }

@@ -15,4 +15,7 @@ interface PlayerApi {
 
     @DELETE("player/authorize")
     suspend fun deleteAuthorization() : NetworkResponse<Boolean, NetworkError>
+
+    @DELETE("player/purge")
+    suspend fun purgeAuthorizations() : NetworkResponse<Boolean, NetworkError>
 }

@@ -69,6 +69,8 @@ class BrowseActivity : AppCompatActivity() {
     lateinit var currentProfile: Profile
     var isTelevision: Boolean = false
 
+    lateinit var currentFragmentTag: String
+
     //Views
     private val contentContainer = R.id.content_container
     private val fragmentContainer = R.id.fragment_container_browse
@@ -388,6 +390,7 @@ class BrowseActivity : AppCompatActivity() {
 
         val fragmentInFragmentManager = fragmentManager.findFragmentByTag(tag)
         if (fragmentInFragmentManager == null) {
+            currentFragmentTag = fragment::class.simpleName!!
             fragmentManager.beginTransaction().apply {
                 add(fragmentContainer, fragment, tag)
                 if (addToBackStack) {
@@ -397,13 +400,15 @@ class BrowseActivity : AppCompatActivity() {
             return
         }
 
-        val backStackEntryCount = supportFragmentManager.backStackEntryCount
+        val backStackEntryCount = fragmentManager.backStackEntryCount
         if (backStackEntryCount > 0) {
-            val currentFragmentTag = fragmentManager.getBackStackEntryAt(backStackEntryCount - 1).name
             if (currentFragmentTag == tag) {
                 return
+            } else {
+                currentFragmentTag = tag ?: ""
             }
         }
+
         fragmentManager.beginTransaction().apply {
             replace(fragmentContainer, fragment, tag)
             if (addToBackStack) {

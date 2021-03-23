@@ -23,8 +23,8 @@ class MovieViewModel(private val contentApi : ContentApi, private val genreApi :
     val error : LiveEvent<String> by lazy {
         LiveEvent<String>()
     }
-    val contentGroupedByGenre : MutableLiveData<MutableList<ContentGroupedByGenre>> by lazy {
-        MutableLiveData<MutableList<ContentGroupedByGenre>>(mutableListOf())
+    val contentGroupedByGenre : LiveEvent<MutableList<ContentGroupedByGenre>> by lazy {
+        LiveEvent<MutableList<ContentGroupedByGenre>>()
     }
     val genres : MutableLiveData<MutableList<IdAndName>> by lazy {
         MutableLiveData<MutableList<IdAndName>>()
@@ -41,6 +41,8 @@ class MovieViewModel(private val contentApi : ContentApi, private val genreApi :
     var isKids = false
 
     fun initialize(){
+        currentGenre = IdAndName()
+        currentYear = IdAndName()
         setIsKids()
         requestGenres()
         requestYears()
@@ -66,7 +68,6 @@ class MovieViewModel(private val contentApi : ContentApi, private val genreApi :
     }
 
     fun handleRequestContent(){
-
         // id of -1 means "All" in filters
         if(currentGenre.id == -1 && currentYear.id == -1){
             requestContentGroupedByGenre()
@@ -76,13 +77,6 @@ class MovieViewModel(private val contentApi : ContentApi, private val genreApi :
             requestContentByYear()
         }
     }
-
-    //Reinitialize current values
-    fun stoppedFragment(){
-        //Set currentContentType to All
-        currentGenre = IdAndName()
-    }
-
 
     //Requests
     private fun requestContentGroupedByGenre(){

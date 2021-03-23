@@ -23,14 +23,14 @@ import javax.inject.Singleton
 class ViewModelModule {
 
     @Provides
-    fun provideHomeViewModel(contentApi : ContentApi, recentApi: RecentApi, context: Context) : HomeViewModel {
-        return HomeViewModel(contentApi, recentApi, context)
+    fun provideHomeViewModel(contentApi : ContentApi, recentApi: RecentApi, playerApi: PlayerApi, context: Context) : HomeViewModel {
+        return HomeViewModel(contentApi, recentApi, playerApi, context)
     }
 
     @Provides
     @Singleton
-    fun providePreviewViewModel(contentApi : ContentApi) : PreviewViewModel {
-        return PreviewViewModel(contentApi)
+    fun providePreviewViewModel(contentApi : ContentApi, context: Context) : PreviewViewModel {
+        return PreviewViewModel(contentApi, context)
     }
 
     @Provides

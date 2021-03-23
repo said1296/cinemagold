@@ -10,7 +10,9 @@ data class Episode (
     val number : String = "",
     val src : String = "",
     var thumbnailSrc : String = BuildConfig.LOGO_URL,
-    val subtitles : List<Subtitle> = emptyList()
+    val subtitles : List<Subtitle> = emptyList(),
+    val elapsed: Int = 0,
+    val elapsedPercent: Float = 0F
 ){
     init {
         //Handle if asset is in local server

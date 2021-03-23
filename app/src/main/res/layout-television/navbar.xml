@@ -3,7 +3,8 @@
     android:id="@+id/navbar"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingVertical="@dimen/navbar_button_padding_vertical">
+    android:paddingVertical="@dimen/navbar_button_padding_vertical"
+    android:nextFocusDown="@id/content_recycler_content_premiere">
     <include
         android:id="@+id/navbar_logo"
         layout="@layout/common_logo"
@@ -19,7 +20,8 @@
         android:text="@string/home"
         android:paddingLeft="@dimen/navbar_button_padding_horizontal"
         android:paddingRight="@dimen/navbar_button_padding_horizontal"
-        android:textColor="@color/light_focused_brand"/>
+        android:textColor="@color/light_focused_brand"
+        android:nextFocusDown="@id/content_recycler_content_premiere"/>
     <androidx.appcompat.widget.AppCompatTextView
         android:onClick="handleNavbarClick"
         android:focusable="true"
@@ -29,7 +31,8 @@
         android:text="@string/movies"
         android:paddingLeft="@dimen/navbar_button_padding_horizontal"
         android:paddingRight="@dimen/navbar_button_padding_horizontal"
-        android:textColor="@color/light_focused_brand"/>
+        android:textColor="@color/light_focused_brand"
+        android:nextFocusDown="@id/content_recycler_content_premiere"/>
     <androidx.appcompat.widget.AppCompatTextView
         android:onClick="handleNavbarClick"
         android:focusable="true"
@@ -39,7 +42,8 @@
         android:text="@string/tv_shows"
         android:paddingLeft="@dimen/navbar_button_padding_horizontal"
         android:paddingRight="@dimen/navbar_button_padding_horizontal"
-        android:textColor="@color/light_focused_brand"/>
+        android:textColor="@color/light_focused_brand"
+        android:nextFocusDown="@id/content_recycler_content_premiere"/>
 
 
     <androidx.appcompat.widget.LinearLayoutCompat
@@ -58,7 +62,8 @@
             android:paddingLeft="@dimen/navbar_image_button_padding_horizontal"
             android:paddingRight="@dimen/navbar_image_button_padding_horizontal"
             android:tint="@color/light_focused_brand"
-            android:background="@android:color/transparent"/>
+            android:background="@android:color/transparent"
+            android:nextFocusDown="@id/content_recycler_content_premiere"/>
         <androidx.appcompat.widget.AppCompatImageButton
             android:onClick="handleNavbarClick"
             android:focusable="true"
@@ -70,13 +75,15 @@
             android:nextFocusRight="@id/menu_avatar_active"
             android:paddingRight="@dimen/navbar_image_button_padding_horizontal"
             android:tint="@color/light_focused_brand"
-            android:background="@android:color/transparent"/>
+            android:background="@android:color/transparent"
+            android:nextFocusDown="@id/content_recycler_content_premiere"/>
         <androidx.appcompat.widget.LinearLayoutCompat
             android:id="@+id/menu_avatar_active"
             android:focusable="true"
             android:onClick="handleNavbarClick"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:nextFocusDown="@id/content_recycler_content_premiere">
             <include
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
@@ -94,6 +101,7 @@
             android:paddingLeft="@dimen/navbar_image_button_padding_horizontal"
             android:paddingRight="@dimen/navbar_image_button_padding_horizontal"
             android:tint="@color/light_focused_brand"
-            android:background="@android:color/transparent"/>
+            android:background="@android:color/transparent"
+            android:nextFocusDown="@id/content_recycler_content_premiere"/>
     </androidx.appcompat.widget.LinearLayoutCompat>
 </androidx.appcompat.widget.LinearLayoutCompat>

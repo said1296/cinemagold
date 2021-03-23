@@ -6,7 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.fragment.app.Fragment
+import androidx.appcompat.widget.AppCompatTextView
 import androidx.lifecycle.observe
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -14,15 +14,17 @@ import app.cinemagold.R
 import app.cinemagold.injection.ApplicationContextInjector
 import app.cinemagold.model.content.ContentType
 import app.cinemagold.ui.browse.BrowseActivity
+import app.cinemagold.ui.browse.common.fragment.AutoScrollFragment
 import app.cinemagold.ui.browse.common.listener.ProgressOnScrollListener
 import app.cinemagold.ui.browse.common.recycleradapter.ContentHorizontalRVA
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_home.view.*
+import kotlinx.android.synthetic.main.navbar.view.*
 import kotlinx.android.synthetic.main.widget_progress_indicators.view.*
 import javax.inject.Inject
 import javax.inject.Provider
 
-class HomeFragment : Fragment() {
+class HomeFragment : AutoScrollFragment() {
     @Inject
     lateinit var viewModel: HomeViewModel
     @Inject
@@ -43,6 +45,8 @@ class HomeFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        isTelevision = resources.getBoolean(R.bool.isTelevision)
+
         //Observers
         viewModel.error.observe(this){data->
             Toast.makeText(context, data, Toast.LENGTH_LONG).show()
@@ -52,9 +56,6 @@ class HomeFragment : Fragment() {
         }
         viewModel.contentPremiere.observe(this){data ->
             contentVerticalRVA.dataset = data
-            requireView().content_recycler_content_premiere.apply {
-                scrollToPosition((adapter as ContentVerticalRVA).startPosition)
-            }
         }
         viewModel.contentRecent.observe(this){data ->
             contentRecentRVA.dataset = data
@@ -64,9 +65,6 @@ class HomeFragment : Fragment() {
                 return@observe
             }
             buildRecent()
-            requireView().content_recycler_content_recent.apply {
-                scrollToPosition((adapter as ContentRecentRVA).startPosition)
-            }
         }
         viewModel.contentRecentSelected.observe(this){data ->
             if(viewModel.recentSelected.mediaType.id== ContentType.MOVIE.value){
@@ -101,15 +99,21 @@ class HomeFragment : Fragment() {
             adapter = contentVerticalRVA
             if(!(activity as BrowseActivity).isTelevision)
                 addOnScrollListener(ProgressOnScrollListener(progressIndicators, layoutManager as LinearLayoutManager, adapter as ContentVerticalRVA))
+            recyclerViewsToScroll.add(this)
         }
         contentVerticalRVA.apply {
             clickHandler = { contentId, contentType ->
                 (activity as BrowseActivity).navigateToPreview(contentId, contentType)
             }
+            changedFocus = { hasFocus ->
+                this@HomeFragment.changedScrollingRecyclerFocus(hasFocus, rootView.content_recycler_content_premiere.id)
+            }
             this.progressIndicators = progressIndicators
         }
 
+        startScrolling()
 
+        if(isTelevision) requireActivity().findViewById<AppCompatTextView>(R.id.navbar_home).requestFocus()
 
         return rootView
     }
@@ -135,6 +139,9 @@ class HomeFragment : Fragment() {
         contentRecentRVA.apply {
             clickHandler = {data ->
                 viewModel.clickedRecent(data)
+            }
+            changedFocus = { hasFocus ->
+                this@HomeFragment.changedScrollingRecyclerFocus(hasFocus, view!!.content_recycler_content_recent.id)
             }
             this.progressIndicators = progressIndicators
         }

@@ -47,10 +47,12 @@ class NetworkModule {
     }
 
     @Provides
-    fun giveOkHttpClient(httpLoggingInterceptor: Interceptor,
-                         @Named("handleCookiesInterceptor") handleCookiesInterceptor: Interceptor,
-                         @Named("addCookiesInterceptor") addCookiesInterceptor: Interceptor,
-                         @Named("forbiddenInterceptor") forbiddenInterceptor: Interceptor): OkHttpClient {
+    fun giveOkHttpClient(
+        httpLoggingInterceptor: Interceptor,
+        @Named("handleCookiesInterceptor") handleCookiesInterceptor: Interceptor,
+        @Named("addCookiesInterceptor") addCookiesInterceptor: Interceptor,
+        @Named("forbiddenInterceptor") forbiddenInterceptor: Interceptor
+    ): OkHttpClient {
         val trustAllCerts: Array<TrustManager> = arrayOf<TrustManager>(
             object : X509TrustManager {
                 @Throws(CertificateException::class)
@@ -67,7 +69,7 @@ class NetworkModule {
                 ) {
                 }
 
-                override fun getAcceptedIssuers(): Array<X509Certificate?>?{
+                override fun getAcceptedIssuers(): Array<X509Certificate?>? {
                     return arrayOfNulls(0)
                 }
             }
@@ -84,13 +86,14 @@ class NetworkModule {
 
         return OkHttpClient.Builder()
             .addInterceptor(httpLoggingInterceptor)
-            .addInterceptor(object: Interceptor{
+            .addInterceptor(object : Interceptor {
                 override fun intercept(chain: Interceptor.Chain): Response {
                     val originalRequest = chain.request()
                     val requestWithUserAgent = originalRequest.newBuilder()
                         .header("User-Agent", Build.MODEL)
                         .build()
-                    return chain.proceed(requestWithUserAgent)                }
+                    return chain.proceed(requestWithUserAgent)
+                }
             })
             .addInterceptor(handleCookiesInterceptor)
             .addInterceptor(addCookiesInterceptor)
@@ -109,7 +112,7 @@ class NetworkModule {
     }
 
     @Provides
-    fun giveObjectMapper() : ObjectMapper {
+    fun giveObjectMapper(): ObjectMapper {
         return ObjectMapper().registerModule(KotlinModule(nullIsSameAsDefault = true))
             .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
             .setDefaultSetterInfo(JsonSetter.Value.forValueNulls(Nulls.SKIP))
@@ -117,8 +120,8 @@ class NetworkModule {
 
     @Provides
     @Named("handleCookiesInterceptor")
-    fun giveHandleCookiesInterceptor(context: Context) : Interceptor {
-        return object: Interceptor {
+    fun giveHandleCookiesInterceptor(context: Context): Interceptor {
+        return object : Interceptor {
             override fun intercept(chain: Interceptor.Chain): Response {
                 val originalResponse = chain.proceed(chain.request())
                 if (originalResponse.headers("Set-Cookie").isNotEmpty()) {
@@ -129,12 +132,12 @@ class NetworkModule {
                         //only checks cookie name, doesn't care for path
                         val cookieNameSeparatorIndex = header.indexOf("=")
                         val cookieName = header.substring(0, cookieNameSeparatorIndex)
-                        val cookiesToRemove : MutableList<String> = mutableListOf()
-                        for(cookie in cookies!!){
-                            if(cookie.substring(0, cookieNameSeparatorIndex).equals(cookieName))
+                        val cookiesToRemove: MutableList<String> = mutableListOf()
+                        for (cookie in cookies!!) {
+                            if (cookie.substring(0, cookieNameSeparatorIndex).equals(cookieName))
                                 cookiesToRemove.add(cookie)
                         }
-                        for(cookieToRemove in cookiesToRemove)
+                        for (cookieToRemove in cookiesToRemove)
                             cookies.remove(cookieToRemove)
                         cookies.add(header)
                     }
@@ -149,8 +152,8 @@ class NetworkModule {
 
     @Provides
     @Named("addCookiesInterceptor")
-    fun giveAddCookiesInterceptor(context: Context) : Interceptor {
-        return object: Interceptor {
+    fun giveAddCookiesInterceptor(context: Context): Interceptor {
+        return object : Interceptor {
             override fun intercept(chain: Interceptor.Chain): Response {
                 var cookieString = ""
                 val builder: Request.Builder = chain.request().newBuilder()
@@ -171,12 +174,12 @@ class NetworkModule {
 
     @Provides
     @Named("forbiddenInterceptor")
-    fun hiveHandleForbiddenInterceptor(context : Context) : Interceptor {
-        return object: Interceptor{
+    fun hiveHandleForbiddenInterceptor(context: Context): Interceptor {
+        return object : Interceptor {
             override fun intercept(chain: Interceptor.Chain): Response {
                 val request = chain.request()
                 val response = chain.proceed(request)
-                if(response.code==403){
+                if (response.code == 403) {
                     val intent = Intent(context, AuthenticationActivity::class.java)
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)

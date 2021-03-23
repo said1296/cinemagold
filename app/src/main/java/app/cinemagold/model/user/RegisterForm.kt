@@ -6,5 +6,6 @@ data class RegisterForm (
     var mail : String? = null,
     var name : String? = null,
     var password : String? = null,
-    var phone : String? = null
+    var phone : String? = null,
+    var sellerId: String? = null
 )

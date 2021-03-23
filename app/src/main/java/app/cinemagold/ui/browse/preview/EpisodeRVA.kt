@@ -5,11 +5,13 @@ import android.graphics.Bitmap
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import app.cinemagold.R
 import app.cinemagold.model.content.Episode
 import app.cinemagold.ui.common.ContentItemTarget
 import com.squareup.picasso.Picasso
+import kotlinx.android.synthetic.main.item_content_recent.view.*
 import kotlinx.android.synthetic.main.item_episode.view.*
 import javax.inject.Inject
 
@@ -25,6 +27,7 @@ class EpisodeRVA @Inject constructor(
     private val scale : Int = 30
     lateinit var clickHandler : (Int) -> Unit
     val isTelevision = context.resources.getBoolean(R.bool.isTelevision)
+    var isPlayerActivity: Boolean = false
 
     class ViewHolder(itemView : View) : RecyclerView.ViewHolder(itemView)
 
@@ -41,6 +44,20 @@ class EpisodeRVA @Inject constructor(
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val currentData = dataset[position]
         val item = holder.itemView
+
+        // Set elapsed
+        if(currentData.elapsedPercent == 0F || !isPlayerActivity) {
+            item.item_episode_elapsed.visibility = View.GONE
+            item.item_episode_remaining.visibility = View.GONE
+        }
+        else {
+            item.item_episode_elapsed.apply {
+                visibility = View.VISIBLE
+                (layoutParams as ConstraintLayout.LayoutParams).matchConstraintPercentWidth = currentData.elapsedPercent
+            }
+            item.item_episode_remaining.visibility = View.VISIBLE
+        }
+
         item.item_episode_description.text = currentData.description
         item.item_episode_title.text = currentData.name
         item.item_episode_length.text = currentData.length
@@ -69,8 +86,8 @@ class EpisodeRVA @Inject constructor(
         } else if (position == dataset.lastIndex){
             if(!isTelevision) params.rightMargin = sideMargin
             else{
-                item.nextFocusDownId = item.id
                 item.nextFocusUpId = dataset[position-1].id
+                item.nextFocusDownId = item.id
             }
         } else {
             if(isTelevision){

@@ -96,12 +96,6 @@ class MovieFragment : Fragment() {
         return rootView
     }
 
-
-    override fun onStop() {
-        viewModel.stoppedFragment()
-        super.onStop()
-    }
-
     // UI
 
     private fun handleFilterClick(){

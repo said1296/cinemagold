@@ -34,7 +34,7 @@ class OptionActivity : AppCompatActivity() {
     //Fragment transactions
     fun addOrReplaceFragment(fragment : Fragment, tag : String?){
         if(fragmentManager.findFragmentByTag(tag)==null){
-            fragmentManager.beginTransaction().add(fragmentContainer, fragment, tag).addToBackStack(tag).commit()
+            fragmentManager.beginTransaction().add(fragmentContainer, fragment, tag).commit()
             return
         }
 

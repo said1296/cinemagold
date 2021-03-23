@@ -151,7 +151,7 @@
                         android:layout_weight="90"
                         android:hint="@string/password"
                         android:nextFocusUp="@id/register_email"
-                        android:nextFocusDown="@id/register_submit"
+                        android:nextFocusDown="@id/register_seller"
                         android:nextFocusLeft="@id/register_password_edit_text"
                         android:nextFocusRight="@id/register_password_show"/>
                     <ImageButton
@@ -164,10 +164,20 @@
                         android:tint="@color/item_genre_text"
                         android:background="@drawable/bg_login_edit_text"
                         android:nextFocusUp="@id/register_email"
-                        android:nextFocusDown="@id/register_submit"
+                        android:nextFocusDown="@id/register_seller"
                         android:nextFocusLeft="@id/register_password_edit_text"
                         android:nextFocusRight="@id/register_password_show"/>
                 </LinearLayout>
+                <androidx.appcompat.widget.AppCompatEditText
+                    android:id="@+id/register_seller"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/seller_code"
+                    android:layout_marginTop="@dimen/register_edit_text_margin_top"
+                    android:nextFocusUp="@id/register_password_edit_text"
+                    android:nextFocusDown="@id/register_submit"
+                    android:nextFocusLeft="@id/register_seller"
+                    android:nextFocusRight="@id/register_seller"/>
                 <Button
                     android:id="@+id/register_submit"
                     android:layout_width="@dimen/login_submit_width"
@@ -180,9 +190,10 @@
                     android:text="@string/REGISTER"
                     android:textSize="@dimen/heading5"
                     android:fontFamily="@font/font_semibold"
-                    android:nextFocusUp="@id/register_password_edit_text"
+                    android:nextFocusUp="@id/register_seller"
                     android:nextFocusLeft="@id/register_submit"
                     android:nextFocusRight="@id/register_submit"
+                    android:layout_marginBottom="20dp"
                     android:elevation="10dp"/>
             </LinearLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>

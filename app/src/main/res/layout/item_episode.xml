@@ -16,6 +16,27 @@
         android:layout_height="match_parent"
         android:background="@drawable/bg_item_content">
 
+        <View
+            android:id="@+id/item_episode_elapsed"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintWidth_percent="0.4"
+            app:layout_constraintLeft_toLeftOf="parent"
+            android:layout_width="0dp"
+            android:layout_height="10dp"
+            android:background="?brand"
+            android:visibility="visible"/>
+
+        <View
+            android:id="@+id/item_episode_remaining"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintLeft_toRightOf="@id/item_episode_elapsed"
+            android:layout_weight="0.5"
+            android:layout_width="0dp"
+            android:layout_height="10dp"
+            android:background="?light"
+            android:visibility="visible"/>
+
         <ImageView
             android:id="@+id/item_episode_background"
             android:layout_width="0dp"
@@ -26,7 +47,7 @@
             app:layout_constraintDimensionRatio="16:9"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@id/item_episode_elapsed" />
 
         <View
             android:id="@+id/item_episode_background_gradient"
@@ -37,7 +58,7 @@
             app:layout_constraintDimensionRatio="16:9"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/item_episode_elapsed"
             android:background="@drawable/bg_item_episode_gradient"/>
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -55,7 +76,7 @@
                 android:id="@+id/item_episode_description"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="ESTA ES UNA DESCRIPCION MUY LARGA ALV MUY MUY LARGA MUY MUY LARGA msdiaomd osamd oamd kosamd oas"
+                android:text="ESTA ES UNA DESCRIPCION MUY LARGA  MUY MUY LARGA MUY MUY LARGA msdiaomd osamd oamd kosamd oas"
                 android:textSize="@dimen/text3"
                 app:fontFamily="@font/font_medium"
                 app:layout_constraintTop_toTopOf="parent"

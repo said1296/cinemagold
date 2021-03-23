@@ -25,7 +25,7 @@ interface ContentApi {
     suspend fun getMovie(@Query("id") contentId : Int) : NetworkResponse<Content, NetworkError>
 
     @GET("content/serie")
-    suspend fun getSerialized(@Query("id") contentId : Int) : NetworkResponse<Content, NetworkError>
+    suspend fun getSerialized(@Query("id") contentId : Int, @Query("profileId") profileId: Int) : NetworkResponse<Content, NetworkError>
 
     @GET("content/serialized/genre")
     suspend fun getSerializedByGenre(@Query("genreId") genreId : Int,

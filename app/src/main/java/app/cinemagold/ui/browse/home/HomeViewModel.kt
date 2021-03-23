@@ -6,6 +6,7 @@ import androidx.lifecycle.*
 import androidx.preference.PreferenceManager
 import app.cinemagold.BuildConfig
 import app.cinemagold.dataaccess.remote.ContentApi
+import app.cinemagold.dataaccess.remote.PlayerApi
 import app.cinemagold.dataaccess.remote.RecentApi
 import app.cinemagold.model.content.Content
 import app.cinemagold.model.content.ContentGroupedByGenre
@@ -20,16 +21,12 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 
-class HomeViewModel(val contentApi : ContentApi, private val recentApi: RecentApi, val context: Context)  : ViewModel() {
+class HomeViewModel(val contentApi : ContentApi, private val recentApi: RecentApi, val playerApi: PlayerApi, val context: Context)  : ViewModel() {
     val error : LiveEvent<String> by lazy {
         LiveEvent<String>()
     }
     val preferences: SharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
-    private var currentProfile : Profile
-
-    init {
-        currentProfile = Gson().fromJson(preferences.getString(BuildConfig.PREFS_PROFILE, ""), Profile::class.java)
-    }
+    private var currentProfile : Profile = Gson().fromJson(preferences.getString(BuildConfig.PREFS_PROFILE, ""), Profile::class.java)
 
     val contentPremiere : LiveData<MutableList<Content>> = liveData(Dispatchers.IO) {
         when(val data = contentApi.getNew(8, isKids)){
@@ -67,7 +64,6 @@ class HomeViewModel(val contentApi : ContentApi, private val recentApi: RecentAp
         setIsKids()
     }
 
-
     //Events
     fun startedFragment(){
         if(!isKids){
@@ -76,6 +72,7 @@ class HomeViewModel(val contentApi : ContentApi, private val recentApi: RecentAp
         if(contentGroupedByGenre.value == null || contentGroupedByGenre.value?.size==0){
             requestContentGroupedByGenre()
         }
+        requestPurgeOfPlayerAuthorizations()
     }
 
     //ids = [contentId, seasonId, episodeId]
@@ -91,6 +88,19 @@ class HomeViewModel(val contentApi : ContentApi, private val recentApi: RecentAp
     }
 
     //Requests
+
+    private fun requestPurgeOfPlayerAuthorizations() {
+        viewModelScope.launch {
+            when(val data = playerApi.purgeAuthorizations()){
+                is NetworkResponse.Success -> {}
+                is NetworkResponse.ServerError -> { error.postValue(data.body?.status.toString() + " " + data.body?.message) }
+                is NetworkResponse.NetworkError -> { error.postValue(data.error.toString()) }
+                else -> error.postValue("Unknown error")
+            }
+        }
+    }
+
+
     private fun requestContentGroupedByGenre(){
         viewModelScope.launch {
             when(val data = contentApi.getGroupedByGenre(isKids)){
@@ -133,7 +143,7 @@ class HomeViewModel(val contentApi : ContentApi, private val recentApi: RecentAp
                 if(recentSelected.mediaType.id== ContentType.MOVIE.value){
                     contentApi.getMovie(ids[0])
                 }else{
-                    contentApi.getSerialized(ids[0])
+                    contentApi.getSerialized(ids[0], currentProfile.id!!)
                 }
 
             when(response){
@@ -170,8 +180,6 @@ class HomeViewModel(val contentApi : ContentApi, private val recentApi: RecentAp
 
     //Action
     private fun setIsKids(){
-        val preferences = PreferenceManager.getDefaultSharedPreferences(context)
-        val currentProfile = Gson().fromJson(preferences.getString(BuildConfig.PREFS_PROFILE, ""), Profile::class.java)
         isKids = currentProfile.id == -1
     }
 }

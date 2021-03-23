@@ -166,6 +166,7 @@ class PreviewFragment : Fragment() {
         episodeRVA.clickHandler = { data ->
             (activity as BrowseActivity).navigateToPlayer(content, currentSeasonIndex, data)
         }
+        episodeRVA.isPlayerActivity = false
         episodeRVA.setDataset(content.seasons[currentSeasonIndex].episodes)
 
         //Season selector

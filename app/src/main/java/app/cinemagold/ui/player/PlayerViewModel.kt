@@ -36,6 +36,10 @@ class PlayerViewModel(private val recentApi: RecentApi, private val playerApi: P
     val title: MutableLiveData<String> by lazy {
         MutableLiveData("")
     }
+    val finish: LiveEvent<Boolean> by lazy {
+        LiveEvent<Boolean>()
+    }
+
     private var currentProfile: Profile
 
     init {
@@ -61,8 +65,10 @@ class PlayerViewModel(private val recentApi: RecentApi, private val playerApi: P
         }
     }
 
-    fun changedEpisode(episodeIndexNew: Int){
+    fun changedEpisode(seasonIndexNew: Int, episodeIndexNew: Int){
+        seasonIndex = seasonIndexNew
         episodeIndex = episodeIndexNew
+        elapsed = content.seasons[seasonIndex].episodes[episodeIndex].elapsed.toLong()
         setTitle()
     }
 
@@ -73,7 +79,7 @@ class PlayerViewModel(private val recentApi: RecentApi, private val playerApi: P
             else{
                 val contentLength = content.seasons.size
                 if(seasonIndex < contentLength-1) seasonIndex++
-                else seasonIndex = 0
+                else finish.value = true
 
                 episodeIndex=0
             }

@@ -78,6 +78,7 @@ class RegisterFragment : Fragment() {
         rootView.register_submit.setOnClickListener {
             viewModel.submit(rootView.register_form)
         }
+        if(resources.getBoolean(R.bool.isTelevision)) rootView.register_name.requestFocus()
         return rootView
     }
 

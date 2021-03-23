@@ -48,6 +48,7 @@ class RegisterViewModel(private val authenticationApi: AuthenticationApi, privat
         registerForm.mail = formView.findViewById<AppCompatEditText>(R.id.register_email).text.toString()
         registerForm.password = formView.findViewById<AppCompatEditText>(R.id.register_password_edit_text).text.toString()
         registerForm.countryId = selectedCountry.id
+        registerForm.sellerId = formView.findViewById<AppCompatEditText>(R.id.register_seller).text.toString()
 
         if(registerForm.name.isNullOrBlank()){
             error.value = "Proporciona un nombre"
